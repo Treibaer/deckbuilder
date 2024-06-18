@@ -1,0 +1,16 @@
+.magicCard {
+    width: 225px;
+    height: 387.5px;
+}
+
+.magicCard > img {
+    width: 225px;
+    border-radius: 12px;
+}
+
+.magicCard > .title {
+    font-size: large;
+    font-weight: bold;
+    margin: 0.5em 0;
+    height: 50px;
+}
