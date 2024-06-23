@@ -7,27 +7,34 @@ export default function Header({ selectedTab, onSelectTab }) {
       url: "/",
     },
     {
-      name: "Finances",
+      name: "finances",
       url: "/finances",
     },
     {
-      name: "Magic",
-      url: "/magic",
+      name: "cardList",
+      url: "/cardList",
     },
     {
-      name: "Demo",
-      url: "/demo",
+      name: "cardSet",
+      url: "/cardSet",
+    },
+    {
+      name: "magicSetCards",
+      url: "/magicSetCards",
+    },
+    {
+      name: "magicDeckOverview",
+      url: "/magicDeckOverview",
     },
   ];
   return (
     <header>
-      <h1>Magic Card Viewer</h1>
       <nav>
         <ul>
           {tabs.map((tab) => (
             <li
               key={tab.name}
-              onClick={() => onSelectTab(tab.name.toLowerCase())}
+              onClick={() => onSelectTab(tab.name)}
               className={selectedTab === tab.name ? "active" : ""}
             >
               {tab.name}

@@ -3,30 +3,49 @@ import MagicCard from "./MagicCard";
 import "./MagicCardList.css";
 import LoadingCard from "../LoadingCard";
 
-export default function MagicCardList({cards, setCards}) {
+export default function MagicCardList({ cards, setCards }) {
   // create state for src
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   let [selectedCard, setSelectedCard] = useState(null);
 
+  const [searchTerm, setSearchTerm] = useState("");
+
   function showFullScreenCard(card) {
-    console.log(card);
     setSelectedCard(card);
   }
 
+  function loadCards(term) {
+    fetch("https://magic.treibaer.de/cards?term=" + term)
+      .then((response) => response.json())
+      .then((data) => {
+        setCards(data.cards);
+      });
+  }
+
   useEffect(() => {
-    console.log(cards);
     setTimeout(() => {
-      fetch("https://magic.treibaer.de/cards")
-        .then((response) => response.json())
-        .then((data) => {
-          setIsLoading(false);
-          setCards(data.cards);
-          console.log(data.cards);
-        });
-    }, 1000);
+      loadCards(searchTerm);
+    }, 0);
   }, []);
+
+  let searchTimer = 0;
+
+  function handleChange(event) {
+    setSearchTerm(event.target.value);
+
+    if (searchTimer) {
+      clearTimeout(searchTimer);
+    }
+    searchTimer = setTimeout(() => {
+      loadCards(event.target.value);
+    }, 300);
+    // console.log(event.target.value);
+  }
+  console.log("MagicCardList.jsx");
+
   return (
     <>
+      <input type="text" value={searchTerm} onChange={handleChange} />
       {selectedCard && (
         <div className="fullscreenCard" onClick={() => setSelectedCard(null)}>
           <img src={selectedCard.image} />
