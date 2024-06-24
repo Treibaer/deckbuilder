@@ -1,0 +1,11 @@
+.loadingCard {
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 225px;
+  }
+  .loadingCard .preview {
+    border: rgb(16, 16, 16) 10px solid;
+    border-radius: 12px;
+  }
+  

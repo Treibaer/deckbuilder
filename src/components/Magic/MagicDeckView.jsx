@@ -1,132 +1,34 @@
 import { useEffect, useState } from "react";
 import "./MagicDeckView.css";
-import symbolMap from "../../assets/symbolmap.js";
-import LoadingSpinner from "./LoadingSpinner.jsx";
+import LoadingSpinner from "../Common/LoadingSpinner.jsx";
+import Helper from "./Helper.jsx";
+import Client from "../../Services/Client.js";
+import MagicHelper from "../../Services/MagicHelper.js";
 
 const backside = "https://magic.treibaer.de/image/card/backside.jpg";
-
-function addStructureToDeck(cards) {
-  // filter out lands
-  let commanders = cards.filter((card) => card.isCommander);
-  cards = cards.filter((card) => !card.isCommander);
-  let lands = cards.filter((card) => card.type.includes("Land"));
-  // sort by type
-  let creatures = cards.filter((card) => card.type.includes("Creature"));
-  let sorceries = cards.filter((card) => card.type.includes("Sorcery"));
-  let instants = cards.filter((card) => card.type.includes("Instant"));
-  let artifacts = cards.filter((card) => card.type.includes("Artifact"));
-  let enchantments = cards.filter((card) => card.type.includes("Enchantment"));
-  let planeswalkers = cards.filter((card) =>
-    card.type.includes("Planeswalker")
-  );
-  // filter out remaining cards
-
-  let remaingCards = cards.filter(
-    (card) =>
-      !card.type.includes("Land") &&
-      !card.type.includes("Creature") &&
-      !card.type.includes("Sorcery") &&
-      !card.type.includes("Instant") &&
-      !card.type.includes("Artifact") &&
-      !card.type.includes("Enchantment") &&
-      !card.type.includes("Planeswalker")
-  );
-
-  return {
-    Commanders: commanders,
-    Hide: commanders,
-    Lands: lands,
-    Creatures: creatures,
-    Sorceries: sorceries,
-    Instants: instants,
-    Artifacts: artifacts,
-    Enchantments: enchantments,
-    Planeswalkers: planeswalkers,
-    // "": remaingCards,
-  };
-}
-
-function mapCosts(costs) {
-  if (!costs) {
-    return [];
-  }
-  let result = [];
-  let cost = costs;
-  while (cost.length > 0) {
-    let index = cost.indexOf("{");
-    if (index === -1) {
-      result.push(cost);
-      break;
-    }
-    if (index > 0) {
-      result.push(cost.substring(0, index));
-    }
-    let endIndex = cost.indexOf("}");
-    result.push(cost.substring(index, endIndex + 1));
-    cost = cost.substring(endIndex + 1);
-  }
-  let out = [];
-  for (let i = 0; i < result.length; i++) {
-    out.push(<img key={i} className="manaSymbol" src={symbolMap[result[i]]} />);
-  }
-  return out;
-}
+const client = Client.shared;
 
 export default function MagicDeckView({ deck, children }) {
   const [cards, setCards] = useState([]);
   const [previewImage, setPreviewImage] = useState(null);
+
   useEffect(() => {
-    fetch(`https://magic.treibaer.de/decks/${deck.publicId}`)
-      .then((response) => response.json())
-      .then((data) => {
-        let index = 1;
-        let cards = [];
-
-        for (let card of Object.values(data.commanders)) {
-          cards.push({
-            id: index,
-            isCommander: true,
-            name: card.card.name,
-            quantity: card.quantity,
-            type: card.card.type_line,
-            colors: card.card.colors,
-            manaCost: card.card.mana_cost,
-            image:
-              "https://magic.treibaer.de/image/card/normal/" +
-              card.card.scryfall_id,
-          });
-          index++;
-        }
-
-        for (let card of Object.values(data.mainboard)) {
-          cards.push({
-            id: index,
-            isCommander: false,
-            name: card.card.name,
-            quantity: card.quantity,
-            type: card.card.type_line,
-            colors: card.card.colors,
-            manaCost: card.card.mana_cost,
-            image:
-              "https://magic.treibaer.de/image/card/normal/" +
-              card.card.scryfall_id,
-          });
-          index++;
-        }
-        setCards(cards);
-      });
+    client.getDeck(deck.publicId).then((cards) => {
+      setCards(cards);
+    });
   }, []);
 
   let image = previewImage || cards[0]?.image || backside;
 
-  let structure = addStructureToDeck(cards);
+  let structure = MagicHelper.getDeckStructureFromCards(cards);
 
   return (
-    <div>
+    <div id="magic-deck-view">
       <div className="deck-details-header">
         <div>
           {children}
-          <button className="play-button"
+          <button
+            className="play-button"
             onClick={() => {
               window
                 .open(
@@ -164,7 +66,9 @@ export default function MagicDeckView({ deck, children }) {
                             <div>
                               {card.quantity} x {card.name}
                             </div>
-                            <div>{mapCosts(card.manaCost)}</div>
+                            <div>
+                              {Helper.convertCostsToImgArray(card.manaCost)}
+                            </div>
                           </div>
                         ))}
                       </div>

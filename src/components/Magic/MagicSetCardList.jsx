@@ -1,13 +1,8 @@
 import { useEffect, useState } from "react";
-import MagicCard from "./MagicCard";
+import MagicCard from "./MagicCardView.jsx";
 import "./MagicSetCardList.css";
-import U from "../../assets/card-symbols/U.svg";
-import B from "../../assets/card-symbols/B.svg";
-import G from "../../assets/card-symbols/G.svg";
-import R from "../../assets/card-symbols/R.svg";
-import W from "../../assets/card-symbols/W.svg";
-import LoadingSpinner from "./LoadingSpinner";
-import symbolMap from "../../assets/symbolmap.js";
+import LoadingSpinner from "../Common/LoadingSpinner";
+import Helper from "./Helper.jsx";
 
 export default function MagicSetCardList() {
   let [cards, setCards] = useState([]);
@@ -31,29 +26,7 @@ export default function MagicSetCardList() {
       });
   }
 
-  function replaceColorSymbolsByImage(symbol) {
-    let image;
-    switch (symbol) {
-      case "U":
-        image = U;
-        break;
-      case "B":
-        image = B;
-        break;
-      case "G":
-        image = G;
-        break;
-      case "R":
-        image = R;
-        break;
-      case "W":
-        image = W;
-        break;
-      default:
-        image = "";
-    }
-    return <img key={symbol} className="manaSymbol" src={image} />;
-  }
+
 
   function handleManaSymbolClick() {
     setFilter({ ...filter, u: !filter.u });
@@ -65,28 +38,7 @@ export default function MagicSetCardList() {
 
   console.log("MagicSetCardList.jsx");
 
-  function mapCosts(costs) {
-    let result = [];
-    let cost = costs;
-    while (cost.length > 0) {
-      let index = cost.indexOf("{");
-      if (index === -1) {
-        result.push(cost);
-        break;
-      }
-      if (index > 0) {
-        result.push(cost.substring(0, index));
-      }
-      let endIndex = cost.indexOf("}");
-      result.push(cost.substring(index, endIndex + 1));
-      cost = cost.substring(endIndex + 1);
-    }
-    let out = [];
-    for (let i = 0; i < result.length; i++) {
-        out.push(<img className="manaSymbol" src={symbolMap[result[i]]} />);
-    }
-    return out;
-  }
+
 
 
 
@@ -132,7 +84,7 @@ export default function MagicSetCardList() {
             <div key={index}>
               <div>{card.name}</div>
               <div>{card.rarity}</div>
-              <div>{mapCosts(card.mana_cost)}</div>
+              <div>{Helper.convertCostsToImgArray(card.mana_cost)}</div>
               <div>{card.type_line}</div>
               <div>
                 {card.colors.map((color) => replaceColorSymbolsByImage(color))}

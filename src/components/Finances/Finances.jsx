@@ -1,33 +1,32 @@
 import { useEffect, useState } from "react";
 import "./Finances.css";
+import LoadingSpinner from "../Common/LoadingSpinner";
+import Client from "../../Services/Client";
 
 export default function Finances() {
+  const [isLoading, setIsLoading] = useState(true);
   const [balance, setBalance] = useState(0);
   const [recentTransactions, setRecentTransactions] = useState([]); // [{amount: 100, date: "2021-09-01"}, {amount: 200, date: "2021-09-02"}
 
-  const token = "7be4dd9b0da9f118093186c6f2c1c0bd68648a0f";
+  let client = Client.shared;
 
   useEffect(() => {
-    fetch("https://mac.treibaer.de/api/v2/accounts/dashboard", {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-        setBalance(data.valueInCents / 100);
-        setRecentTransactions(data.recentTransactions);
-      });
+    client.getFinancesDashboard().then((data) => {
+      setIsLoading(false);
+      setBalance(data.valueInCents / 100);
+      setRecentTransactions(data.recentTransactions);
+    });
   }, []);
 
   return (
-    <div>
-      <h2>Accounts</h2>
-      <div>Total balance: {balance}€</div>
-      <h2>Recent Transactions</h2>
+    <div id="finances-view">
+      <div id="finances-header">
+        <h2>Finances</h2>
+        <div>Total balance: {balance}€</div>
+      </div>
+      <h3>Recent Transactions</h3>
       <div className="financeRowContainer">
+        {isLoading && <LoadingSpinner />}
         {recentTransactions.map((transaction, index) => (
           <div className="financeRow" key={index}>
             <div>{transaction.tag.icon}</div>

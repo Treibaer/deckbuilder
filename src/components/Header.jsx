@@ -1,32 +1,33 @@
 import "./Header.css";
 
+const tabs = [
+  {
+    name: "Home",
+    url: "/",
+  },
+  {
+    name: "finances",
+    url: "/finances",
+  },
+  {
+    name: "cardList",
+    url: "/cardList",
+  },
+  {
+    name: "magicSetList",
+    url: "/magicSetList",
+  },
+  {
+    name: "magicSetCardList",
+    url: "/magicSetCardList",
+  },
+  {
+    name: "magicDeckOverview",
+    url: "/magicDeckOverview",
+  },
+];
+
 export default function Header({ selectedTab, onSelectTab }) {
-  const tabs = [
-    {
-      name: "Home",
-      url: "/",
-    },
-    {
-      name: "finances",
-      url: "/finances",
-    },
-    {
-      name: "cardList",
-      url: "/cardList",
-    },
-    {
-      name: "cardSet",
-      url: "/cardSet",
-    },
-    {
-      name: "magicSetCards",
-      url: "/magicSetCards",
-    },
-    {
-      name: "magicDeckOverview",
-      url: "/magicDeckOverview",
-    },
-  ];
   return (
     <header>
       <nav>

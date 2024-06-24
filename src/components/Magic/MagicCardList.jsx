@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import MagicCard from "./MagicCard";
+import MagicCard from "./MagicCardView";
 import "./MagicCardList.css";
-import LoadingCard from "../LoadingCard";
+import LoadingSpinner from "../Common/LoadingSpinner";
 
 export default function MagicCardList({ cards, setCards }) {
-  // create state for src
   // const [isLoading, setIsLoading] = useState(true);
   let [selectedCard, setSelectedCard] = useState(null);
 
@@ -19,6 +18,7 @@ export default function MagicCardList({ cards, setCards }) {
       .then((response) => response.json())
       .then((data) => {
         setCards(data.cards);
+        // setIsLoading(false);
       });
   }
 
@@ -32,6 +32,8 @@ export default function MagicCardList({ cards, setCards }) {
 
   function handleChange(event) {
     setSearchTerm(event.target.value);
+    // setIsLoading(true);
+    // setCards([]);
 
     if (searchTimer) {
       clearTimeout(searchTimer);
@@ -39,12 +41,11 @@ export default function MagicCardList({ cards, setCards }) {
     searchTimer = setTimeout(() => {
       loadCards(event.target.value);
     }, 300);
-    // console.log(event.target.value);
   }
   console.log("MagicCardList.jsx");
 
   return (
-    <>
+    <div id="magic-card-list">
       <input type="text" value={searchTerm} onChange={handleChange} />
       {selectedCard && (
         <div className="fullscreenCard" onClick={() => setSelectedCard(null)}>
@@ -53,10 +54,7 @@ export default function MagicCardList({ cards, setCards }) {
       )}
 
       <div className="card-container">
-        {cards.length === 0 &&
-          Array.from({ length: 5 }).map((_, index) => (
-            <LoadingCard key={index} />
-          ))}
+        {cards.length === 0 && <LoadingSpinner />}
         {cards.map((card, index) => (
           <MagicCard
             key={index}
@@ -65,6 +63,6 @@ export default function MagicCardList({ cards, setCards }) {
           />
         ))}
       </div>
-    </>
+    </div>
   );
 }

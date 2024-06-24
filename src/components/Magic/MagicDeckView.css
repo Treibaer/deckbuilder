@@ -1,48 +1,46 @@
-.stacked {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: start;
-  gap: 1rem;
-  overflow-y: scroll;
-  max-height: 79vh;
-  padding-right: 16px;
-}
-.stacked > * {
-  flex: 40%;
-  cursor: pointer;
-}
-#deck-detail {
-  position: relative;
-  display: flex;
-  gap: 1rem;
-}
-#deck-detail > img {
-  width: 323px;
-  height: 450px;
-  border-radius: 16px;
-  /* position: fixed;
-  top: 0;
-  left: 0; */
-}
-.deck-details-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.deck-details-list > * {
-  display: flex;
-  gap: 8px;
-  justify-content: space-between;
-}
+#magic-deck-view {
+  .deck-details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  .stacked {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: start;
+    gap: 1rem;
+    overflow-y: scroll;
+    max-height: 79vh;
+    padding-right: 16px;
+  }
+  .stacked > * {
+    flex: 40%;
+    cursor: pointer;
+  }
+  #deck-detail {
+    position: relative;
+    display: flex;
+    gap: 1rem;
+  }
+  #deck-detail > img {
+    width: 323px;
+    height: 450px;
+    border-radius: 16px;
+  }
+  .deck-details-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .deck-details-list > * {
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+  }
 
-.deck-details-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-}
-
-.play-button {
+  .play-button {
     margin-left: 100px;
+  }
 }

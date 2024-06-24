@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import "./MagicCard.css";
+import "./MagicCardView.css";
 import LazyImage from "./LazyImage";
 
 const backside = "https://magic.treibaer.de/image/card/backside.jpg";
@@ -16,7 +16,7 @@ function determineImageUrl(card) {
   }
 }
 
-export default function MagicCard({
+export default function MagicCardView({
   card = { name: "Loading...", image: backside },
   src = "https://magic.treibaer.de/image/card/normal/0004311b-646a-4df8-a4b4-9171642e9ef4",
   onTap = () => {},

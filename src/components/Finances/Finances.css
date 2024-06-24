@@ -1,27 +1,29 @@
- .financeRow {
-    /* display: flex;
-    margin: 0 0 10px 0;
-    width: 100%;
-    gap: 8px; */
-    min-height: 44px;
-    display: flex;
-    gap: 10px;
-    flex-direction: row;
-    padding-left: 16px;
-    padding-right: 16px;
+#finances-view > #finances-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
 
+#finances-view > .financeRowContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding-left: 16px;
+  padding-right: 16px;
 }
-.financeRow > * {
-    display: flex;
-    align-items: center;
-    flex: 1;
-    padding: 8px;
-    font-size: 1.2em;
-    font-weight: 500;
+
+#finances-view > .financeRowContainer > .financeRow {
+  min-height: 44px;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
 }
-.financeRowContainer {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    width: 100%;
+
+#finances-view > .financeRowContainer > .financeRow > * {
+  flex: 1;
+  padding: 8px;
+  font-size: 1.2em;
+  font-weight: 500;
 }
