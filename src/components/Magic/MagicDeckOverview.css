@@ -1,0 +1,11 @@
+.deck-overview {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+.deck-overview > div {
+    padding: 8px;
+    width: 150px;
+    height: auto;
+    border: 1px solid black;
+}
