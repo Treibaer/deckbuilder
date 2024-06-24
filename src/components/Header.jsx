@@ -1,6 +1,6 @@
 import "./Header.css";
 
-const tabs = [
+export const tabs = [
   {
     name: "Home",
     url: "/",
@@ -10,8 +10,8 @@ const tabs = [
     url: "/finances",
   },
   {
-    name: "cardList",
-    url: "/cardList",
+    name: "magicCardSearch",
+    url: "/magicCardSearch",
   },
   {
     name: "magicSetList",
@@ -35,7 +35,7 @@ export default function Header({ selectedTab, onSelectTab }) {
           {tabs.map((tab) => (
             <li
               key={tab.name}
-              onClick={() => onSelectTab(tab.name)}
+              onClick={() => onSelectTab(tab)}
               className={selectedTab === tab.name ? "active" : ""}
             >
               {tab.name}

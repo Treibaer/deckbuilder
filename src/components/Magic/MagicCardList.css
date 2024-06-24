@@ -1,5 +1,9 @@
 #magic-card-list {
-  .card-container {
+  button.selected {
+    border-color: #646cff;
+  }
+
+  #card-container {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
@@ -21,9 +25,28 @@
     transition: width 2s, height 4s;
   }
 
-  .fullscreenCard img {
+  .fullscreenCard > img {
     border-radius: 24px;
     width: 488px;
     height: 680px;
+  }
+
+  #card-list-container > * {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  #card-list-container > * > * {
+    flex: 1;
+  }
+
+  #card-container > .magicCard > img {
+    transition: transform 0.2s;
+  }
+  #card-container > .magicCard > img:hover {
+    vertical-align: middle;
+    transform: scale(1.1);
+    transition: transform 0.2s;
   }
 }

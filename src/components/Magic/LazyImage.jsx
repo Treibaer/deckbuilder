@@ -1,7 +1,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 
-export default function LazyImage ({ src, alt, placeholder, onTap }) {
+export default function LazyImage ({ src, alt, placeholder, onTap, title }) {
   const [isIntersecting, setIntersecting] = useState(false);
   const imgRef = useRef();
 
@@ -30,6 +30,7 @@ export default function LazyImage ({ src, alt, placeholder, onTap }) {
   return (
     <img
       ref={imgRef}
+      title={title}
       src={isIntersecting ? src : placeholder}
       alt={alt}
       onClick={onTap}

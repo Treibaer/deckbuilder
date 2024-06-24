@@ -28,6 +28,7 @@ export default function MagicCardView({
       {/* <div className="title">{card.name}</div> */}
       <LazyImage
         src={determineImageUrl(card)}
+        title={card.name}
         alt={card.name}
         placeholder={backside}
         onTap={onTap}
