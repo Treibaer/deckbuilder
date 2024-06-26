@@ -28,10 +28,12 @@ export default function TicketOverview() {
   console.log("TicketOverview.jsx");
   return (
     <>
-      {createNew && <div className="tb-dialog react-menu tb-dropdown-menu tb-transparent-menu">
-        <div className="tb-dialog-title">Create new ticket</div>
-        <input type="text" placeholder="Title" />
-        </div>}
+      {createNew && (
+        <div className="tb-dialog react-menu tb-dropdown-menu tb-transparent-menu">
+          <div className="tb-dialog-title">Create new ticket</div>
+          <input type="text" placeholder="Title" />
+        </div>
+      )}
       <div>
         <div className="tb-title-bar">
           <div className="tb-title">Tickets</div>

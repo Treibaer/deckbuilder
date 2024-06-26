@@ -33,7 +33,6 @@ export default function MagicCardSearch({ cards, setCards }) {
     }, 0);
   }, []);
 
-  let searchTimer = 0;
 
   function handleChange(event) {
     setSearchTerm(event.target.value);

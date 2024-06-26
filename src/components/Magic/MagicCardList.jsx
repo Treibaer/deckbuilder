@@ -3,17 +3,43 @@ import LoadingSpinner from "../Common/LoadingSpinner";
 import MagicCardView from "./MagicCardView";
 import Helper from "./Helper";
 import "./MagicCardList.css";
+import MagicHelper from "../../Services/MagicHelper";
 
 export default function MagicCardList({ cards }) {
   let [style, setStyle] = useState("cards");
   let [size, setSize] = useState("normal");
   let [selectedCard, setSelectedCard] = useState(null);
 
+  const [faceSide, setFaceSide] = useState(0);
+
+  function changeFaceSide() {
+    setFaceSide((faceSide) => (faceSide + 1) % selectedCard.card_faces.length);
+    // setImage(determineImageUrl(card, faceSide.current));
+  }
+
   return (
     <div id="magic-card-list">
       {selectedCard && (
-        <div className="fullscreenCard" onClick={() => setSelectedCard(null)}>
-          <img src={selectedCard.image ?? selectedCard.image_uris.normal} />
+        <div
+          className={`fullscreenCard`}
+        >
+          <div
+            className="background"
+            onClick={() => setSelectedCard(null)}
+          ></div>
+          <div className="relative-wrapper">
+            <div className={`image-wrapper ${faceSide === 0 ? "normal" : "flipped"}`}>
+              <img
+                src={MagicHelper.determineImageUrl(selectedCard, faceSide)}
+                onClick={() => setSelectedCard(null)}
+              />
+            </div>
+            {selectedCard.card_faces && (
+              <div className="magicCardRotateButton" onClick={changeFaceSide}>
+                R
+              </div>
+            )}
+          </div>
         </div>
       )}
       {["small", "normal", "large"].map((s) => (
@@ -49,7 +75,9 @@ export default function MagicCardList({ cards }) {
               <MagicCardView
                 key={index}
                 card={card}
-                onTap={() => {setSelectedCard(card)}}
+                onTap={() => {
+                  setSelectedCard(card);
+                }}
                 size={size}
               />
             ))}
@@ -64,9 +92,10 @@ export default function MagicCardList({ cards }) {
               <div>{Helper.convertCostsToImgArray(card.mana_cost)}</div>
               <div>{card.type_line}</div>
               <div>
-                {card.colors && card.colors.map((color) =>
-                  Helper.replaceColorSymbolsByImage(color)
-                )}
+                {card.colors &&
+                  card.colors.map((color) =>
+                    Helper.replaceColorSymbolsByImage(color)
+                  )}
               </div>
             </div>
           ))}

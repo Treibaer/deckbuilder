@@ -38,4 +38,45 @@ export default class MagicHelper {
       "": remaingCards,
     };
   }
+
+  static loadFromTreibaer = true;
+
+  static determineImageUrl(card, faceId = 0) {
+    if (card.image_uris) {
+      // if is scryfall card
+      if (MagicHelper.loadFromTreibaer) {
+        return "https://magic.treibaer.de/image/card/normal/" + card.id;
+      }
+      return card.image_uris.normal;
+    } else if (card.image) {
+      // if is treibaer card
+      return card.image;
+    } else if (card.card_faces) {
+      // console.log(card.card_faces[faceId].image_uris.normal);
+      return card.card_faces[faceId].image_uris.normal;
+    } else {
+      return backside;
+    }
+  }
+
+  static determineCardType(card) {
+    if (card.type_line.includes("Creature")) {
+      return "Creature";
+    } else if (card.type_line.includes("Land")) {
+      return "Land";
+    } else if (card.type_line.includes("Instant")) {
+      return "Instant";
+    } else if (card.type_line.includes("Sorcery")) {
+      return "Sorcery";
+    } else if (card.type_line.includes("Artifact")) {
+      return "Artifact";
+    } else if (card.type_line.includes("Enchantment")) {
+      return "Enchantment";
+    } else if (card.type_line.includes("Planeswalker")) {
+      return "Planeswalker";
+    } else {
+      console.error("Unknown type: " + card.type_line+ ", scryfall_id: " + card.id);
+      return "";
+    }
+  }
 }

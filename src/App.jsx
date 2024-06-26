@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./App.css";
 import Header, { tabs } from "./components/Header.jsx";
 import Finances from "./components/Finances/Finances.jsx";
-import TicketOverview from "./components/tickets/TicketOverview.jsx";
+import TicketOverview from "./components/Tickets/TicketOverview.jsx";
 import MagicSetCardList from "./components/Magic/MagicSetCardList.jsx";
 import MagicDeckOverview from "./components/Magic/MagicDeckOverview.jsx";
 import MagicSetList from "./components/Magic/MagicSetList.jsx";
@@ -10,6 +10,8 @@ import MagicCardSearch from "./components/Magic/MagicCardSearch.jsx";
 import "inter-ui/inter.css";
 import "./all3.css";
 import "./Magic.css";
+import Test from "./Test.jsx";
+import MyDecksList from "./components/Magic/MyDecksList.jsx";
 
 function App() {
   const [selectedTab, setSelectedTab] = useState(null);
@@ -51,6 +53,8 @@ function App() {
         <MagicSetCardList setCode={setCode ?? "mh3"} />
       )}
       {selectedTab === "magicDeckOverview" && <MagicDeckOverview />}
+      {selectedTab === "test" && <Test />}
+      {selectedTab === "myDecksList" && <MyDecksList />}
     </>
   );
 }

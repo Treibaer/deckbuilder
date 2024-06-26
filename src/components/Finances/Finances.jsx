@@ -18,6 +18,7 @@ export default function Finances() {
     });
   }, []);
 
+  console.log("Finances.jsx");
   return (
     <div id="finances-view">
       <div id="finances-header">

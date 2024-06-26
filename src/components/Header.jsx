@@ -25,6 +25,14 @@ export const tabs = [
     name: "magicDeckOverview",
     url: "/magicDeckOverview",
   },
+  {
+    name: "myDecksList",
+    url: "/myDeckView",
+  },
+  {
+    name: "test",
+    url: "/test",
+  },
 ];
 
 export default function Header({ selectedTab, onSelectTab }) {

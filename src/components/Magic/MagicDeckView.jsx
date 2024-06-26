@@ -32,7 +32,10 @@ export default function MagicDeckView({ deck, children }) {
             onClick={() => {
               window
                 .open(
-                  "http://127.0.0.1:5502/play3.html?deck=" + deck.publicId,
+                  "http://127.0.0.1:5502/play3.html?moxFieldId=" +
+                    deck.publicId +
+                    "&gameId=" +
+                    Math.floor(new Date().getTime() / 1000),
                   "_blank"
                 )
                 .focus();
@@ -43,9 +46,12 @@ export default function MagicDeckView({ deck, children }) {
         </div>
         <h1>{deck.name}</h1>
       </div>
+      <div>{deck.publicId}</div>
       <div id="deck-detail">
-        <img src={image} alt={deck.name} />
-
+        <div className="image-stats">
+          <img className="backside" src={backside} alt=" " />
+          <img src={image} alt=" " />
+        </div>
         {cards.length === 0 && <LoadingSpinner />}
         <div className="stacked">
           {Object.keys(structure).map((key, index) => {
