@@ -1,0 +1,26 @@
+#deck-grid-view {
+  overflow-y: scroll;
+  max-height: 79vh;
+
+  .deck-grid-view-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .cardWrapper {
+    position: relative;
+  }
+  .amountOverlay {
+    position: absolute;
+    top: 40px;
+    right: 10px;
+    background-color: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 5px;
+    cursor: default;
+  }
+}

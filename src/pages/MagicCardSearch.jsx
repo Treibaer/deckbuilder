@@ -1,7 +1,12 @@
-import { useEffect, useState } from "react";
-import MagicCardList from "./MagicCardList";
+import { useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import MagicCardList from "../components/Magic/MagicCardList.jsx";
 
-export default function MagicCardSearch({ cards, setCards }) {
+export default function MagicCardSearch({}) {
+  const data = useLoaderData();
+  const cards = data.data;
+
+  // const [cards, setCards] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   function loadCards2(term) {
@@ -9,10 +14,12 @@ export default function MagicCardSearch({ cards, setCards }) {
       .then((response) => response.json())
       .then((data) => {
         setCards(data.cards);
+
         // setIsLoading(false);
       });
   }
 
+  
   function loadCards(term) {
     let setCode = "mh3";
     let url = `https://api.scryfall.com/cards/search?q=c%3Ar,u,g,b,w`;
@@ -27,12 +34,11 @@ export default function MagicCardSearch({ cards, setCards }) {
       });
   }
 
-  useEffect(() => {
-    setTimeout(() => {
-      loadCards(searchTerm);
-    }, 0);
-  }, []);
-
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     loadCards(searchTerm);
+  //   }, 0);
+  // }, []);
 
   function handleChange(event) {
     setSearchTerm(event.target.value);
@@ -56,3 +62,19 @@ export default function MagicCardSearch({ cards, setCards }) {
     </>
   );
 }
+
+export const loader = async () => {
+  // let url = `https://api.scryfall.com/cards/search?q=c%3Ar,u,g,b,w`;
+  let url = `https://api.scryfall.com/cards/search?q=c%3Ac`;
+  const response = await fetch(url);
+  // wait 2 seconds
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  return response;
+  /*
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data.data);
+      setCards(data.data);
+      // setIsLoading(false);
+    }); */
+};

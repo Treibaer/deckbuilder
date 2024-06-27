@@ -27,7 +27,12 @@ export default class DeckService {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(deck),
+      body: JSON.stringify({
+        id: deck.id,
+        name: deck.name,
+        description: deck.description,
+        promoId: deck.promoId,
+      }),
     });
     // let endingTime = new Date().getTime();
     // if (endingTime - startingTime < 700) {
@@ -83,6 +88,24 @@ export default class DeckService {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ amount: amount }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Error updating card amount");
+    }
+    return response.json();
+  }
+
+  async setPromoId(deck, scryfallId) {
+    const response = await fetch(
+      this.url + "/" + deck.id,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ scryfallId: scryfallId }),
       }
     );
 

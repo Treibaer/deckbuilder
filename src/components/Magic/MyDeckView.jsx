@@ -1,20 +1,30 @@
 import { useEffect, useRef, useState } from "react";
-import "./MagicDeckView.css";
-import LoadingSpinner from "../Common/LoadingSpinner.jsx";
-import Helper from "./Helper.jsx";
-import Client from "../../Services/Client.js";
-import MagicHelper from "../../Services/MagicHelper.js";
+import { Link, useParams } from "react-router-dom";
 import DeckService from "../../Services/DeckService.js";
+import MagicHelper from "../../Services/MagicHelper.js";
+import LoadingSpinner from "../Common/LoadingSpinner.jsx";
+import DeckGridView from "./DeckViews/DeckGridView.jsx";
+import DeckListView from "./DeckViews/DeckListView";
+import Helper from "./Helper.jsx";
+import "./MoxfieldDeckDetailView.css";
 
 const backside = "https://magic.treibaer.de/image/card/backside.jpg";
-const client = Client.shared;
+const viewStyles = ["deck", "list", "visualSpoiler"];
 
-export default function MyDeckView({ deckId, children }) {
-  //   const [cards, setCards] = useState([]);
-  const [previewImage, setPreviewImage] = useState(null);
+export default function MyDeckView() {
+  const [hovered, setHovered] = useState({
+    isPreviewCardFromDeck: true,
+    id: null,
+    faceSide: 0,
+  });
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResultCards, setSearchResultCards] = useState([]);
   const [deck, setDeck] = useState(null);
+  const [viewStyle, setViewStyle] = useState("visualSpoiler");
+
+  // get deck id from url
+  const params = useParams();
+  const deckId = params.deckId;
 
   const searchTimer = useRef();
 
@@ -43,8 +53,8 @@ export default function MyDeckView({ deckId, children }) {
       return card !== null;
     });
 
-  let image =
-    previewImage || cards[0]?.image || cards[0]?.image_uris?.normal || backside;
+  const previewId = hovered?.id ?? deck.promoId;
+  const image = previewId ? MagicHelper.getImageUrl(previewId, "normal", hovered?.faceSide ?? 0) : backside;
 
   let structure = MagicHelper.getDeckStructureFromCards(cards);
 
@@ -85,21 +95,36 @@ export default function MyDeckView({ deckId, children }) {
     await loadDeck();
   }
 
+  async function setPromoId(scryfallId) {
+    deck.promoId = scryfallId;
+    await DeckService.shared.createDeck(deck);
+    await loadDeck();
+  }
+
   async function removeFromDeck(card) {
     await DeckService.shared.removeCardFromDeck(deck, card);
     await loadDeck();
   }
 
+  function setPreviewImage(card, faceSide) {
+    setHovered({ isPreviewCardFromDeck: true, id: card.id, faceSide: faceSide });
+  }
+
   return (
     <div id="magic-deck-view">
       <div className="deck-details-header">
-        <div>{children}</div>
+        <Link to=".." relative="path">
+          <button>Back</button>
+        </Link>
         <button
           className="play-button"
           onClick={() => {
             window
               .open(
-                "http://127.0.0.1:5502/play3.html?deckId=" + deck.id + "&gameId=" + Math.floor(new Date().getTime() / 1000),
+                "http://127.0.0.1:5502/play3.html?deckId=" +
+                  deck.id +
+                  "&gameId=" +
+                  Math.floor(new Date().getTime() / 1000),
                 "_blank"
               )
               .focus();
@@ -109,6 +134,20 @@ export default function MyDeckView({ deckId, children }) {
         </button>
         <input type="text" value={searchTerm} onChange={handleChange} />
         <div className="title">{deck.name}</div>
+
+        <div>
+          {viewStyles.map((s) => (
+            <button
+              className={viewStyle === s ? "selected" : ""}
+              key={s}
+              onClick={() => {
+                setViewStyle(s);
+              }}
+            >
+              {s}
+            </button>
+          ))}
+        </div>
       </div>
       <div>{deck.publicId}</div>
 
@@ -130,10 +169,10 @@ export default function MyDeckView({ deckId, children }) {
         {searchResultCards.map((card) => {
           return (
             <div key={card.id}>
-              {/* {card.name} */}
               <img
                 onMouseEnter={() => {
-                  setPreviewImage(card.image ?? card.image_uris?.normal);
+                  setHovered({ isPreviewCardFromDeck: false, id: card.id, faceSide: 0 });
+                  console.log(card);
                 }}
                 onClick={() => {
                   addToDeck(card);
@@ -143,10 +182,9 @@ export default function MyDeckView({ deckId, children }) {
                   borderRadius: "12px",
                   height: "167px",
                 }}
-                src={card.image_uris?.normal}
+                src={MagicHelper.getImageUrl(card.id, "normal")}
                 alt=" "
               />
-              {/* {card.type_line} */}
             </div>
           );
         })}
@@ -159,62 +197,88 @@ export default function MyDeckView({ deckId, children }) {
           <div>Cards: {DeckService.shared.cardCount(deck)}</div>
           <div>Worth: {DeckService.shared.calculateWorth(deck)}€</div>
           <p>Valid: {DeckService.shared.isValid(deck) ? "yes" : "no"}</p>
+          {deck.promoId !== previewId && hovered.isPreviewCardFromDeck && (
+            <button
+              onClick={() => {
+                setPromoId(previewId);
+              }}
+            >
+              Set Promo
+            </button>
+          )}
         </div>
 
         {cards.length === 0 && <p>No cards in deck</p>}
-        <div className="stacked">
-          {Object.keys(structure).map((key, index) => {
-            return (
-              structure[key].length > 0 && (
-                <div key={index + 200}>
-                  {key !== "Hide" && (
-                    <>
-                      <h3>{key}</h3>
-                      <div className="deck-details-list">
-                        {structure[key].map((card, index2) => (
-                          <div
-                            key={index2}
-                            onMouseEnter={() => {
-                              setPreviewImage(
-                                card.image ?? card.image_uris?.normal
-                              );
-                            }}
-                          >
-                            <div>
-                              {card.quantity} x {card.name}
-                            </div>
-                            <div>
-                              {Helper.convertCostsToImgArray(
-                                card.manaCost ?? card.mana_cost
-                              )}
-                              <span className="actions">
-                                <span
-                                  onClick={() => {
-                                    addToDeck(card);
-                                  }}
-                                >
-                                  ➕
+        {viewStyle === "list" && (
+          <DeckListView
+            structure={structure}
+            setPreviewImage={setPreviewImage}
+          />
+        )}
+        {viewStyle === "visualSpoiler" && (
+          <DeckGridView
+            structure={structure}
+            setPreviewImage={setPreviewImage}
+          />
+        )}
+
+        {false && (
+          <div className="stacked">
+            {Object.keys(structure).map((key, index) => {
+              return (
+                structure[key].length > 0 && (
+                  <div key={index + 200}>
+                    {key !== "Hide" && (
+                      <>
+                        <h3>{key}</h3>
+                        <div className="deck-details-list">
+                          {structure[key].map((card, index2) => (
+                            <div
+                              key={index2}
+                              onMouseEnter={() => {
+                                setHovered({
+                                  isPreviewCardFromDeck: true,
+                                  id: card.id,
+                                  faceSide: 0,
+                                });
+                              }}
+                            >
+                              <div>
+                                {card.quantity} x {card.name}
+                              </div>
+                              <div>
+                                {Helper.convertCostsToImgArray(
+                                  card.manaCost ?? card.mana_cost
+                                )}
+                                <span className="actions">
+                                  <span
+                                    onClick={() => {
+                                      addToDeck(card);
+                                    }}
+                                  >
+                                    ➕
+                                  </span>
+                                  <span
+                                    onClick={() => {
+                                      // removeFromDeck(card);
+                                      updateCardAmount(card, card.amount - 1);
+                                    }}
+                                  >
+                                    ➖
+                                  </span>
                                 </span>
-                                <span
-                                  onClick={() => {
-                                    // removeFromDeck(card);
-                                    updateCardAmount(card, card.amount - 1);
-                                  }}
-                                >
-                                  ➖
-                                </span>
-                              </span>
+                              </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
-                    </>
-                  )}
-                </div>
-              )
-            );
-          })}
-        </div>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                )
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* {cards.length === 0 && <LoadingSpinner />}

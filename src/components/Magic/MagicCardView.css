@@ -1,25 +1,28 @@
 .magicCard,
+.magicCard > .image-wrapper,
 .magicCard > .image-wrapper > img {
   width: 245px;
-  height: auto;
+  height: 341px;
   border-radius: 12px;
-  transition: width 0.3s, height 0.4s;
+  transition: width 0.3s, height 0.4s, transform 0.5s;
 }
 
 .magicCard.small,
+.magicCard.small > .image-wrapper,
 .magicCard.small > .image-wrapper > img {
   width: 180px;
-  height: auto;
+  height: 251px;
   border-radius: 12px;
-  transition: width 0.3s, height 0.4s;
+  transition: width 0.3s, height 0.4s, transform 0.5s;
 }
 
 .magicCard.large,
+.magicCard.large > .image-wrapper,
 .magicCard.large > .image-wrapper > img {
   width: 350px;
-  height: auto;
+  height: 488px;
   border-radius: 24px;
-  transition: width 0.3s, height 0.4s;
+  transition: width 0.3s, height 0.4s, transform 0.5s;
 }
 
 .magicCard > .title {
@@ -44,17 +47,9 @@
   color: white;
   cursor: pointer;
 }
-.magicCard > .image-wrapper {
-  transition: transform 0.5s;
-}
-.magicCard > .image-wrapper > img {
-  transition: transform 0.5s;
-}
 .magicCard > .image-wrapper.flipped {
   transform: rotateY(180deg);
-  transition: transform 0.5s;
 }
 .magicCard > .image-wrapper.flipped > img {
   transform: rotateY(180deg);
-  transition: transform 0.5s;
 }

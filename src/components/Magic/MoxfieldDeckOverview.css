@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     margin: 0 auto;
 }
-#deck-overview > div {
+#deck-overview > * {
     padding: 8px;
     width: 150px;
     height: auto;

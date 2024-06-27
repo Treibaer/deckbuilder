@@ -5,29 +5,6 @@
     align-items: center;
     gap: 1rem;
   }
-  .stacked {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: start;
-    gap: 1rem;
-    overflow-y: scroll;
-    max-height: 79vh;
-    padding-right: 16px;
-  }
-  .stacked > * {
-    flex: 40%;
-    cursor: pointer;
-  }
-  .stacked .actions {
-    width: 20px;
-    font-size: 1.3rem;
-    cursor: pointer;
-    /* padding: 20px; */
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none; /* Standard syntax */
-  }
   #deck-detail {
     position: relative;
     display: flex;
@@ -35,6 +12,9 @@
   }
   #deck-detail > .image-stats {
     position: relative;
+    width: 323px;
+    height: 450px;
+    flex-shrink: 0;
   }
   #deck-detail > .image-stats > .backside {
     position: absolute;

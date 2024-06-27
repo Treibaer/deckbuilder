@@ -8,6 +8,7 @@ const backside = "https://magic.treibaer.de/image/card/backside.jpg";
 export default function MagicCardView({
   card = { name: "Loading...", image: backside },
   onTap = () => {},
+  onMouseOver = (faceSide) => {},
   size = "normal",
 }) {
   const [image, setImage] = useState(MagicHelper.determineImageUrl(card));
@@ -16,6 +17,7 @@ export default function MagicCardView({
   function changeFaceSide() {
     faceSide.current = (faceSide.current + 1) % card.card_faces.length;
     setImage(MagicHelper.determineImageUrl(card, faceSide.current));
+    onMouseOver(faceSide.current)
   }
 
   lazy();
@@ -30,6 +32,8 @@ export default function MagicCardView({
           alt={card.name}
           placeholder={backside}
           onTap={onTap}
+          onMouseOver={(card) => {onMouseOver(faceSide.current)}}
+          // onFlip={onFlip}
         />
       </div>
       {card.card_faces && (

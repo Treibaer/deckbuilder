@@ -1,3 +1,5 @@
+import MagicHelper from "./MagicHelper";
+
 export default class Client {
   static shared = new Client();
 
@@ -32,10 +34,14 @@ export default class Client {
         // cards: deck.cards,
         mainboardCount: deck.mainboardCount,
         colors: deck.colors,
+        promoId: deck.mainScryfallId,
       };
     });
 
     decks = decks.filter((deck) => {
+      // if (deck.name === "🌽Sneaky Farm🚜") {
+      //   console.log(deck);
+      // }
       if (deck.format === "commander") {
         return deck.mainboardCount <= 110 && deck.mainboardCount >= 99;
       }
@@ -53,37 +59,56 @@ export default class Client {
 
     for (let card of Object.values(resData.commanders)) {
       cards.push({
-        id: index,
+        id: card.card.scryfall_id,
         isCommander: true,
         name: card.card.name,
         quantity: card.quantity,
+        card_faces: this.findCardFaces(card),
         type: card.card.type_line,
         colors: card.card.colors,
         manaCost: card.card.mana_cost,
-        image:
-          "https://magic.treibaer.de/image/card/normal/" +
-          card.card.scryfall_id,
+        image: card.card.card_faces?.length
+          ? MagicHelper.getCardFace(card.card.scryfall_id, 0)
+          : MagicHelper.getImageUrl(card.card.scryfall_id),
       });
       index++;
     }
+    // console.log(Object.values(resData.commanders));
+    // console.log(cards);
+    // console.log(Object.values(resData.commanders)[0].card);
+    // console.log(Object.values(resData.commanders)[0].card.scryfall_id);
+    // console.log(cards[0]);
 
     for (let card of Object.values(resData.mainboard)) {
       cards.push({
-        id: index,
+        id: card.card.scryfall_id,
         isCommander: false,
         name: card.card.name,
         quantity: card.quantity,
+        card_faces: this.findCardFaces(card),
         type: card.card.type_line,
         colors: card.card.colors,
         manaCost: card.card.mana_cost,
-        image:
-          "https://magic.treibaer.de/image/card/normal/" +
-          card.card.scryfall_id,
+        image: MagicHelper.getImageUrl(card.card.scryfall_id),
       });
       index++;
     }
-    return cards;
+    return { name: resData.name, publicId: resData.publicId, cards: cards };
   }
+
+  findCardFaces(card) {
+    if (!card.card.card_faces || card.card.card_faces.length === 0) {
+      return undefined;
+    }
+    const faces = [];
+    for (let i = 0; i < card.card.card_faces.length; i++) {
+      faces.push({
+        image: MagicHelper.getImageUrl(card.card.scryfall_id, "normal", i),
+      });
+    }
+    return faces;
+  }
+
   async loadSets() {
     let data = await fetch("https://magic.treibaer.de/sets");
     let resData = await data.json();

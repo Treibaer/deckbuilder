@@ -1,37 +1,28 @@
-import { useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 import Client from "../../Services/Client";
 import "./MagicSetList.css";
 
 const client = Client.shared;
 
 export default function MagicSetList() {
-  const [sets, setSets] = useState([]);
-
-  function loadSets() {
-    client.loadSets().then((data) => {
-      setSets(data);
-    });
-  }
-
-  if (!sets.length) {
-    loadSets();
-  }
-
-  function openUrlWithSetCode(setCode) {
-    window.open(`/magicSetCardList?setCode=${setCode}`, "_self");
-  }
+  const sets = useLoaderData();
 
   return (
     <div>
       <h1>Magic Card Sets</h1>
       <div id="set-wrapper">
         {sets.map((set, index) => (
-          <div key={index} onClick={() => openUrlWithSetCode(set.code)}>
+          <Link to={`/sets/${set.code}`} key={index}>
             <div>{set.name}</div>
             <img src={set.iconSvgUri} />
-          </div>
+          </Link>
         ))}
       </div>
     </div>
   );
+}
+
+export const loader = async () => {
+  const response = await Client.shared.loadSets()
+  return response;
 }

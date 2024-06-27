@@ -19,3 +19,6 @@ Currently, two official plugins are available:
 ### start webserver
 
 `npm run dev`
+
+### install router
+`npm install react-router-dom`
