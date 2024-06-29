@@ -91,4 +91,27 @@ export default class DeckService {
     }
     dataService.saveDecks(decks);
   }
+
+  replaceCard(deckId: number, oldId: string, newCard: any) {
+    const decks = dataService.loadDecks();
+    const deck = decks.find((d) => d.id === deckId);
+
+    if (!deck) {
+      throw new Error("Deck not found");
+    }
+
+    const oldCardIndex = deck.mainboard.findIndex((c) => c.scryfallId === oldId);
+    // const newCardIndex = deck.mainboard.findIndex((c) => c.scryfallId === newId);
+
+    if (oldCardIndex === -1) {
+      throw new Error("Card not found");
+    }
+
+    deck.mainboard[oldCardIndex].card = newCard;
+    deck.mainboard[oldCardIndex].scryfallId = newCard.id;
+    if (deck.promoId === oldId) {
+      deck.promoId = newCard.id;
+    }
+    dataService.saveDecks(decks);
+  }
 }

@@ -73,11 +73,6 @@ export default class Client {
       });
       index++;
     }
-    // console.log(Object.values(resData.commanders));
-    // console.log(cards);
-    // console.log(Object.values(resData.commanders)[0].card);
-    // console.log(Object.values(resData.commanders)[0].card.scryfall_id);
-    // console.log(cards[0]);
 
     for (let card of Object.values(resData.mainboard)) {
       cards.push({

@@ -60,10 +60,6 @@ export default class MagicHelper {
   }
 
   static determineImageUrl(card, faceId = 0) {
-    // todo: make more generic
-    // if (card.isMoxy) {
-    //   return card.image;
-    // }
     if (card.image_uris) {
       // proxying is allowed per api guidelines
       return `https://magic.treibaer.de/image/card/normal/${card.id}`;
@@ -81,7 +77,9 @@ export default class MagicHelper {
   }
 
   static determineCardType(card) {
-    if (card.type_line.includes("Creature")) {
+    if (!card.type_line) {
+      return "Unknown";
+    } else if (card.type_line.includes("Creature")) {
       return "Creature";
     } else if (card.type_line.includes("Land")) {
       return "Land";
@@ -120,5 +118,96 @@ export default class MagicHelper {
   static getCardFace(scryfallId, faceId = 0) {
     // not implemented yet, will be done in backend, when importing the moxfield deck
     return "https://magic.treibaer.de/image/card/backside.jpg";
+  }
+
+  static extractFilterFromQuery(q) {
+    // example: order:name direction:ascending o:oracle e:ymid t:Creature c<=wu id<=rg m=2 mv=1 power=3 toughness>4 loyalty=5
+    // example: order:name direction:ascending o:oracle e:ymid type:Creature c<=wu id<=rg m=2 mv=1 power=3 toughness>4 loyalty=5
+    const filter = {
+      cardName: undefined,
+      type: undefined,
+      manaValue: undefined,
+
+      power: undefined,
+      toughness: undefined,
+      loyalty: undefined,
+      rarity: undefined,
+      set: undefined,
+      format: undefined,
+      oracle: undefined,
+      colors: [],
+    };
+
+    if (!q) {
+      return filter;
+    }
+
+    const split = q.trim().split(" ");
+    if (split.length === 1 && !MagicHelper.extractOperator(split[0])) {
+      filter.cardName = split[0];
+      return filter;
+    }
+    console.log(filter);
+    split.reverse().forEach((part) => {
+      const operator = MagicHelper.extractOperator(part);
+      if (!operator) {
+        filter.cardName = part;
+        return;
+      }
+      const [key, value] = part.split(operator);
+      console.log(key + " " + value);
+      switch (key) {
+        case "name":
+          filter.cardName = value;
+          break;
+        case "type":
+          filter.type = value;
+          break;
+        case "color":
+          for (let i = 0; i < value.length; i++) {
+            const color = value.charAt(i);
+            filter.colors.push(color);
+          }
+          break;
+
+        case "mv":
+          filter.manaValue = value;
+          break;
+        case "power":
+          filter.power = value;
+          break;
+        case "toughness":
+          filter.toughness = value;
+          break;
+        case "rarity":
+          filter.rarity = value;
+          break;
+        case "format":
+          filter.format = value;
+          break;
+        case "oracle":
+          filter.oracle = value;
+          break;
+        // case "loyalty":
+        //   filter.loyalty = value;
+        //   break;
+        // case "set":
+        //   filter.set = value;
+        //   break;
+        default:
+          break;
+      }
+    });
+    return filter;
+  }
+
+  static extractOperator(value) {
+    const operators = ["<=", "<", "=", ">", ">=", ":"];
+    for (let operator of operators) {
+      if (value.includes(operator)) {
+        return operator;
+      }
+    }
+    return undefined;
   }
 }

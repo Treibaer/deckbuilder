@@ -62,6 +62,20 @@ app.post("/api/decks", (req, res) => {
   res.status(200).json(deck);
 });
 
+// currently only replace print
+app.put("/api/decks/:id", (req, res) => {
+  const deckId = parseInt(req.params.id);
+  const oldId = req.body.oldId;
+  const newCard = req.body.newCard;
+  
+  try {
+    deckService.replaceCard(deckId, oldId, newCard);
+    res.status(200).json({ message: "Card replaced" });
+  } catch (error: any) {
+    res.status(404).json({ message: error.message });
+  }
+});
+
 app.get("/api/decks/:id", (req, res) => {
   const deckId = parseInt(req.params.id);
 

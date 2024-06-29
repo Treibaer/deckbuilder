@@ -2,8 +2,6 @@ import { Link, useLoaderData } from "react-router-dom";
 import Client from "../../Services/Client";
 import "./MagicSetList.css";
 
-const client = Client.shared;
-
 export default function MagicSetList() {
   const sets = useLoaderData();
 

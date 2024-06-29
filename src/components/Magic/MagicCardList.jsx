@@ -1,9 +1,9 @@
 import { useState } from "react";
+import MagicHelper from "../../Services/MagicHelper";
 import LoadingSpinner from "../Common/LoadingSpinner";
-import MagicCardView from "./MagicCardView";
 import Helper from "./Helper";
 import "./MagicCardList.css";
-import MagicHelper from "../../Services/MagicHelper";
+import MagicCardView from "./MagicCardView";
 
 export default function MagicCardList({ cards }) {
   let [style, setStyle] = useState("cards");
@@ -14,7 +14,6 @@ export default function MagicCardList({ cards }) {
 
   function changeFaceSide() {
     setFaceSide((faceSide) => (faceSide + 1) % selectedCard.card_faces.length);
-    // setImage(determineImageUrl(card, faceSide.current));
   }
 
   return (
@@ -73,7 +72,7 @@ export default function MagicCardList({ cards }) {
           {style === "cards" &&
             cards.map((card, index) => (
               <MagicCardView
-                key={index}
+                key={card.id}
                 card={card}
                 onTap={() => {
                   setSelectedCard(card);

@@ -25,7 +25,7 @@ export default function MainNavigation() {
               }
               end
             >
-              Magic Card Search
+              Cards
             </NavLink>
           </li>
           <li>

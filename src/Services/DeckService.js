@@ -97,17 +97,14 @@ export default class DeckService {
     return response.json();
   }
 
-  async setPromoId(deck, scryfallId) {
-    const response = await fetch(
-      this.url + "/" + deck.id,
-      {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ scryfallId: scryfallId }),
-      }
-    );
+  async setPrint(deck, card, print) {
+    const response = await fetch(this.url + "/" + deck.id, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ oldId: card.id, newCard: print }),
+    });
 
     if (!response.ok) {
       throw new Error("Error updating card amount");
@@ -122,7 +119,14 @@ export default class DeckService {
   }
 
   calculateWorth(deck) {
+    console.log(deck);
     return deck.mainboard.reduce((acc, card) => {
+      if (card.card.foil) {
+        if (!card.card.prices.eur_foil) {
+          return acc;
+        }
+        return acc + card.amount * parseInt(card.card.prices.eur_foil);
+      }
       if (!card.card.prices.eur) {
         return acc;
       }

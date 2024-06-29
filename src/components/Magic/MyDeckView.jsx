@@ -1,17 +1,19 @@
-import { useEffect, useRef, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useRef, useState } from "react";
+import { Link, useLoaderData } from "react-router-dom";
 import DeckService from "../../Services/DeckService.js";
 import MagicHelper from "../../Services/MagicHelper.js";
-import LoadingSpinner from "../Common/LoadingSpinner.jsx";
 import DeckGridView from "./DeckViews/DeckGridView.jsx";
 import DeckListView from "./DeckViews/DeckListView";
-import Helper from "./Helper.jsx";
 import "./MoxfieldDeckDetailView.css";
+import MyDeckViewOverlay from "./MyDeckViewOverlay.jsx";
+import MagicCardView from "./MagicCardView.jsx";
 
 const backside = "https://magic.treibaer.de/image/card/backside.jpg";
-const viewStyles = ["deck", "list", "visualSpoiler"];
+const viewStyles = ["list", "grid"];
 
 export default function MyDeckView() {
+  const data = useLoaderData();
+
   const [hovered, setHovered] = useState({
     isPreviewCardFromDeck: true,
     id: null,
@@ -19,27 +21,12 @@ export default function MyDeckView() {
   });
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResultCards, setSearchResultCards] = useState([]);
-  const [deck, setDeck] = useState(null);
-  const [viewStyle, setViewStyle] = useState("visualSpoiler");
-
-  // get deck id from url
-  const params = useParams();
-  const deckId = params.deckId;
-
-  const searchTimer = useRef();
+  const [deck, setDeck] = useState(data);
+  const [viewStyle, setViewStyle] = useState("grid");
 
   async function loadDeck() {
-    const deck = await DeckService.shared.loadDeck(deckId);
-    setDeck(deck);
-  }
-
-  useEffect(() => {
-    loadDeck();
-  }, []);
-
-  // load deck data later
-  if (!deck) {
-    return <LoadingSpinner />;
+    const response = await DeckService.shared.loadDeck(deck.id);
+    setDeck(response);
   }
 
   let cards = deck.mainboard
@@ -54,9 +41,31 @@ export default function MyDeckView() {
     });
 
   const previewId = hovered?.id ?? deck.promoId;
-  const image = previewId ? MagicHelper.getImageUrl(previewId, "normal", hovered?.faceSide ?? 0) : backside;
+  const image = previewId
+    ? MagicHelper.getImageUrl(previewId, "normal", hovered?.faceSide ?? 0)
+    : backside;
 
   let structure = MagicHelper.getDeckStructureFromCards(cards);
+
+  let tokens = []
+  cards.forEach((card) => {
+    card.all_parts?.forEach((part) => {
+      if (part.component === "token") {
+        tokens.push(part);
+      }
+    });
+  });
+  // filter out with same id
+  tokens = tokens.filter((token, index, self) =>
+    index === self.findIndex((t) => t.id === token.id)
+  );
+  // map to compatible format
+  tokens.map((token) => {
+    token.image = MagicHelper.getImageUrl(token.id);
+    return token;
+  });
+
+  structure["Tokens"] = tokens;
 
   async function loadCards(term) {
     if (term === "") {
@@ -74,6 +83,7 @@ export default function MyDeckView() {
     setSearchResultCards(resData.data);
   }
 
+  const searchTimer = useRef();
   function handleChange(event) {
     setSearchTerm(event.target.value);
 
@@ -107,11 +117,39 @@ export default function MyDeckView() {
   }
 
   function setPreviewImage(card, faceSide) {
-    setHovered({ isPreviewCardFromDeck: true, id: card.id, faceSide: faceSide });
+    setHovered({
+      isPreviewCardFromDeck: true,
+      id: card.id,
+      faceSide: faceSide,
+    });
+  }
+
+  const [cardDetails, setCardDetails] = useState(null);
+
+  function showDetailOverlay(card) {
+    setCardDetails(card);
+  }
+
+  async function setPrint(card, print) {
+    // console.log("setPrint", card, print);
+    await DeckService.shared.setPrint(deck, card, print);
+    await loadDeck();
+    if (card.id === hovered?.id) {
+      setPreviewImage(print, 0);
+    }
+    setCardDetails(print);
+    // setCardDetails(null);
   }
 
   return (
     <div id="magic-deck-view">
+      {cardDetails && (
+        <MyDeckViewOverlay
+          card={cardDetails}
+          closeOverlay={() => setCardDetails(null)}
+          setPrint={setPrint}
+        />
+      )}
       <div className="deck-details-header">
         <Link to=".." relative="path">
           <button>Back</button>
@@ -144,7 +182,7 @@ export default function MyDeckView() {
                 setViewStyle(s);
               }}
             >
-              {s}
+              {s.capitalize()}
             </button>
           ))}
         </div>
@@ -171,8 +209,12 @@ export default function MyDeckView() {
             <div key={card.id}>
               <img
                 onMouseEnter={() => {
-                  setHovered({ isPreviewCardFromDeck: false, id: card.id, faceSide: 0 });
-                  console.log(card);
+                  setHovered({
+                    isPreviewCardFromDeck: false,
+                    id: card.id,
+                    faceSide: 0,
+                  });
+                  // console.log(card);
                 }}
                 onClick={() => {
                   addToDeck(card);
@@ -213,88 +255,26 @@ export default function MyDeckView() {
           <DeckListView
             structure={structure}
             setPreviewImage={setPreviewImage}
+            addToDeck={addToDeck}
+            updateCardAmount={updateCardAmount}
+            onClick={showDetailOverlay}
           />
         )}
-        {viewStyle === "visualSpoiler" && (
+        {viewStyle === "grid" && (
           <DeckGridView
             structure={structure}
             setPreviewImage={setPreviewImage}
+            addToDeck={addToDeck}
+            updateCardAmount={updateCardAmount}
+            openPrintSelection={showDetailOverlay}
           />
         )}
-
-        {false && (
-          <div className="stacked">
-            {Object.keys(structure).map((key, index) => {
-              return (
-                structure[key].length > 0 && (
-                  <div key={index + 200}>
-                    {key !== "Hide" && (
-                      <>
-                        <h3>{key}</h3>
-                        <div className="deck-details-list">
-                          {structure[key].map((card, index2) => (
-                            <div
-                              key={index2}
-                              onMouseEnter={() => {
-                                setHovered({
-                                  isPreviewCardFromDeck: true,
-                                  id: card.id,
-                                  faceSide: 0,
-                                });
-                              }}
-                            >
-                              <div>
-                                {card.quantity} x {card.name}
-                              </div>
-                              <div>
-                                {Helper.convertCostsToImgArray(
-                                  card.manaCost ?? card.mana_cost
-                                )}
-                                <span className="actions">
-                                  <span
-                                    onClick={() => {
-                                      addToDeck(card);
-                                    }}
-                                  >
-                                    ➕
-                                  </span>
-                                  <span
-                                    onClick={() => {
-                                      // removeFromDeck(card);
-                                      updateCardAmount(card, card.amount - 1);
-                                    }}
-                                  >
-                                    ➖
-                                  </span>
-                                </span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )
-              );
-            })}
-          </div>
-        )}
       </div>
-
-      {/* {cards.length === 0 && <LoadingSpinner />}
-      {cards.length && (
-        <div>
-          <h2>{deck.name}</h2>
-          <h3>Cards</h3>
-          <ul>
-            <div className="card-container">
-              {cards.map((card) => (
-                <MagicCard key={card.id} card={card} onTap={() => {}} />
-              ))}
-            </div>
-          </ul>
-        </div>
-      )} */}
     </div>
   );
 }
+
+export const loader = async ({ params }) => {
+  const response = await DeckService.shared.loadDeck(params.deckId);
+  return response;
+};

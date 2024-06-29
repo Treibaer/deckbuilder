@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import "./Finances.css";
-import LoadingSpinner from "../Common/LoadingSpinner";
 import Client from "../../Services/Client";
+import LoadingSpinner from "../Common/LoadingSpinner";
+import "./Finances.css";
 
 export default function Finances() {
   const [isLoading, setIsLoading] = useState(true);

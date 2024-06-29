@@ -13,8 +13,9 @@ export default function MyDecksList() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState(null);
   const [isCreatingDeck, setIsCreatingDeck] = useState(false);
+  const data = useLoaderData();
+  const [myDecks, setMyDecks] = useState(data);
 
-  const myDecks = useLoaderData();
 
   async function createDeck() {
     // setIsUpdating(true);
@@ -32,10 +33,12 @@ export default function MyDecksList() {
         mainboard: [],
         promoId: "",
       });
-      await loadMyDecks();
+      let decks = await deckService.loadMyDecks();
+      setMyDecks(decks);
       setIsCreatingDeck(false);
       setError(null);
     } catch (error) {
+      console.log(error);
       setError(error);
     }
     // setIsUpdating(false);
