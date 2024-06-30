@@ -1,19 +1,26 @@
 import { useEffect, useState } from "react";
-import { useLoaderData, useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
+import Client from "../Services/Client.js";
 import MagicCardList from "../components/Magic/MagicCardList.jsx";
-import MagicFilterView from "./MagicFilterView.jsx";
 import "./MagicCardSearch.css";
+import MagicFilterView from "./MagicFilterView.jsx";
 
 export default function MagicCardSearch({}) {
   const navigate = useNavigate();
   const data = useLoaderData();
   const cards = data.data;
-  const queryParameters = new URLSearchParams(window.location.search);
-  const q = queryParameters.get("q");
+  const [searchParams, _] = useSearchParams();
+  const q = searchParams.get("q");
+  const page = searchParams.get("page");
+  const selectedPage = page ? parseInt(page) - 1 : 0;
 
   const [showFilter, setShowFilter] = useState(false);
 
-  console.log("search term: " + q);
+  let pages = Math.ceil(data.amount / cards.length);
+  if (!data.hasMore) {
+    pages = selectedPage + 1;
+  }
+
   const [searchTerm, setSearchTerm] = useState(q ?? "");
 
   useEffect(() => {
@@ -34,13 +41,21 @@ export default function MagicCardSearch({}) {
   }
 
   function handleSearch() {
-    let url = `/magicCardSearch?q=${searchTerm}`;
+    let url = `/search?q=${searchTerm}`;
     navigate(url);
   }
 
   return (
     <>
-      <h1>Magic Card Search</h1>
+      <div className="searchHeader">
+        <div className="title">Search</div>
+
+        {data.amount > 0 && (
+          <h2>
+            {data.amount} card{data.amount === 1 ? "" : "s"} found
+          </h2>
+        )}
+      </div>
       <div className="searchBar">
         <input
           type="text"
@@ -63,17 +78,40 @@ export default function MagicCardSearch({}) {
       </div>
       {
         <MagicFilterView
+          sets={data.sets}
           showFilter={showFilter}
           setShowFilter={setShowFilter}
-          setSearchTerm={setSearchTerm}
         />
       }
-      {cards.length > 0 && <MagicCardList cards={cards} />}
+      <div className="searchResultsHeader">
+        {pages > 1 && (
+          <div>
+            {Array.from({ length: pages }, (_, i) => (
+              <button
+                className={selectedPage === i ? "active" : ""}
+                key={i}
+                onClick={() => {
+                  let url = `/search?q=${searchTerm}&page=${i + 1}`;
+                  navigate(url);
+                }}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+      <div>
+        {data.amount === 0 && <p>No cards found</p>}
+        {cards.length > 0 && <MagicCardList cards={cards} />}
+      </div>
     </>
   );
 }
 
 export const loader = async ({ request }) => {
+  const sets = await Client.shared.loadSets();
+  sets.sort((a, b) => (a.name > b.name ? 1 : -1));
   // filter logic
   let url = `https://api.scryfall.com/cards/search?q=c%3Ar,u,g,b,w`;
   // let url = `https://api.scryfall.com/cards/search?q=`;
@@ -82,23 +120,25 @@ export const loader = async ({ request }) => {
   let q = queryParameters.get("q");
 
   if (!q) {
-    return { data: [] };
+    return { data: [], sets: sets };
   }
   q += " game:paper";
 
-  // log(url);
   url = `https://api.scryfall.com/cards/search?q=ab+order:name+direction:ascending+c%3Dwu+prefer:usd-low+include:extras&page=1`;
   url = `https://api.scryfall.com/cards/search?q=${q}`;
-  // if (queryParameters.size > 0) {
-  //   url = `https://api.scryfall.com/cards/search?q=${filter.join("+")}`;
-  // } else {
-  //   return {data: []};
-  // }
+  if (queryParameters.has("page")) {
+    url += `&page=${queryParameters.get("page")}`;
+  }
   const response = await fetch(url);
   if (!response.ok) {
-    return { data: [] };
+    return { data: [], sets: sets, amount: 0, hasMore: false };
   }
-  // wait 2 seconds
   // await new Promise((resolve) => setTimeout(resolve, 2000));
-  return response;
+  const json = await response.json();
+  return {
+    data: json.data,
+    hasMore: json.has_more,
+    amount: json.total_cards,
+    sets: sets,
+  };
 };

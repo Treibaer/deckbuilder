@@ -3,7 +3,7 @@
   <head>
     <style>
       html {
-        background-color: #191A23;
+        background-color: #191a23;
       }
     </style>
     <meta charset="UTF-8" />
@@ -13,6 +13,24 @@
   </head>
   <body>
     <div id="root"></div>
+    <div id="loadingSpinnerWrapper">
+      <div id="loadingSpinner">
+        <div class="lds-ring">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      const loadingSpinnerWrapper = document.getElementById(
+        "loadingSpinnerWrapper"
+      );
+      setTimeout(() => {
+        loadingSpinnerWrapper.style.display = "block";
+      }, 300);
+    </script>
   </body>
 </html>

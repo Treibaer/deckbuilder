@@ -1,27 +1,23 @@
 import { useEffect, useState } from "react";
 import Helper from "../components/Magic/Helper";
 import "./MagicFilterView.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import MagicHelper from "../Services/MagicHelper";
 
-export default function MagicFilterView({
-  showFilter,
-  setShowFilter,
-  setSearchTerm,
-}) {
+export default function MagicFilterView({ sets, showFilter, setShowFilter }) {
   const navigate = useNavigate();
-
-  const queryParameters = new URLSearchParams(window.location.search);
-  const q = queryParameters.get("q");
+  const [searchParams, _] = useSearchParams();
+  const q = searchParams.get("q");
 
   const prevFilter = MagicHelper.extractFilterFromQuery(q);
 
   const [filter, setFilter] = useState(prevFilter);
 
-  console.log(filter);
+  const [key, setKey] = useState(Math.floor(Math.random() * 1000000));
 
   useEffect(() => {
     setFilter(MagicHelper.extractFilterFromQuery(q));
+    setKey(Math.floor(Math.random() * 1000000));
   }, [q]);
 
   function toggleColor(symbol) {
@@ -33,6 +29,8 @@ export default function MagicFilterView({
     console.log(filter.colors);
     setFilter({ ...filter, colors: filter.colors });
   }
+
+  console.log(filter);
 
   return (
     <div className={`filterBlurBackground ${showFilter ? "active" : ""}`}>
@@ -48,7 +46,7 @@ export default function MagicFilterView({
               type="text"
               name="name"
               placeholder="Name"
-              key={filter.cardName}
+              key={`name_${key}`}
               defaultValue={filter.cardName}
               onChange={(event) => {
                 setFilter({ ...filter, cardName: event.target.value });
@@ -60,7 +58,7 @@ export default function MagicFilterView({
             <input
               type="text"
               name="type"
-              key={filter.type}
+              key={`type_${key}`}
               placeholder="Type"
               defaultValue={filter.type}
               onChange={(event) => {
@@ -73,7 +71,7 @@ export default function MagicFilterView({
             <input
               type="number"
               name="manaValue"
-              key={filter.manaValue}
+              key={`manaValue_${key}`}
               defaultValue={filter.manaValue}
               onChange={(event) => {
                 setFilter({ ...filter, manaValue: event.target.value });
@@ -85,7 +83,7 @@ export default function MagicFilterView({
             <input
               type="number"
               name="power"
-              key={filter.power}
+              key={`power_${key}`}
               defaultValue={filter.power}
               onChange={(event) => {
                 setFilter({ ...filter, power: event.target.value });
@@ -97,7 +95,7 @@ export default function MagicFilterView({
             <input
               type="number"
               name="toughness"
-              key={filter.toughness}
+              key={`toughness_${key}`}
               defaultValue={filter.toughness}
               onChange={(event) => {
                 setFilter({ ...filter, toughness: event.target.value });
@@ -124,7 +122,24 @@ export default function MagicFilterView({
           </div>
           <div className="inputGroup">
             <label htmlFor="set">Set</label>
-            <input type="text" key={filter.set} name="set" />
+            {/* <input type="text" key={`set_${key}`} name="set" /> */}
+            <select
+              name="set"
+              key={`set_${key}`}
+              defaultValue={filter.set}
+              onChange={(event) => {
+                setFilter({ ...filter, set: event.target.value });
+              }}
+            >
+              <option value="">All</option>
+              {sets.map((set) => {
+                return (
+                  <option value={set.code} key={set.code}>
+                    {set.name}
+                  </option>
+                );
+              })}
+            </select>
           </div>
           <div className="inputGroup">
             <label htmlFor="format">Format</label>
@@ -169,7 +184,7 @@ export default function MagicFilterView({
             <textarea
               type="text"
               name="oracle"
-              key={filter.oracle}
+              key={`oracle_${key}`}
               defaultValue={filter.oracle}
               onChange={(event) => {
                 setFilter({ ...filter, oracle: event.target.value });
@@ -215,51 +230,39 @@ export default function MagicFilterView({
               </div>
             </div>
           </div>
+          <div className="inputGroup">
+            <label htmlFor="unique">All prints</label>
+            <input
+              type="checkbox"
+              name="unique"
+              key={`unique_${key}`}
+              checked={filter.unique === "prints"}
+              onChange={(event) => {
+                setFilter({
+                  ...filter,
+                  unique: event.target.checked ? "prints" : undefined,
+                });
+              }}
+            />
+          </div>
+          <div className="inputGroup">
+            <label htmlFor="unique">Fullart</label>
+            <input
+              type="checkbox"
+              name="fullart"
+              key={`fullart_${key}`}
+              checked={filter.is === "fullart"}
+              onChange={(event) => {
+                setFilter({
+                  ...filter,
+                  is: event.target.checked ? "fullart" : undefined,
+                });
+              }}
+            />
+          </div>
           <button
             onClick={() => {
-              const filters = [];
-              // build url
-              let q = "";
-              if (filter.cardName) {
-                q += ` name:${filter.cardName}`;
-                // filters.push(`name=${filter.name}`);
-              }
-              if (filter.type) {
-                q += ` type:${filter.type}`;
-                // filters.push(`type=${filter.type}`);
-              }
-              if (filter.manaValue) {
-                q += ` mv:${filter.manaValue}`;
-              }
-
-              if (filter.rarity) {
-                q += ` rarity:${filter.rarity}`;
-              }
-
-              if (filter.power) {
-                q += ` power:${filter.power}`;
-              }
-              if (filter.toughness) {
-                q += ` toughness:${filter.toughness}`;
-              }
-              if (filter.loyalty) {
-                q += ` loyalty:${filter.loyalty}`;
-              }
-              if (filter.set) {
-                q += ` set:${filter.set}`;
-              }
-              if (filter.format) {
-                q += ` format:${filter.format}`;
-              }
-              if (filter.oracle) {
-                q += ` oracle:${filter.oracle}`;
-              }
-              if (filter.colors.length > 0) {
-                q += ` color:${filter.colors.join("")}`;
-              }
-              q = q.trim().toLowerCase();
-              // let url = `/magicCardSearch?${filters.join("&")}`;
-              let url = `/magicCardSearch?q=${q}`;
+              const url = MagicHelper.createUrlFromFilter(filter);
               navigate(url);
               setShowFilter(false);
             }}

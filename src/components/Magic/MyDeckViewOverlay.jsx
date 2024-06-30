@@ -9,7 +9,8 @@ export default function MyDeckViewOverlay({ closeOverlay, card, setPrint }) {
   async function loadPrints() {
     setIsLoading(true);
 
-    const response = await fetch(card.prints_search_uri);
+    const url = card.prints_search_uri.replace("q=", "q=game:paper+");
+    const response = await fetch(url);
     let resData = await response.json();
 
     if (resData.object === "cors") {

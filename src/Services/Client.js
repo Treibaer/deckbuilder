@@ -3,9 +3,14 @@ import MagicHelper from "./MagicHelper";
 export default class Client {
   static shared = new Client();
 
-  token = "7be4dd9b0da9f118093186c6f2c1c0bd68648a0f";
+  token;
 
-  constructor() {}
+  constructor() {
+    this.token = localStorage.getItem("token");
+    if (!this.token) {
+      localStorage.setItem("token", "TESTABC");
+    }
+  }
 
   async getFinancesDashboard() {
     let data = await fetch(

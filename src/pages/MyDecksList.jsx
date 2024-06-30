@@ -5,7 +5,7 @@ import ErrorView from "../components/Common/ErrorView.jsx";
 import MagicHelper from "../Services/MagicHelper.js";
 import DeckList from "../components/Magic/DeckOverview.jsx";
 import DeckService from "../Services/DeckService.js";
-import { useLoaderData } from "react-router-dom";
+import { defer, useLoaderData } from "react-router-dom";
 
 const deckService = DeckService.shared;
 
@@ -89,6 +89,19 @@ export default function MyDecksList() {
   );
 }
 
-export const loader = async () => {
+
+async function realLoad() {
+  // wait 2 seconds
+  await new Promise((resolve) => setTimeout(resolve, 2000));
   return await deckService.loadMyDecks();
+}
+
+export const loader = async () => {
+  // wait 2 seconds
+  // await new Promise((resolve) => setTimeout(resolve, 2000));
+  return await deckService.loadMyDecks();
+
+  // return defer({
+  //   data: await realLoad(),
+  // })
 };

@@ -19,7 +19,7 @@ export default function MainNavigation() {
           </li>
           <li>
             <NavLink
-              to="magicCardSearch"
+              to="/search"
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
               }

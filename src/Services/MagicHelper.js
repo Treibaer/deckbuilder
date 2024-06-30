@@ -127,7 +127,6 @@ export default class MagicHelper {
       cardName: undefined,
       type: undefined,
       manaValue: undefined,
-
       power: undefined,
       toughness: undefined,
       loyalty: undefined,
@@ -135,6 +134,8 @@ export default class MagicHelper {
       set: undefined,
       format: undefined,
       oracle: undefined,
+      unique: undefined,
+      is: undefined,
       colors: [],
     };
 
@@ -147,7 +148,7 @@ export default class MagicHelper {
       filter.cardName = split[0];
       return filter;
     }
-    console.log(filter);
+
     split.reverse().forEach((part) => {
       const operator = MagicHelper.extractOperator(part);
       if (!operator) {
@@ -155,7 +156,6 @@ export default class MagicHelper {
         return;
       }
       const [key, value] = part.split(operator);
-      console.log(key + " " + value);
       switch (key) {
         case "name":
           filter.cardName = value;
@@ -169,7 +169,6 @@ export default class MagicHelper {
             filter.colors.push(color);
           }
           break;
-
         case "mv":
           filter.manaValue = value;
           break;
@@ -191,14 +190,70 @@ export default class MagicHelper {
         // case "loyalty":
         //   filter.loyalty = value;
         //   break;
-        // case "set":
-        //   filter.set = value;
-        //   break;
+        case "set":
+          filter.set = value;
+          break;
+        case "unique":
+          filter.unique = value;
+          break;
+        case "is":
+          filter.is = value;
+          break;
         default:
           break;
       }
     });
     return filter;
+  }
+
+  static createUrlFromFilter(filter) {
+    let query = "";
+    if (filter.cardName) {
+      query += ` name:${filter.cardName}`;
+    }
+    if (filter.type) {
+      query += ` type:${filter.type}`;
+    }
+    if (filter.manaValue) {
+      query += ` mv:${filter.manaValue}`;
+    }
+
+    if (filter.rarity) {
+      query += ` rarity:${filter.rarity}`;
+    }
+
+    if (filter.power) {
+      query += ` power:${filter.power}`;
+    }
+    if (filter.toughness) {
+      query += ` toughness:${filter.toughness}`;
+    }
+    if (filter.loyalty) {
+      query += ` loyalty:${filter.loyalty}`;
+    }
+    if (filter.set) {
+      query += ` set:${filter.set}`;
+    }
+    if (filter.format) {
+      query += ` format:${filter.format}`;
+    }
+    if (filter.oracle) {
+      query += ` oracle:${filter.oracle}`;
+    }
+    if (filter.colors && filter.colors.length > 0) {
+      query += ` color:${filter.colors.join("")}`;
+    }
+    if (filter.unique) {
+      query += ` unique:${filter.unique}`;
+    }
+    if (filter.is) {
+      query += ` is:fullart`;
+    }
+    if (filter.order) {
+      query += ` order:${filter.order}`;
+    }
+    query = query.trim().toLowerCase();
+    return `/search?q=${query}`;
   }
 
   static extractOperator(value) {
