@@ -22,8 +22,6 @@ export default function MagicSetList() {
 }
 
 export const loader = async () => {
-  // wait 10 minutes
-  // await new Promise((resolve) => setTimeout(resolve, 1000));
   const response = await Client.shared.loadSets();
   return response;
 };

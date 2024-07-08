@@ -3,6 +3,9 @@ import express from "express";
 import DataService from "./DataService.js";
 import DeckService from "./DeckService.js";
 import { Deck, ScryfallCard } from "./Models.js";
+import MoxFieldImporter from "./MoxfieldImporter.js";
+import deckRoutes from "./routes/decks.js";
+import matchRoutes from "./routes/matches.js";
 
 const app = express();
 const dataService = new DataService();
@@ -11,22 +14,39 @@ app.use(bodyParser.json());
 
 // CORS
 app.use((_, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*"); // allow all domains
+  res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Methods", "GET, PUT, DELETE, POST");
   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-
   next();
 });
+
+app.use("/api/decks", deckRoutes);
+app.use("/api/matches", matchRoutes);
 
 app.get("/", (_, res) => {
   res.status(200).json({ message: "Hello from express" });
 });
 
-app.get("/api/decks", async (_, res) => {
-  const decks = dataService.loadDecks();
-  // wait 2 seconds
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
-  res.status(200).json(decks);
+app.get("/api/users", (_, res) => {
+  res.status(200).json([
+    { id: 1, name: "Hannes" },
+    { id: 2, name: "Juri" },
+  ]);
+});
+
+app.post("/api/decks/clone", async (req, res) => {
+  const type = req.body.type as string;
+  const deckId = req.body.id as string;
+  if (!type || !deckId) {
+    res.status(400).json({ message: "Invalid request" });
+    return;
+  }
+  let clone;
+  if (type === "moxField") {
+    clone = await new MoxFieldImporter().loadMoxfieldDeck(deckId);
+    // console.log(clone);
+  }
+  res.status(200).json(clone);
 });
 
 // currently only reduce amount by one or set promoId
@@ -41,33 +61,12 @@ app.put("/api/decks/:id/cards/:cardId", (req, res) => {
   }
 });
 
-app.post("/api/decks", (req, res) => {
-  const rawDeck = req.body;
-
-  if (!rawDeck.name || !rawDeck.description) {
-    res.status(400).json({ message: "Invalid deck" });
-    return;
-  }
-
-  const deck: Deck = {
-    id: rawDeck.id,
-    name: rawDeck.name,
-    description: rawDeck.description,
-    mainboard: [],
-    promoId: rawDeck.promoId,
-    isPublic: false,
-  };
-
-  deckService.createOrUpdateDeck(deck);
-  res.status(200).json(deck);
-});
-
 // currently only replace print
 app.put("/api/decks/:id", (req, res) => {
   const deckId = parseInt(req.params.id);
   const oldId = req.body.oldId;
   const newCard = req.body.newCard;
-  
+
   try {
     deckService.replaceCard(deckId, oldId, newCard);
     res.status(200).json({ message: "Card replaced" });

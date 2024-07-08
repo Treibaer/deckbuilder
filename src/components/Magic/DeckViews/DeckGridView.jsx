@@ -52,7 +52,7 @@ export default function DeckGridView({
                             <div
                               className="action"
                               onClick={() => {
-                                updateCardAmount(card, card.amount - 1);
+                                updateCardAmount(card, card.quantity - 1);
                               }}
                             >
                               -
@@ -61,7 +61,7 @@ export default function DeckGridView({
                               <div
                                 className="action"
                                 onClick={() => {
-                                  openPrintSelection(card, card.amount - 1);
+                                  openPrintSelection(card);
                                 }}
                               >
                                 ...

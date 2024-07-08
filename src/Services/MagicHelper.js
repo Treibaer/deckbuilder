@@ -60,6 +60,7 @@ export default class MagicHelper {
   }
 
   static determineImageUrl(card, faceId = 0) {
+    return `https://magic.treibaer.de/image/card/normal/${card.id}`;
     if (card.image_uris) {
       // proxying is allowed per api guidelines
       return `https://magic.treibaer.de/image/card/normal/${card.id}`;
@@ -77,25 +78,25 @@ export default class MagicHelper {
   }
 
   static determineCardType(card) {
-    if (!card.type_line) {
+    if (!card.typeLine) {
       return "Unknown";
-    } else if (card.type_line.includes("Creature")) {
+    } else if (card.typeLine.includes("Creature")) {
       return "Creature";
-    } else if (card.type_line.includes("Land")) {
+    } else if (card.typeLine.includes("Land")) {
       return "Land";
-    } else if (card.type_line.includes("Instant")) {
+    } else if (card.typeLine.includes("Instant")) {
       return "Instant";
-    } else if (card.type_line.includes("Sorcery")) {
+    } else if (card.typeLine.includes("Sorcery")) {
       return "Sorcery";
-    } else if (card.type_line.includes("Artifact")) {
+    } else if (card.typeLine.includes("Artifact")) {
       return "Artifact";
-    } else if (card.type_line.includes("Enchantment")) {
+    } else if (card.typeLine.includes("Enchantment")) {
       return "Enchantment";
-    } else if (card.type_line.includes("Planeswalker")) {
+    } else if (card.typeLine.includes("Planeswalker")) {
       return "Planeswalker";
     } else {
       console.error(
-        "Unknown type: " + card.type_line + ", scryfall_id: " + card.id
+        "Unknown type: " + card.typeLine + ", scryfall_id: " + card.id
       );
       return "";
     }

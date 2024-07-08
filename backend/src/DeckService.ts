@@ -1,11 +1,11 @@
 import DataService from "./DataService.js";
 import { Deck, ScryfallCard } from "./Models.js";
 
-const dataService = new DataService();
-
 export default class DeckService {
+  dataService = new DataService();
+  
   decreaseCardAmount(deckId: number, scryfallId: string) {
-    const decks = dataService.loadDecks();
+    const decks = this.dataService.loadDecks();
     const deck = decks.find((d) => d.id === deckId);
     if (!deck) {
       throw new Error("Deck not found");
@@ -29,11 +29,20 @@ export default class DeckService {
         }
       }
     }
-    dataService.saveDecks(decks);
+    this.dataService.saveDecks(decks);
+  }
+
+  getNewDeckId() {
+    const decks = this.dataService.loadDecks();
+    let maxId = 0;
+    if (decks.length > 0) {
+      maxId = Math.max(...decks.map((d) => d.id));
+    }
+    return maxId + 1;
   }
 
   createOrUpdateDeck(deck: Deck) {
-    const decks = dataService.loadDecks();
+    const decks = this.dataService.loadDecks();
     let existingDeck = decks.find((d) => d.id === deck.id);
 
     if (existingDeck) {
@@ -50,11 +59,11 @@ export default class DeckService {
       deck.promoId = "";
       decks.push(deck);
     }
-    dataService.saveDecks(decks);
+    this.dataService.saveDecks(decks);
   }
 
   getDeck(deckId: number): Deck | undefined {
-    const decks = dataService.loadDecks();
+    const decks = this.dataService.loadDecks();
     return decks.find((d) => d.id === deckId);
   }
 
@@ -63,7 +72,7 @@ export default class DeckService {
       throw new Error("Invalid card");
     }
 
-    const decks = dataService.loadDecks();
+    const decks = this.dataService.loadDecks();
     const deck = decks.find((d) => d.id === deckId);
 
     if (!deck) {
@@ -89,11 +98,11 @@ export default class DeckService {
         deck.promoId = card.id;
       }
     }
-    dataService.saveDecks(decks);
+    this.dataService.saveDecks(decks);
   }
 
   replaceCard(deckId: number, oldId: string, newCard: any) {
-    const decks = dataService.loadDecks();
+    const decks = this.dataService.loadDecks();
     const deck = decks.find((d) => d.id === deckId);
 
     if (!deck) {
@@ -112,6 +121,6 @@ export default class DeckService {
     if (deck.promoId === oldId) {
       deck.promoId = newCard.id;
     }
-    dataService.saveDecks(decks);
+    this.dataService.saveDecks(decks);
   }
 }

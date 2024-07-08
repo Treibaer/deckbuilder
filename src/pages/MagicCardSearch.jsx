@@ -6,6 +6,20 @@ import "./MagicCardSearch.css";
 import MagicFilterView from "./MagicFilterView.jsx";
 
 export default function MagicCardSearch({}) {
+  /*
+    useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onCancel();
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+
+  }, []);
+  */
   const navigate = useNavigate();
   const data = useLoaderData();
   const cards = data.data;

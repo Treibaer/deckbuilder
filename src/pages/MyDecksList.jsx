@@ -56,7 +56,7 @@ export default function MyDecksList() {
       name: deck.name,
       format: deck.format,
       viewCount: deck.viewCount,
-      cardCount: DeckService.shared.cardCount(deck),
+      cardCount: deck.cardCount,
       colors: [],
     };
   });

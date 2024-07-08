@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MagicCardView from "./MagicCardView";
 
-export default function MyDeckViewOverlay({ closeOverlay, card, setPrint }) {
+export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPrint }) {
   const [isLoading, setIsLoading] = useState(false);
   const [prints, setPrints] = useState([]);
 
   async function loadPrints() {
     setIsLoading(true);
 
-    const url = card.prints_search_uri.replace("q=", "q=game:paper+");
+    const url = card.printsSearchUri.replace("q=", "q=game:paper+");
     const response = await fetch(url);
     let resData = await response.json();
 

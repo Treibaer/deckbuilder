@@ -43,7 +43,7 @@ export default function DeckListView({
                               </span>
                               <span
                                 onClick={() => {
-                                  updateCardAmount(card, card.amount - 1);
+                                  updateCardAmount(card, card.quantity - 1);
                                 }}
                               >
                                 ➖

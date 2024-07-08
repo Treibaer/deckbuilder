@@ -16,17 +16,23 @@ import MoxfieldDeckDetailView, {
 import MoxfieldDeckOverview, {
   loader as moxfieldLoader,
 } from "./components/Magic/MoxfieldDeckOverview.jsx";
-import MyDeckView, { loader as myDeckViewLoader } from "./components/Magic/MyDeckView.jsx";
+import MyDeckView, {
+  loader as myDeckViewLoader,
+} from "./components/Magic/MyDeckView.jsx";
 import TicketOverview from "./components/Tickets/TicketOverview.jsx";
 import "./extensions/String.js";
 import Home from "./pages/Home.jsx";
 import MagicCardSearch, {
   loader as searchCardLoader,
 } from "./pages/MagicCardSearch.jsx";
+import Matches from "./pages/Matches.jsx";
 import MyDecksList, {
   loader as myDecksListLoader,
 } from "./pages/MyDecksList.jsx";
+import Profile from "./pages/Profile.jsx";
 import RootLayout from "./pages/RootLayout.jsx";
+import Settings from "./pages/Settings.jsx";
+import Users from "./pages/Users.jsx";
 
 const router = createBrowserRouter([
   {
@@ -54,9 +60,21 @@ const router = createBrowserRouter([
         loader: moxfieldDeckDetailLoader,
       },
       { path: "/decks", element: <h1>All Public Decks</h1> },
-      { path: "/decks/my", element: <MyDecksList />, loader: myDecksListLoader },
-      { path: "/decks/my/:deckId", element: <MyDeckView />, loader: myDeckViewLoader},
+      {
+        path: "/decks/my",
+        element: <MyDecksList />,
+        loader: myDecksListLoader,
+      },
+      {
+        path: "/decks/my/:deckId",
+        element: <MyDeckView />,
+        loader: myDeckViewLoader,
+      },
       { path: "test", element: <Test /> },
+      { path: "/users", element: <Users /> },
+      { path: "/matches", element: <Matches /> },
+      { path: "/profile", element: <Profile /> },
+      { path: "/settings", element: <Settings /> },
     ],
     // errorElement: <ErrorPage />,
   },

@@ -1,0 +1,39 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 32px;
+
+  .title {
+    font-size: x-large;
+    font-weight: 600;
+  }
+}
+.matches {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .matchRow {
+    display: flex;
+    gap: 8px;
+    * {
+      flex: 1;
+    }
+  }
+}
+
+.new-match-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+
+  .formRow {
+    display: flex;
+    gap: 8px;
+    * {
+      flex: 1;
+    }
+  }
+}

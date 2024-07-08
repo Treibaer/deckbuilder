@@ -61,6 +61,50 @@ export default function MainNavigation() {
               My Decks
             </NavLink>
           </li>
+          <li>
+            <NavLink
+              to="/users"
+              className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }
+              end
+            >
+              Users
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/matches"
+              className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }
+              end
+            >
+              Matches
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/profile"
+              className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }
+              end
+            >
+              Profile
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/settings"
+              className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }
+              end
+            >
+              Settings
+            </NavLink>
+          </li>
           {/* <li>
             <NavLink
               to="finances"

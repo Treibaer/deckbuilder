@@ -1,17 +1,17 @@
 import { useRef, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import DeckService from "../../Services/DeckService.js";
 import MagicHelper from "../../Services/MagicHelper.js";
 import DeckGridView from "./DeckViews/DeckGridView.jsx";
 import DeckListView from "./DeckViews/DeckListView";
 import "./MoxfieldDeckDetailView.css";
-import MyDeckViewOverlay from "./MyDeckViewOverlay.jsx";
-import MagicCardView from "./MagicCardView.jsx";
+import MyDeckPrintSelectionOverlay from "./MyDeckPrintSelectionOverlay.jsx";
 
 const backside = "https://magic.treibaer.de/image/card/backside.jpg";
 const viewStyles = ["list", "grid"];
 
 export default function MyDeckView() {
+  const navigator = useNavigate();
   const data = useLoaderData();
 
   const [hovered, setHovered] = useState({
@@ -19,21 +19,43 @@ export default function MyDeckView() {
     id: null,
     faceSide: 0,
   });
+  const [viewStyle, setViewStyle] = useState("grid");
+  
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResultCards, setSearchResultCards] = useState([]);
   const [deck, setDeck] = useState(data);
-  const [viewStyle, setViewStyle] = useState("grid");
 
   async function loadDeck() {
     const response = await DeckService.shared.loadDeck(deck.id);
     setDeck(response);
   }
 
-  let cards = deck.mainboard
+  // merge 2 card arrays
+  function mergeCards(cards1, cards2) {
+    let merged = [];
+    cards1.forEach((card1) => {
+      let card2 = cards2.find((c) => c.id === card1.id);
+      if (card2) {
+        card1.quantity += card2.quantity;
+        merged.push(card1);
+      } else {
+        merged.push(card1);
+      }
+    });
+    cards2.forEach((card2) => {
+      let card1 = cards1.find((c) => c.id === card2.id);
+      if (!card1) {
+        merged.push(card2);
+      }
+    });
+    return merged;
+  }
+
+  let cards = mergeCards(deck.mainboard, deck.commanders)
     .map((card) => {
       let newCard = card.card;
       newCard.type = MagicHelper.determineCardType(newCard);
-      newCard.quantity = card.amount;
+      newCard.quantity = card.quantity;
       return newCard;
     })
     .filter((card) => {
@@ -41,13 +63,14 @@ export default function MyDeckView() {
     });
 
   const previewId = hovered?.id ?? deck.promoId;
+  console.log("previewId", previewId);
   const image = previewId
     ? MagicHelper.getImageUrl(previewId, "normal", hovered?.faceSide ?? 0)
     : backside;
 
   let structure = MagicHelper.getDeckStructureFromCards(cards);
 
-  let tokens = []
+  let tokens = [];
   cards.forEach((card) => {
     card.all_parts?.forEach((part) => {
       if (part.component === "token") {
@@ -56,8 +79,8 @@ export default function MyDeckView() {
     });
   });
   // filter out with same id
-  tokens = tokens.filter((token, index, self) =>
-    index === self.findIndex((t) => t.id === token.id)
+  tokens = tokens.filter(
+    (token, index, self) => index === self.findIndex((t) => t.id === token.id)
   );
   // map to compatible format
   tokens.map((token) => {
@@ -103,11 +126,13 @@ export default function MyDeckView() {
   async function updateCardAmount(card, amount) {
     await DeckService.shared.updateCardAmount(deck, card, amount);
     await loadDeck();
+    if (hovered.id === card.id && amount === 0) {
+      setPreviewImage(null, 0);
+    }
   }
 
   async function setPromoId(scryfallId) {
-    deck.promoId = scryfallId;
-    await DeckService.shared.createDeck(deck);
+    await DeckService.shared.setPromoId(deck, scryfallId);
     await loadDeck();
   }
 
@@ -119,7 +144,7 @@ export default function MyDeckView() {
   function setPreviewImage(card, faceSide) {
     setHovered({
       isPreviewCardFromDeck: true,
-      id: card.id,
+      id: card?.id,
       faceSide: faceSide,
     });
   }
@@ -140,11 +165,15 @@ export default function MyDeckView() {
     setCardDetails(print);
     // setCardDetails(null);
   }
+  async function deleteDeck() {
+    await DeckService.shared.deleteDeck(deck);
+    navigator("/decks/my");
+  }
 
   return (
     <div id="magic-deck-view">
       {cardDetails && (
-        <MyDeckViewOverlay
+        <MyDeckPrintSelectionOverlay
           card={cardDetails}
           closeOverlay={() => setCardDetails(null)}
           setPrint={setPrint}
@@ -154,6 +183,7 @@ export default function MyDeckView() {
         <Link to=".." relative="path">
           <button>Back</button>
         </Link>
+        <button onClick={deleteDeck}>Delete</button>
         <button
           className="play-button"
           onClick={() => {
@@ -214,7 +244,6 @@ export default function MyDeckView() {
                     id: card.id,
                     faceSide: 0,
                   });
-                  // console.log(card);
                 }}
                 onClick={() => {
                   addToDeck(card);
@@ -236,7 +265,7 @@ export default function MyDeckView() {
         <div className="image-stats">
           <img className="backside" src={backside} alt=" " />
           <img style={{ zIndex: 1 }} src={image} alt=" " />
-          <div>Cards: {DeckService.shared.cardCount(deck)}</div>
+          <div>Cards: {deck.cardCount}</div>
           <div>Worth: {DeckService.shared.calculateWorth(deck)}€</div>
           <p>Valid: {DeckService.shared.isValid(deck) ? "yes" : "no"}</p>
           {deck.promoId !== previewId && hovered.isPreviewCardFromDeck && (

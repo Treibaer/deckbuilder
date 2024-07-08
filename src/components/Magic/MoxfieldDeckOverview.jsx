@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
-import Client from "../../Services/Client";
-import "./MoxfieldDeckOverview.css";
-import DeckList from "./DeckOverview";
 import { useLoaderData } from "react-router-dom";
+import Client from "../../Services/Client";
 import MagicHelper from "../../Services/MagicHelper";
+import DeckList from "./DeckOverview";
+import "./MoxfieldDeckOverview.css";
 
 const client = Client.shared;
 
 export default function MoxfieldDeckOverview() {
   const decks = useLoaderData();
-  
+
   const mappedDecks = decks.map((deck) => {
     return {
       id: deck.id,
       img: deck.promoId ? MagicHelper.artCropUrl(deck.promoId) : undefined,
-      link: `/decks/moxfield/${deck.publicId}`,
+      link: `/decks/moxfield/${deck.id}`,
       name: deck.name,
       format: deck.format,
       viewCount: deck.viewCount,
