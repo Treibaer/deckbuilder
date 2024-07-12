@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import Client from "../../Services/Client.js";
+import DeckService from "../../Services/DeckService.js";
 import MagicHelper from "../../Services/MagicHelper.js";
+import LoadingSpinner from "../Common/LoadingSpinner.jsx";
+import CardPeekView from "./CardPeekView.jsx";
 import DeckGridView from "./DeckViews/DeckGridView.jsx";
 import DeckListView from "./DeckViews/DeckListView.jsx";
 import "./MoxfieldDeckDetailView.css";
-import DeckService from "../../Services/DeckService.js";
-import LoadingSpinner from "../Common/LoadingSpinner.jsx";
 
 const backside = "https://magic.treibaer.de/image/card/backside.jpg";
 const client = Client.shared;
@@ -18,6 +19,7 @@ export default function MoxfieldDeckDetailView() {
   const deck = useLoaderData();
   const [isLoading, setIsLoading] = useState(false);
 
+  const [cardPreview, setCardPreview] = useState(false);
   const [hovered, setHovered] = useState({
     isPreviewCardFromDeck: true,
     id: null,
@@ -25,28 +27,7 @@ export default function MoxfieldDeckDetailView() {
   });
   const [viewStyle, setViewStyle] = useState("grid");
 
-  // merge 2 card arrays
-  function mergeCards(cards1, cards2) {
-    let merged = [];
-    cards1.forEach((card1) => {
-      let card2 = cards2.find((c) => c.id === card1.id);
-      if (card2) {
-        card1.quantity += card2.quantity;
-        merged.push(card1);
-      } else {
-        merged.push(card1);
-      }
-    });
-    cards2.forEach((card2) => {
-      let card1 = cards1.find((c) => c.id === card2.id);
-      if (!card1) {
-        merged.push(card2);
-      }
-    });
-    return merged;
-  }
-
-  let cards = mergeCards(deck.mainboard, deck.commanders)
+  let cards = deck.mainboard
     .map((card) => {
       let newCard = card.card;
       newCard.type = MagicHelper.determineCardType(newCard);
@@ -57,13 +38,19 @@ export default function MoxfieldDeckDetailView() {
       return card !== null;
     });
 
-
   const previewId = hovered.id ?? deck.promoId;
 
   const image = previewId
     ? MagicHelper.getImageUrl(previewId, "normal", hovered.faceSide ?? 0)
     : backside;
   const structure = MagicHelper.getDeckStructureFromCards(cards);
+
+  structure["Commanders"] = deck.commanders.map((card) => {
+    let newCard = card.card;
+    newCard.type = MagicHelper.determineCardType(newCard);
+    newCard.quantity = card.quantity;
+    return newCard;
+  });
 
   function setPreviewImage(card, faceSide) {
     setHovered({
@@ -76,40 +63,46 @@ export default function MoxfieldDeckDetailView() {
   async function clone() {
     setIsLoading(true);
     const newDeck = await deckService.cloneMoxfieldDeck(deck.id);
-    // wait 1 seconds for the deck to be created
+    // wait 1 seconds for the deck to be created, otherwise, it's too fast and you don't see that a deck is created
     await new Promise((resolve) => setTimeout(resolve, 1000));
-    // setIsLoading(true);
     navigator("/decks/my/" + newDeck.id);
+  }
+
+  function showCardPreview(card) {
+    setCardPreview(card);
+  }
+
+  async function didTapPlay() {
+    const response = await Client.shared.post(
+      `https://magic.treibaer.de/api/v1/playtests`,
+      JSON.stringify({
+        moxFieldDeckId: deck.id,
+      })
+    );
+    window
+      .open("http://127.0.0.1:5502/play3.html?mId=" + response.id, "_blank")
+      .focus();
   }
 
   return (
     <div id="magic-deck-view">
-      {isLoading && (
-        <div className="fullscreenBlurWithLoading">
-          <LoadingSpinner />
-        </div>
+      {isLoading && <LoadingSpinner />}
+
+      {cardPreview && (
+        <CardPeekView card={cardPreview} onClose={() => setCardPreview(null)} />
       )}
       <div className="deck-details-header">
         <div>
-          <Link to=".." relative="path">
-            <button>Back</button>
-          </Link>
-
-          <button onClick={clone}>Clone</button>
           <button
-            className="play-button"
             onClick={() => {
-              window
-                .open(
-                  "http://127.0.0.1:5502/play3.html?moxFieldId=" +
-                    deck.publicId +
-                    "&gameId=" +
-                    Math.floor(new Date().getTime() / 1000),
-                  "_blank"
-                )
-                .focus();
+              navigator(-1);
             }}
           >
+            Back
+          </button>
+
+          <button onClick={clone}>Clone</button>
+          <button className="play-button" onClick={didTapPlay}>
             Play
           </button>
         </div>
@@ -145,6 +138,7 @@ export default function MoxfieldDeckDetailView() {
           <DeckGridView
             structure={structure}
             setPreviewImage={setPreviewImage}
+            showCardPreview={showCardPreview}
           />
         )}
       </div>

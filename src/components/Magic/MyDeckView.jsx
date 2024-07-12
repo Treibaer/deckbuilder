@@ -2,10 +2,13 @@ import { useRef, useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import DeckService from "../../Services/DeckService.js";
 import MagicHelper from "../../Services/MagicHelper.js";
+import Confirmation from "../Common/Confirmation.jsx";
+import CardPeekView from "./CardPeekView.jsx";
 import DeckGridView from "./DeckViews/DeckGridView.jsx";
 import DeckListView from "./DeckViews/DeckListView";
 import "./MoxfieldDeckDetailView.css";
 import MyDeckPrintSelectionOverlay from "./MyDeckPrintSelectionOverlay.jsx";
+import Client from "../../Services/Client.js";
 
 const backside = "https://magic.treibaer.de/image/card/backside.jpg";
 const viewStyles = ["list", "grid"];
@@ -20,38 +23,21 @@ export default function MyDeckView() {
     faceSide: 0,
   });
   const [viewStyle, setViewStyle] = useState("grid");
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResultCards, setSearchResultCards] = useState([]);
   const [deck, setDeck] = useState(data);
+  const [showDeletionConfirmation, setShowDeletionConfirmation] =
+    useState(false);
+
+  const [cardPreview, setCardPreview] = useState(false);
 
   async function loadDeck() {
     const response = await DeckService.shared.loadDeck(deck.id);
     setDeck(response);
   }
 
-  // merge 2 card arrays
-  function mergeCards(cards1, cards2) {
-    let merged = [];
-    cards1.forEach((card1) => {
-      let card2 = cards2.find((c) => c.id === card1.id);
-      if (card2) {
-        card1.quantity += card2.quantity;
-        merged.push(card1);
-      } else {
-        merged.push(card1);
-      }
-    });
-    cards2.forEach((card2) => {
-      let card1 = cards1.find((c) => c.id === card2.id);
-      if (!card1) {
-        merged.push(card2);
-      }
-    });
-    return merged;
-  }
-
-  let cards = mergeCards(deck.mainboard, deck.commanders)
+  let cards = deck.mainboard
     .map((card) => {
       let newCard = card.card;
       newCard.type = MagicHelper.determineCardType(newCard);
@@ -63,12 +49,18 @@ export default function MyDeckView() {
     });
 
   const previewId = hovered?.id ?? deck.promoId;
-  console.log("previewId", previewId);
   const image = previewId
     ? MagicHelper.getImageUrl(previewId, "normal", hovered?.faceSide ?? 0)
     : backside;
 
   let structure = MagicHelper.getDeckStructureFromCards(cards);
+
+  structure["Commanders"] = deck.commanders.map((card) => {
+    let newCard = card.card;
+    newCard.type = MagicHelper.determineCardType(newCard);
+    newCard.quantity = card.quantity;
+    return newCard;
+  });
 
   let tokens = [];
   cards.forEach((card) => {
@@ -118,13 +110,13 @@ export default function MyDeckView() {
     }, 500);
   }
 
-  async function addToDeck(card) {
-    await DeckService.shared.addCardToDeck(deck, card);
+  async function addToDeck(card, zone) {
+    await DeckService.shared.addCardToDeck(deck, card, zone);
     await loadDeck();
   }
 
-  async function updateCardAmount(card, amount) {
-    await DeckService.shared.updateCardAmount(deck, card, amount);
+  async function updateCardAmount(card, zone, amount) {
+    await DeckService.shared.updateCardAmount(deck, card, zone, amount);
     await loadDeck();
     if (hovered.id === card.id && amount === 0) {
       setPreviewImage(null, 0);
@@ -133,11 +125,6 @@ export default function MyDeckView() {
 
   async function setPromoId(scryfallId) {
     await DeckService.shared.setPromoId(deck, scryfallId);
-    await loadDeck();
-  }
-
-  async function removeFromDeck(card) {
-    await DeckService.shared.removeCardFromDeck(deck, card);
     await loadDeck();
   }
 
@@ -155,6 +142,15 @@ export default function MyDeckView() {
     setCardDetails(card);
   }
 
+  function showCardPreview(card) {
+    setCardPreview(card);
+  }
+
+  async function moveZone(card, originZone, destinationZone) {
+    await DeckService.shared.moveZone(deck, card, originZone, destinationZone);
+    await loadDeck();
+  }
+
   async function setPrint(card, print) {
     // console.log("setPrint", card, print);
     await DeckService.shared.setPrint(deck, card, print);
@@ -170,8 +166,33 @@ export default function MyDeckView() {
     navigator("/decks/my");
   }
 
+  async function didTapPlay() {
+    const response = await Client.shared.post(
+      `https://magic.treibaer.de/api/v1/playtests`,
+      JSON.stringify({
+        deckId: deck.id,
+      })
+    );
+    console.log(response);
+    window
+      .open("http://127.0.0.1:5502/play3.html?mId=" + response.id, "_blank")
+      .focus();
+  }
+
   return (
     <div id="magic-deck-view">
+      {cardPreview && (
+        <CardPeekView card={cardPreview} onClose={() => setCardPreview(null)} />
+      )}
+
+      {showDeletionConfirmation && (
+        <div className="fullscreenBlurWithLoading">
+          <Confirmation
+            onCancel={() => setShowDeletionConfirmation(false)}
+            onConfirm={deleteDeck}
+          />
+        </div>
+      )}
       {cardDetails && (
         <MyDeckPrintSelectionOverlay
           card={cardDetails}
@@ -183,21 +204,10 @@ export default function MyDeckView() {
         <Link to=".." relative="path">
           <button>Back</button>
         </Link>
-        <button onClick={deleteDeck}>Delete</button>
-        <button
-          className="play-button"
-          onClick={() => {
-            window
-              .open(
-                "http://127.0.0.1:5502/play3.html?deckId=" +
-                  deck.id +
-                  "&gameId=" +
-                  Math.floor(new Date().getTime() / 1000),
-                "_blank"
-              )
-              .focus();
-          }}
-        >
+        <button onClick={() => setShowDeletionConfirmation(true)}>
+          Delete
+        </button>
+        <button className="play-button" onClick={() => didTapPlay()}>
           Play
         </button>
         <input type="text" value={searchTerm} onChange={handleChange} />
@@ -217,7 +227,6 @@ export default function MyDeckView() {
           ))}
         </div>
       </div>
-      <div>{deck.publicId}</div>
 
       <div>Results</div>
 
@@ -228,7 +237,7 @@ export default function MyDeckView() {
           gap: "10px",
           padding: "10px",
           border: "1px solid black",
-          height: "200px",
+          height: "100px",
           overflowY: "scroll",
           marginTop: "10px",
           marginBottom: "40px",
@@ -286,7 +295,9 @@ export default function MyDeckView() {
             setPreviewImage={setPreviewImage}
             addToDeck={addToDeck}
             updateCardAmount={updateCardAmount}
-            onClick={showDetailOverlay}
+            openPrintSelection={showDetailOverlay}
+            showCardPreview={showCardPreview}
+            moveZone={moveZone}
           />
         )}
         {viewStyle === "grid" && (
@@ -296,6 +307,8 @@ export default function MyDeckView() {
             addToDeck={addToDeck}
             updateCardAmount={updateCardAmount}
             openPrintSelection={showDetailOverlay}
+            showCardPreview={showCardPreview}
+            moveZone={moveZone}
           />
         )}
       </div>
@@ -304,6 +317,5 @@ export default function MyDeckView() {
 }
 
 export const loader = async ({ params }) => {
-  const response = await DeckService.shared.loadDeck(params.deckId);
-  return response;
+  return await DeckService.shared.loadDeck(params.deckId);
 };

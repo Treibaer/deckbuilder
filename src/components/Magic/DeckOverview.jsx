@@ -16,17 +16,20 @@ export default function DeckOverview({ decks }) {
           <div className="deckInfo">
             {deck.description && <p>{deck.description}</p>}
             <p>Format: {deck.format}</p>
-            {deck.viewCount !== undefined && <p>ViewCount: {deck.viewCount}</p>}
-            <p>Cards: {deck.cardCount}</p>
-
-            {deck.colors.length > 0 && (
-              <div className="colors">
-                {deck.colors.map((color) =>
-                  Helper.replaceColorSymbolsByImage(color)
-                )}
-              </div>
-            )}
           </div>
+
+          {deck.colors.length > 0 && (
+            <div className="colors">
+              {deck.colors.map((color) =>
+                Helper.replaceColorSymbolsByImage(color)
+              )}
+            </div>
+          )}
+
+          {deck.viewCount !== undefined && (
+            <div className="viewCount">{deck.viewCount} views</div>
+          )}
+          <div className="cardCount">{deck.cardCount} cards</div>
         </Link>
       ))}
     </div>

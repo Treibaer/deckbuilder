@@ -6,16 +6,26 @@ import "./MagicCardView.css";
 const backside = "https://magic.treibaer.de/image/card/backside.jpg";
 
 export default function MagicCardView({
-  card = { name: "Loading...", image: backside, card_faces: []},
+  card = { name: "Loading...", image: backside, cardFaces: [] },
   onTap = () => {},
   onMouseOver = (faceSide) => {},
   size = "normal",
 }) {
+  // be compatible with scryfall api
+  if (card.card_faces && card.card_faces.length > 0) {
+    card.cardFaces = card.card_faces;
+  }
+  if (!card.cardFaces) {
+    card.cardFaces = [];
+  }
+  if (card.image_uris) {
+    card.cardFaces = [];
+  }
   const [image, setImage] = useState(MagicHelper.determineImageUrl(card));
   const faceSide = useRef(0);
 
   function changeFaceSide() {
-    faceSide.current = (faceSide.current + 1) % card.card_faces.length;
+    faceSide.current = (faceSide.current + 1) % card.cardFaces.length;
     setImage(MagicHelper.determineImageUrl(card, faceSide.current));
     onMouseOver(faceSide.current);
   }
@@ -40,7 +50,7 @@ export default function MagicCardView({
           }}
         />
       </div>
-      {card.card_faces && (
+      {card.cardFaces.length > 0 && (
         <div className="magicCardRotateButton" onClick={changeFaceSide}>
           R
         </div>

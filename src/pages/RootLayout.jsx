@@ -3,6 +3,7 @@ import { Outlet, useNavigation } from "react-router-dom";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import MainNavigation from "../components/MainNavigation";
 import LoginView from "./LoginView";
+import Constants from "../Services/Constants";
 
 export default function RootLayout() {
   const navigation = useNavigation();
@@ -18,7 +19,7 @@ export default function RootLayout() {
         return;
       }
 
-      const result = await fetch("https://mac.treibaer.de/api/v2/app", {
+      const result = await fetch(`${Constants.backendUrl}/api/v1/app`, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -70,8 +71,6 @@ function DelayedLoadingView() {
   }
 
   return (
-    <div className="fullscreenBlurWithLoading">
-      <LoadingSpinner />
-    </div>
+    <LoadingSpinner />
   );
 }

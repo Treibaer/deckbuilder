@@ -6,7 +6,9 @@ import "./Magic.css";
 import Test from "./Test.jsx";
 import "./all3.css";
 import Finances from "./components/Finances/Finances.jsx";
-import CardDetailView from "./components/Magic/CardDetailView.jsx";
+import CardDetailView, {
+  loader as cardDetailLoader,
+} from "./components/Magic/CardDetailView.jsx";
 import MagicSetList, {
   loader as setsLoader,
 } from "./components/Magic/MagicSetList.jsx";
@@ -32,7 +34,8 @@ import MyDecksList, {
 import Profile from "./pages/Profile.jsx";
 import RootLayout from "./pages/RootLayout.jsx";
 import Settings from "./pages/Settings.jsx";
-import Users from "./pages/Users.jsx";
+import Users, { loader as usersLoader } from "./pages/Users.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 const router = createBrowserRouter([
   {
@@ -46,7 +49,11 @@ const router = createBrowserRouter([
         element: <MagicCardSearch />,
         loader: searchCardLoader,
       },
-      { path: "/cards/:cardId", element: <CardDetailView /> },
+      {
+        path: "/cards/:cardId",
+        element: <CardDetailView />,
+        loader: cardDetailLoader,
+      },
       { path: "/sets", element: <MagicSetList />, loader: setsLoader },
       { path: "tickets", element: <TicketOverview /> },
       {
@@ -71,7 +78,7 @@ const router = createBrowserRouter([
         loader: myDeckViewLoader,
       },
       { path: "test", element: <Test /> },
-      { path: "/users", element: <Users /> },
+      { path: "/users", element: <Users />, loader: usersLoader },
       { path: "/matches", element: <Matches /> },
       { path: "/profile", element: <Profile /> },
       { path: "/settings", element: <Settings /> },

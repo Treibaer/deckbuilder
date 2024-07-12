@@ -10,6 +10,7 @@
   }
   .cardWrapper {
     position: relative;
+    cursor: pointer;
   }
   .amountOverlay {
     position: absolute;

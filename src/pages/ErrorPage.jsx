@@ -6,7 +6,7 @@ export default function ErrorPage() {
       <MainNavigation />
       <main style={{ textAlign: "center" }}>
         <h1>Error</h1>
-        <p>Sorry, an error occurred.</p>
+        <p>An error occurred.</p>
       </main>
     </>
   );

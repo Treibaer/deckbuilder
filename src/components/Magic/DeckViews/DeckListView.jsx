@@ -6,7 +6,9 @@ export default function DeckListView({
   setPreviewImage,
   addToDeck,
   updateCardAmount,
-  onClick,
+  showCardPreview,
+  openPrintSelection,
+  moveZone,
 }) {
   return (
     <div id="deck-list-view">
@@ -25,7 +27,7 @@ export default function DeckListView({
                           setPreviewImage(card);
                         }}
                       >
-                        <div onClick={() => onClick(card)}>
+                        <div onClick={() => showCardPreview(card)}>
                           {card.quantity} x {card.name}
                         </div>
                         <div>
@@ -36,25 +38,47 @@ export default function DeckListView({
                             <span className="actions">
                               <span
                                 onClick={() => {
-                                  addToDeck(card);
+                                  const zone =
+                                    key === "Commanders"
+                                      ? "commandZone"
+                                      : "mainboard";
+                                  addToDeck(card, zone);
                                 }}
                               >
                                 ➕
                               </span>
                               <span
                                 onClick={() => {
-                                  updateCardAmount(card, card.quantity - 1);
+                                  const zone =
+                                    key === "Commanders"
+                                      ? "commandZone"
+                                      : "mainboard";
+                                  updateCardAmount(
+                                    card,
+                                    zone,
+                                    card.quantity - 1
+                                  );
                                 }}
                               >
                                 ➖
                               </span>
                               {card.reprint && (
+                                <span onClick={() => openPrintSelection(card)}>
+                                  ...
+                                </span>
+                              )}
+                              {card.typeLine.includes("Legendary") && (
                                 <span
+                                  className="action"
                                   onClick={() => {
-                                    onClick(card);
+                                    if (key === "Commanders") {
+                                      moveZone(card, "commandZone", "mainboard");
+                                    } else {
+                                      moveZone(card, "mainboard", "commandZone");
+                                    }
                                   }}
                                 >
-                                  ...
+                                  C
                                 </span>
                               )}
                               {!card.reprint && <span> </span>}

@@ -19,6 +19,10 @@ export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPri
       resData = await response2.json();
     }
 
+    for (let i = 0; i < resData.data.length; i++) {
+      resData.data[i].cardFaces = resData.data[i].card_faces ?? []
+    }
+
     setPrints(resData.data);
     setIsLoading(false);
   }

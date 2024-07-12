@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Constants from "../Services/Constants";
 
 export default function LoginView({ setIsLoggedIn }) {
   const [username, setUsername] = useState("");
@@ -9,7 +10,7 @@ export default function LoginView({ setIsLoggedIn }) {
     event.preventDefault();
     setIsSubmitting(true);
 
-    const response = await fetch("https://mac.treibaer.de/api/v2/login", {
+    const response = await fetch(`${Constants.loginApiHost}/api/v1/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -21,6 +22,7 @@ export default function LoginView({ setIsLoggedIn }) {
       }),
     });
     const data = await response.json();
+    console.log(data);
     if (response.ok && data.token) {
       localStorage.setItem("token", data.token);
       setIsLoggedIn(true);

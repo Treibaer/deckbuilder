@@ -7,6 +7,8 @@ export default function DeckGridView({
   addToDeck,
   updateCardAmount,
   openPrintSelection,
+  showCardPreview,
+  moveZone,
 }) {
   function formatTitle(title, section) {
     const cardAmount = section.reduce((acc, card) => acc + card.quantity, 0);
@@ -30,6 +32,7 @@ export default function DeckGridView({
                       <div className="cardWrapper" key={card.id}>
                         <MagicCardView
                           card={card}
+                          onTap={() => showCardPreview(card)}
                           onMouseOver={(faceSide) => {
                             setPreviewImage(card, faceSide);
                           }}
@@ -44,7 +47,11 @@ export default function DeckGridView({
                             <div
                               className="action"
                               onClick={() => {
-                                addToDeck(card);
+                                const zone =
+                                  key === "Commanders"
+                                    ? "commandZone"
+                                    : "mainboard";
+                                addToDeck(card, zone);
                               }}
                             >
                               +
@@ -52,7 +59,11 @@ export default function DeckGridView({
                             <div
                               className="action"
                               onClick={() => {
-                                updateCardAmount(card, card.quantity - 1);
+                                const zone =
+                                  key === "Commanders"
+                                    ? "commandZone"
+                                    : "mainboard";
+                                updateCardAmount(card, zone, card.quantity - 1);
                               }}
                             >
                               -
@@ -60,11 +71,23 @@ export default function DeckGridView({
                             {card.reprint && (
                               <div
                                 className="action"
-                                onClick={() => {
-                                  openPrintSelection(card);
-                                }}
+                                onClick={() => openPrintSelection(card)}
                               >
                                 ...
+                              </div>
+                            )}
+                            {card.typeLine.includes("Legendary") && (
+                              <div
+                                className="action"
+                                onClick={() => {
+                                  if (key === "Commanders") {
+                                    moveZone(card, "commandZone", "mainboard");
+                                  } else {
+                                    moveZone(card, "mainboard", "commandZone");
+                                  }
+                                }}
+                              >
+                                C
                               </div>
                             )}
                           </div>

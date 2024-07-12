@@ -16,8 +16,8 @@ export default function MyDecksList() {
   const data = useLoaderData();
   const [myDecks, setMyDecks] = useState(data);
 
-
   async function createDeck() {
+    setIsUpdating(true);
     // setIsUpdating(true);
     // setIsCreatingDeck(false);
     const name = document.querySelector("input[name=name]").value;
@@ -41,6 +41,8 @@ export default function MyDecksList() {
       console.log(error);
       setError(error);
     }
+
+    setIsUpdating(false);
     // setIsUpdating(false);
   }
 
@@ -64,24 +66,22 @@ export default function MyDecksList() {
   return (
     <>
       <div>
-        <h1>MyDeckView</h1>
-        {isUpdating && (
-          <div className="fullscreenBlurWithLoading">
-            <LoadingSpinner />
-          </div>
-        )}
-        {isCreatingDeck && (
-          <div className="fullscreenBlurWithLoading">
-            <div className="new-deck-form">
-              {error && <ErrorView message={error.message} />}
-              <h2>Create Deck</h2>
-              <label htmlFor="name">Name</label>
-              <input type="text" name="name" />
-              <button onClick={createDeck}>Create</button>
+        <div className="headline">
+          <h1>My Decks</h1>
+          {isCreatingDeck && (
+            <div className="fullscreenBlurWithLoading">
+              <div className="new-deck-form">
+                {error && <ErrorView message={error.message} />}
+                <h2>Create Deck</h2>
+                <label htmlFor="name">Name</label>
+                <input type="text" name="name" />
+                <button onClick={createDeck}>Create</button>
+              </div>
             </div>
-          </div>
-        )}
-        <button onClick={showDeckForm}> Create Deck</button>
+          )}
+          {isUpdating && <LoadingSpinner />}
+          <button onClick={showDeckForm}> Create Deck</button>
+        </div>
         {myDecks.length === 0 && <p>No decks found</p>}
         <DeckList decks={mappedDecks} />
       </div>
@@ -89,19 +89,6 @@ export default function MyDecksList() {
   );
 }
 
-
-async function realLoad() {
-  // wait 2 seconds
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-  return await deckService.loadMyDecks();
-}
-
 export const loader = async () => {
-  // wait 2 seconds
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
   return await deckService.loadMyDecks();
-
-  // return defer({
-  //   data: await realLoad(),
-  // })
 };

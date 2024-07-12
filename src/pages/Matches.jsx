@@ -60,11 +60,7 @@ export default function Matches() {
 
   return (
     <div>
-      {isLoading && (
-        <div className="fullscreenBlurWithLoading">
-          <LoadingSpinner />
-        </div>
-      )}
+      {isLoading && <LoadingSpinner />}
       {isCreatingMatch && (
         <div className="fullscreenBlurWithLoading">
           <div className="new-match-form new-deck-for1m">
@@ -104,7 +100,7 @@ export default function Matches() {
             <div>{match.id}</div>
             {match.players.map((player, index) => (
               <div key={index}>
-                  <Link to={`/users/${player.id}`}>{player.name}</Link>
+                <Link to={`/users/${player.id}`}>{player.name}</Link>
               </div>
             ))}
             <div>{match.creationDate}</div>

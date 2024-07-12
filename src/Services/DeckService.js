@@ -1,37 +1,27 @@
 import MagicHelper from "./MagicHelper";
-
+import Constants from "./Constants.js";
+import Client from "./Client.js";
+// console.log(Settings());
 export default class DeckService {
-  api = "https://magic.treibaer.de/api/v1";
+  api = `${Constants.backendUrl}/api/v1`;
+
+  client = Client.shared;
 
   static shared = new DeckService();
 
   async cloneMoxfieldDeck(moxfieldId) {
-    const response = await fetch(
+    return await this.client.post(
       this.api + "/moxfield/decks/" + moxfieldId + "/clone",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({}),
-      }
+      JSON.stringify({})
     );
-
-    if (!response.ok) {
-      throw new Error("Error cloning deck");
-    }
-    return response.json();
   }
 
   async loadMyDecks() {
-    const response = await fetch(this.api + "/decks");
-    return response.json();
+    return await this.client.get(this.api + "/decks");
   }
 
   async loadDeck(deckId) {
-    const response = await fetch(this.api + "/decks/" + deckId);
-    // sort mainboard by name ascending
-    const resData = await response.json();
+    const resData = await this.client.get(this.api + "/decks/" + deckId);
     resData.mainboard = resData.mainboard.sort((a, b) =>
       a.card.name.localeCompare(b.card.name)
     );
@@ -40,140 +30,80 @@ export default class DeckService {
 
   async createDeck(deck) {
     // let startingTime = new Date().getTime();
-    const response = await fetch(`${this.api}/decks`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
+    return await this.client.post(
+      `${this.api}/decks`,
+      JSON.stringify({
         id: deck.id,
         name: deck.name,
         description: deck.description,
         promoId: deck.promoId,
-      }),
-    });
+      })
+    );
+
     // let endingTime = new Date().getTime();
     // if (endingTime - startingTime < 700) {
     //   await new Promise((resolve) =>
     //     setTimeout(resolve, 700 - (endingTime - startingTime))
     //   );
     // }
-
-    if (!response.ok) {
-      throw new Error("Error creating deck");
-    }
-    return response.json();
   }
 
-  async addCardToDeck(deck, card, type = "mainboard") {
+  async addCardToDeck(deck, card, zone, quantity = 1) {
     const cardObject = {
       scryfallId: card.id,
-      quantity: 1,
-      type: type,
+      quantity: quantity,
+      zone: zone,
       action: "add",
     };
-    const response = await fetch(this.api + "/decks/" + deck.id + "/cards", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cardObject),
-    });
-
-    if (!response.ok) {
-      throw new Error("Error adding card to deck");
-    }
-    return response.json();
-  }
-
-  async removeCardFromDeck(deck, card, type = "mainboard") {
-    const cardObject = {
-      scryfallId: card.id,
-      quantity: 1,
-      type: type,
-      action: "remove",
-    };
-    const response = await fetch(this.api + "/deck/" + deck.id + "/cards", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cardObject),
-    });
-
-    if (!response.ok) {
-      throw new Error("Error adding card to deck");
-    }
-    return response.json();
+    return await this.client.post(
+      `${this.api}/decks/${deck.id}/cards`,
+      JSON.stringify(cardObject)
+    );
   }
 
   async setPromoId(deck, promoId) {
+    const url = `${this.api}/decks/${deck.id}`;
     const cardObject = {
       promoId: promoId,
       action: "modify",
     };
-    const response = await fetch(this.api + "/decks/" + deck.id + "", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cardObject),
-    });
-
-    if (!response.ok) {
-      throw new Error("Error adding card to deck");
-    }
-    return response.json();
+    return await this.client.post(url, JSON.stringify(cardObject));
   }
 
-  async updateCardAmount(deck, card, quantity, type = "mainboard") {
+  async updateCardAmount(deck, card, zone, quantity) {
+    const url = `${this.api}/decks/${deck.id}/cards`;
     const cardObject = {
       scryfallId: card.id,
       quantity: quantity,
-      type: type,
+      zone: zone,
       action: "modify",
     };
-    const response = await fetch(this.api + "/decks/" + deck.id + "/cards", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(cardObject),
-    });
-
-    if (!response.ok) {
-      throw new Error("Error adding card to deck");
-    }
-    return response.json();
+    return await this.client.post(url, JSON.stringify(cardObject));
   }
 
   async setPrint(deck, card, print) {
-    const response = await fetch(this.api + "/decks/" + deck.id, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ oldId: card.id, newId: print.id }),
-    });
+    const url = `${this.api}/decks/${deck.id}`;
+    const data = {
+      action: "replaceCard",
+      oldId: card.id,
+      newId: print.id,
+    };
+    return await this.client.put(url, JSON.stringify(data));
+  }
 
-    if (!response.ok) {
-      throw new Error("Error updating card amount");
-    }
-    return response.json();
+  async moveZone(deck, card, originZone, destinationZone) {
+    const url = `${this.api}/decks/${deck.id}`;
+    const data = {
+      action: "moveZone",
+      cardId: card.id,
+      originZone: originZone,
+      destinationZone: destinationZone,
+    };
+    return await this.client.put(url, JSON.stringify(data));
   }
 
   async deleteDeck(deck) {
-    const response = await fetch(this.api + "/decks/" + deck.id, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error("Error deleting deck");
-    }
-    return response.json();
+    return await this.client.delete(this.api + "/decks/" + deck.id);
   }
 
   cardCount(deck) {

@@ -7,34 +7,40 @@
   text-align: center;
 }
 .deckList > * {
-  width: 150px;
-  height: 322px;
+  width: 270px;
+  height: 340px;
   position: relative;
   cursor: pointer;
   background-color: gray;
   border: 1px solid black;
   border-radius: 10px;
 }
-.deckList > * > div > img {
-  width: 100%;
-  border-radius: 10px 10px 0 0;
-}
 .promoWrapper {
-  width: 150px;
-  height: 110px;
-}
-.promoWrapper > img {
-  width: 100%;
-  height: 100%;
-}
+  /* background: radial-gradient(transparent, rgb(0, 0, 0)); */
+  width: 270px;
+  height: 198px;
 
+  img {
+    /* filter: brightness(60%); */
+    opacity: 0.8;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px 10px 0 0;
+  }
+}
 .deckList .deck-title {
   /* height: 40px; */
   /* max-lines: 1; */
+  /* position: absolute; */
+  top: 4px;
   font-size: medium;
+  /* background-color: rgba(255, 255, 255, 0.5); */
+  text-align: left;
+  border-radius: 6px;
+  color: white;
   text-overflow: ellipsis;
   max-height: 54px;
-  height: 54px;
+  /* height: 54px; */
   display: block; /* or inline-block */
   word-wrap: break-word;
   overflow: hidden;
@@ -48,8 +54,21 @@
   padding-left: 4px;
   padding-right: 4px;
 }
-.deckList .deckInfo .colors {
+.deckList .colors {
+  position: absolute;
+  bottom: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.deckList .cardCount {
+  position: absolute;
+  right: 8px;
+  bottom: 4px;
+}
+
+.deckList .viewCount {
+  position: absolute;
+  right: 8px;
+  bottom: 24px;
 }

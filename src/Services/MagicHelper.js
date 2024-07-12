@@ -2,8 +2,6 @@ const backside = "https://magic.treibaer.de/image/card/backside.jpg";
 
 export default class MagicHelper {
   static getDeckStructureFromCards(cards) {
-    let commanders = cards.filter((card) => card.isCommander);
-    cards = cards.filter((card) => !card.isCommander);
     // add type is missing to cards
     cards = cards.map((card) => {
       if (!card.type) {
@@ -46,8 +44,7 @@ export default class MagicHelper {
     );
 
     return {
-      Commanders: commanders,
-      Hide: commanders,
+      Commanders: [],
       Lands: lands,
       Creatures: creatures,
       Sorceries: sorceries,
@@ -60,21 +57,8 @@ export default class MagicHelper {
   }
 
   static determineImageUrl(card, faceId = 0) {
-    return `https://magic.treibaer.de/image/card/normal/${card.id}`;
-    if (card.image_uris) {
-      // proxying is allowed per api guidelines
-      return `https://magic.treibaer.de/image/card/normal/${card.id}`;
-      return card.image_uris.normal;
-    } else if (card.card_faces) {
-      if (card.card_faces[faceId].image_uris) {
-        return card.card_faces[faceId].image_uris.normal;
-      }
-      return card.card_faces[faceId].image;
-    } else if (card.image) {
-      return card.image;
-    } else {
-      return backside;
-    }
+    // proxying is allowed per api guidelines
+    return `https://magic.treibaer.de/image/card/normal/${card.id}?faceSide=${faceId}`;
   }
 
   static determineCardType(card) {
