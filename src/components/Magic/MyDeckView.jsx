@@ -9,8 +9,9 @@ import DeckListView from "./DeckViews/DeckListView";
 import "./MoxfieldDeckDetailView.css";
 import MyDeckPrintSelectionOverlay from "./MyDeckPrintSelectionOverlay.jsx";
 import Client from "../../Services/Client.js";
+import Constants from "../../Services/Constants.js";
 
-const backside = "https://magic.treibaer.de/image/card/backside.jpg";
+const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
 
 export default function MyDeckView() {

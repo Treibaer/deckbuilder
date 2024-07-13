@@ -8,8 +8,9 @@ import CardPeekView from "./CardPeekView.jsx";
 import DeckGridView from "./DeckViews/DeckGridView.jsx";
 import DeckListView from "./DeckViews/DeckListView.jsx";
 import "./MoxfieldDeckDetailView.css";
+import Constants from "../../Services/Constants.js";
 
-const backside = "https://magic.treibaer.de/image/card/backside.jpg";
+const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const client = Client.shared;
 const deckService = DeckService.shared;
 const viewStyles = ["list", "grid"];

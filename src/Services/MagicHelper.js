@@ -1,4 +1,6 @@
-const backside = "https://magic.treibaer.de/image/card/backside.jpg";
+import Constants from "./Constants";
+
+const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 
 export default class MagicHelper {
   static getDeckStructureFromCards(cards) {
@@ -58,7 +60,7 @@ export default class MagicHelper {
 
   static determineImageUrl(card, faceId = 0) {
     // proxying is allowed per api guidelines
-    return `https://magic.treibaer.de/image/card/normal/${card.id}?faceSide=${faceId}`;
+    return `${Constants.backendUrl}/image/card/normal/${card.id}?faceSide=${faceId}`;
   }
 
   static determineCardType(card) {
@@ -87,12 +89,12 @@ export default class MagicHelper {
   }
 
   static artCropUrl(scryfallId) {
-    return "https://magic.treibaer.de/image/card/art_crop/" + scryfallId;
+    return `${Constants.backendUrl}/image/card/art_crop/${scryfallId}`;
   }
 
   static getImageUrl(scryfallId, type = "normal", faceSide = 0) {
     // proxying is allowed per api guidelines
-    return `https://magic.treibaer.de/image/card/${type}/${scryfallId}${
+    return `${Constants.backendUrl}/image/card/${type}/${scryfallId}${
       faceSide > 0 ? "?faceSide=1" : ""
     }`;
 
@@ -102,7 +104,7 @@ export default class MagicHelper {
   }
   static getCardFace(scryfallId, faceId = 0) {
     // not implemented yet, will be done in backend, when importing the moxfield deck
-    return "https://magic.treibaer.de/image/card/backside.jpg";
+    return `${Constants.backendUrl}/image/card/backside.jpg`;
   }
 
   static extractFilterFromQuery(q) {

@@ -2,8 +2,9 @@ import { lazy, useRef, useState } from "react";
 import MagicHelper from "../../Services/MagicHelper";
 import LazyImage from "./LazyImage";
 import "./MagicCardView.css";
+import Constants from "../../Services/Constants";
 
-const backside = "https://magic.treibaer.de/image/card/backside.jpg";
+const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 
 export default function MagicCardView({
   card = { name: "Loading...", image: backside, cardFaces: [] },
