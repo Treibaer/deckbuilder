@@ -8,7 +8,7 @@ export default class DeckService {
   static shared = new DeckService();
 
   async cloneMoxfieldDeck(moxfieldId) {
-    const path = `/moxfield/decks/${moxfieldId}clone`;
+    const path = `/moxfield/decks/${moxfieldId}/clone`;
     return await this.client.post(path, JSON.stringify({}));
   }
 

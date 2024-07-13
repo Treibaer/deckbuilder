@@ -13,10 +13,10 @@ const prodConfig = {
     host: "https://rt.treibaer.de",
     https: {
       key: fs.readFileSync(
-        path.resolve("/Users/hannes/tmp/treibaer.de", "privkey.pem")
+        path.resolve("/etc/letsencrypt/live/treibaer.de", "privkey.pem")
       ),
       cert: fs.readFileSync(
-        path.resolve("/Users/hannes/tmp/treibaer.de", "cert.pem")
+        path.resolve("/etc/letsencrypt/live/treibaer.de", "cert.pem")
       ),
     },
   },

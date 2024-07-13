@@ -13,7 +13,6 @@ export default function Users() {
           <li key={user.id}>{user.username}</li>
         ))}
       </ul>
-      <PlayComponent />
     </div>
   );
 }
