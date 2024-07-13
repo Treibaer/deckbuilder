@@ -73,14 +73,13 @@ export default function MoxfieldDeckDetailView() {
   }
 
   async function didTapPlay() {
-    const response = await Client.shared.post(
-      `https://magic.treibaer.de/api/v1/playtests`,
-      JSON.stringify({
-        moxFieldDeckId: deck.id,
-      })
-    );
+    const path = `/playtests`;
+    const data = {
+      moxFieldDeckId: deck.id,
+    };
+    const response = await Client.shared.post(path, JSON.stringify(data));
     window
-      .open("http://127.0.0.1:5502/play3.html?mId=" + response.id, "_blank")
+      .open("/magic-web-js/play3.html?mId=" + response.id, "_blank")
       .focus();
   }
 

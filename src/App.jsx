@@ -21,7 +21,7 @@ import MoxfieldDeckOverview, {
 import MyDeckView, {
   loader as myDeckViewLoader,
 } from "./components/Magic/MyDeckView.jsx";
-import TicketOverview from "./components/Tickets/TicketOverview.jsx";
+import TicketOverview from "./components/Tickets2/TicketOverview.jsx";
 import "./extensions/String.js";
 import Home from "./pages/Home.jsx";
 import MagicCardSearch, {

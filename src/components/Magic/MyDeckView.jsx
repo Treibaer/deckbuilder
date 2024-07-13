@@ -167,15 +167,14 @@ export default function MyDeckView() {
   }
 
   async function didTapPlay() {
-    const response = await Client.shared.post(
-      `https://magic.treibaer.de/api/v1/playtests`,
-      JSON.stringify({
-        deckId: deck.id,
-      })
-    );
-    console.log(response);
+    const path = `/playtests`;
+    const data = {
+      deckId: deck.id,
+    };
+    const response = await Client.shared.post(path, JSON.stringify(data));
+
     window
-      .open("http://127.0.0.1:5502/play3.html?mId=" + response.id, "_blank")
+      .open("/magic-web-js/play3.html?mId=" + response.id, "_blank")
       .focus();
   }
 

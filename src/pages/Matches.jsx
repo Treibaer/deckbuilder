@@ -2,17 +2,26 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import "./Matches.css";
+import Client from "../Services/Client";
+
+const client = Client.shared;
 
 export default function Matches() {
   const [matches, setMatches] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreatingMatch, setIsCreatingMatch] = useState(false);
+  const [isSelectingDeck, setIsSelectingDeck] = useState(false);
   const [users, setUsers] = useState([]);
+  const [enemyId, setEnemyId] = useState(0);
   const [decks, setDecks] = useState([]);
 
+  // vars for deck selection
+  const [selectedPlayerPosition, setSelectedPlayerPosition] = useState(0);
+  const [selectedMatch, setSelectedMatch] = useState(null);
+  const [selectedDeckId, setSelectedDeckId] = useState(0);
+
   async function loadMatches() {
-    const response = await fetch("http://localhost:3456/api/matches");
-    const matches = await response.json();
+    const matches = await client.get("/matches");
     setMatches(matches);
   }
   useEffect(() => {
@@ -22,15 +31,14 @@ export default function Matches() {
   async function openCreateMatchForm() {
     setIsLoading(true);
     // wait 2 seconds
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
     // load users
     // load my decks
-    const response = await fetch("http://localhost:3456/api/users");
-    const users = await response.json();
+    const users = await client.get("/users");
     setUsers(users);
-    const response2 = await fetch("http://localhost:3456/api/decks");
-    const decks = await response2.json();
-    setDecks(decks);
+    setEnemyId(users[0].id);
+    // const decks = await client.get("/decks");
+    // setDecks(decks);
 
     setIsCreatingMatch(true);
     setIsLoading(false);
@@ -39,21 +47,43 @@ export default function Matches() {
   async function createMatch() {
     setIsLoading(true);
     setIsCreatingMatch(false);
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
+    const data = { enemyId: enemyId };
+    const match = await client.post("/matches", JSON.stringify(data));
+    await loadMatches();
+    setIsLoading(false);
+  }
+
+  async function openMatch(matchId) {
+    window.open("/magic-web-js/duo3.html?mId=" + matchId, "_blank").focus();
+  }
+
+  async function openDeckSelection(match, playerIndex) {
+    setIsLoading(true);
+    setSelectedPlayerPosition(playerIndex);
+    setSelectedMatch(match);
     // wait 2 seconds
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    // load users
+    // await new Promise((resolve) => setTimeout(resolve, 1000));
     // load my decks
-    const response = await fetch("http://localhost:3456/api/matches", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: 1,
-        deckId: 1,
-      }),
-    });
-    const match = await response.json();
+    const decks = await client.get("/decks");
+    if (decks.length > 0) {
+      setSelectedDeckId(decks[0].id);
+    }
+    setDecks(decks);
+
+    setIsSelectingDeck(true);
+    setIsLoading(false);
+  }
+
+  async function selectDeck() {
+    setIsLoading(true);
+    setIsSelectingDeck(false);
+    const path = `/matches/${selectedMatch.id}/selectDeck`;
+    const data = {
+      deckId: selectedDeckId,
+      playerIndex: selectedPlayerPosition,
+    };
+    await client.post(path, JSON.stringify(data));
     await loadMatches();
     setIsLoading(false);
   }
@@ -68,17 +98,37 @@ export default function Matches() {
             <h2>Create Match</h2>
             <div className="formRow">
               <label htmlFor="enemy">Enemy</label>
-              <label htmlFor="deck">Select Deck</label>
+              {/* <label htmlFor="deck">Select Deck</label> */}
             </div>
             <div className="formRow">
-              <select name="enemy">
+              <select
+                name="enemy"
+                onChange={(event) => setEnemyId(event.target.value)}
+              >
                 {users.map((user, index) => (
                   <option key={index} value={user.id}>
-                    {user.name}
+                    {user.username}
                   </option>
                 ))}
               </select>
-              <select name="deck">
+            </div>
+            <button onClick={createMatch}>Create</button>
+          </div>
+        </div>
+      )}
+      {isSelectingDeck && (
+        <div className="fullscreenBlurWithLoading">
+          <div className="new-match-form new-deck-for1m">
+            {/* {error && <ErrorView message={error.message} />} */}
+            <h2>Select Deck</h2>
+            <div className="formRow">
+              <label htmlFor="enemy">My Deck</label>
+            </div>
+            <div className="formRow">
+              <select
+                name="deck"
+                onChange={(event) => setSelectedDeckId(event.target.value)}
+              >
                 {decks.map((deck, index) => (
                   <option key={index} value={deck.id}>
                     [{deck.id}] {deck.name}
@@ -86,7 +136,7 @@ export default function Matches() {
                 ))}
               </select>
             </div>
-            <button onClick={createMatch}>Create</button>
+            <button onClick={selectDeck}>Select</button>
           </div>
         </div>
       )}
@@ -98,14 +148,41 @@ export default function Matches() {
         {matches.map((match, index) => (
           <div key={index} className="matchRow">
             <div>{match.id}</div>
-            {match.players.map((player, index) => (
-              <div key={index}>
-                <Link to={`/users/${player.id}`}>{player.name}</Link>
-              </div>
-            ))}
+            <div>
+              <Link to={`/users/${match.player0.id}`}>
+                {match.player0.name}
+              </Link>
+              {match.player0.canSelectDeck && (
+                <button onClick={() => openDeckSelection(match, 0)}>
+                  Select Deck
+                </button>
+              )}
+              {!match.player0.canSelectDeck && !match.player0.deckSelected && (
+                <button disabled={"disabled"}>Select Deck</button>
+              )}
+            </div>
+            <div>
+              <Link to={`/users/${match.player1.id}`}>
+                {match.player1.name}
+              </Link>
+              {match.player1.canSelectDeck && (
+                <button onClick={() => openDeckSelection(match, 1)}>
+                  Select Deck
+                </button>
+              )}
+              {!match.player1.canSelectDeck && !match.player1.deckSelected && (
+                <button disabled={"disabled"}>Select Deck</button>
+              )}
+            </div>
+
             <div>{match.creationDate}</div>
             <div>
-              <button onClick={() => startMatch()}>Play</button>
+              {match.player0.deckSelected && match.player0.deckSelected && (
+                <button onClick={() => openMatch(match.id)}>Play</button>
+              )}
+              {(!match.player0.deckSelected || !match.player0.deckSelected) && (
+                <button disabled={"disabled"}>Play</button>
+              )}
             </div>
           </div>
         ))}

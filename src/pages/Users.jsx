@@ -1,5 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import Client from "../Services/Client";
+import PlayComponent from "../components/PlayComponent";
 
 export default function Users() {
   const users = useLoaderData();
@@ -12,10 +13,11 @@ export default function Users() {
           <li key={user.id}>{user.username}</li>
         ))}
       </ul>
+      <PlayComponent />
     </div>
   );
 }
 
 export const loader = async () => {
-  return await Client.shared.get("https://magic.treibaer.de/api/v1/users");
+  return await Client.shared.get("/users");
 };

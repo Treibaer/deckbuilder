@@ -134,7 +134,5 @@ export const loader = async ({ request }) => {
     );
     return response;
   }
-
-  const response = await client.getDecks(format, page, commander !== null);
-  return response;
+  return await client.getDecks(format, page, commander !== null);
 };

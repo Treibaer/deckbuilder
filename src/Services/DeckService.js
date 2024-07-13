@@ -3,25 +3,21 @@ import Constants from "./Constants.js";
 import Client from "./Client.js";
 // console.log(Settings());
 export default class DeckService {
-  api = `${Constants.backendUrl}/api/v1`;
-
   client = Client.shared;
 
   static shared = new DeckService();
 
   async cloneMoxfieldDeck(moxfieldId) {
-    return await this.client.post(
-      this.api + "/moxfield/decks/" + moxfieldId + "/clone",
-      JSON.stringify({})
-    );
+    const path = `/moxfield/decks/${moxfieldId}clone`;
+    return await this.client.post(path, JSON.stringify({}));
   }
 
   async loadMyDecks() {
-    return await this.client.get(this.api + "/decks");
+    return await this.client.get("/decks");
   }
 
   async loadDeck(deckId) {
-    const resData = await this.client.get(this.api + "/decks/" + deckId);
+    const resData = await this.client.get(`/decks/${deckId}`);
     resData.mainboard = resData.mainboard.sort((a, b) =>
       a.card.name.localeCompare(b.card.name)
     );
@@ -29,16 +25,15 @@ export default class DeckService {
   }
 
   async createDeck(deck) {
+    const path = `/decks`;
+    const data = {
+      id: deck.id,
+      name: deck.name,
+      description: deck.description,
+      promoId: deck.promoId,
+    };
     // let startingTime = new Date().getTime();
-    return await this.client.post(
-      `${this.api}/decks`,
-      JSON.stringify({
-        id: deck.id,
-        name: deck.name,
-        description: deck.description,
-        promoId: deck.promoId,
-      })
-    );
+    return await this.client.post(path, JSON.stringify(data));
 
     // let endingTime = new Date().getTime();
     // if (endingTime - startingTime < 700) {
@@ -49,20 +44,18 @@ export default class DeckService {
   }
 
   async addCardToDeck(deck, card, zone, quantity = 1) {
+    const path = `/decks/${deck.id}/cards`;
     const cardObject = {
       scryfallId: card.id,
       quantity: quantity,
       zone: zone,
       action: "add",
     };
-    return await this.client.post(
-      `${this.api}/decks/${deck.id}/cards`,
-      JSON.stringify(cardObject)
-    );
+    return await this.client.post(path, JSON.stringify(cardObject));
   }
 
   async setPromoId(deck, promoId) {
-    const url = `${this.api}/decks/${deck.id}`;
+    const url = `/decks/${deck.id}`;
     const cardObject = {
       promoId: promoId,
       action: "modify",
@@ -71,39 +64,39 @@ export default class DeckService {
   }
 
   async updateCardAmount(deck, card, zone, quantity) {
-    const url = `${this.api}/decks/${deck.id}/cards`;
+    const path = `/decks/${deck.id}/cards`;
     const cardObject = {
       scryfallId: card.id,
       quantity: quantity,
       zone: zone,
       action: "modify",
     };
-    return await this.client.post(url, JSON.stringify(cardObject));
+    return await this.client.post(path, JSON.stringify(cardObject));
   }
 
   async setPrint(deck, card, print) {
-    const url = `${this.api}/decks/${deck.id}`;
+    const path = `/decks/${deck.id}`;
     const data = {
       action: "replaceCard",
       oldId: card.id,
       newId: print.id,
     };
-    return await this.client.put(url, JSON.stringify(data));
+    return await this.client.put(path, JSON.stringify(data));
   }
 
   async moveZone(deck, card, originZone, destinationZone) {
-    const url = `${this.api}/decks/${deck.id}`;
+    const path = `/decks/${deck.id}`;
     const data = {
       action: "moveZone",
       cardId: card.id,
       originZone: originZone,
       destinationZone: destinationZone,
     };
-    return await this.client.put(url, JSON.stringify(data));
+    return await this.client.put(path, JSON.stringify(data));
   }
 
   async deleteDeck(deck) {
-    return await this.client.delete(this.api + "/decks/" + deck.id);
+    return await this.client.delete(`/decks/${deck.id}`);
   }
 
   cardCount(deck) {

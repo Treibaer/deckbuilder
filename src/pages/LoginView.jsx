@@ -10,7 +10,7 @@ export default function LoginView({ setIsLoggedIn }) {
     event.preventDefault();
     setIsSubmitting(true);
 
-    const response = await fetch(`${Constants.loginApiHost}/api/v1/login`, {
+    const response = await fetch(`${Constants.backendUrl}/api/v1/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

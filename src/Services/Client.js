@@ -1,7 +1,9 @@
+import Constants from "./Constants";
 import MagicHelper from "./MagicHelper";
 
 export default class Client {
   static shared = new Client();
+  api = `${Constants.backendUrl}/api/v1`;
 
   getAuthToken() {
     return localStorage.getItem("token");
@@ -10,8 +12,7 @@ export default class Client {
   constructor() {}
 
   async get(url) {
-    console.log(this.token);
-    const response = await fetch(url, {
+    const response = await fetch(this.api + url, {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${this.getAuthToken()}`,
@@ -20,7 +21,6 @@ export default class Client {
 
     if (!response.ok) {
       if (response.status === 401) {
-        // location.href = "/";
         throw new Error("Unauthorized");
       }
       const responseJson = await response.json();
@@ -33,7 +33,7 @@ export default class Client {
   }
 
   async post(url, data) {
-    const response = await fetch(url, {
+    const response = await fetch(this.api + url, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +53,7 @@ export default class Client {
   }
 
   async put(url, data) {
-    const response = await fetch(url, {
+    const response = await fetch(this.api + url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +73,7 @@ export default class Client {
   }
 
   async delete(url) {
-    const response = await fetch(url, {
+    const response = await fetch(this.api + url, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -96,39 +96,25 @@ export default class Client {
     return await data.json();
   }
 
-  api = "https://magic.treibaer.de/api/v1/moxfield";
+  // api = "https://magic.treibaer.de/api/v1/moxfield";
 
   async getDecks(format, page, shouldBeCommander) {
-    let resData = await this.get(
-      `${this.api}/decks?format=${format}&page=${page}&commander=${
-        shouldBeCommander ? 1 : 0
-      }`
-    );
-    // let decks = resData;
-    // decks = decks.filter((deck) => {
-    //   if (deck.format === "commander") {
-    //     return deck.cardCount <= 110 && deck.cardCount >= 99;
-    //   }
-    //   return deck.cardCount <= 60 && deck.cardCount >= 59;
-    // });
-    return resData;
+    const path = `/moxfield/decks?format=${format}&page=${page}&commander=${
+      shouldBeCommander ? 1 : 0
+    }`;
+    return await this.get(path);
   }
 
   async getDecksByCardId(moxFieldCardId, format, page, shouldBeCommander) {
-    return await this.get(
-      `${
-        this.api
-      }/decks-search-by-card-id/${moxFieldCardId}?format=${format}&page=${page}&commander=${
-        shouldBeCommander ? 1 : 0
-      }`
-    );
+    const path = `/moxfield/decks-search-by-card-id/${moxFieldCardId}?format=${format}&page=${page}&commander=${
+      shouldBeCommander ? 1 : 0
+    }`;
+    return await this.get(path);
   }
 
   async getDeck(deckId) {
-    let resData = await this.get(
-      `https://magic.treibaer.de/api/v1/moxfield/decks/${deckId}`
-    );
-    return resData;
+    const path = `/moxfield/decks/${deckId}`;
+    return await this.get(path);
   }
 
   findCardFaces(card) {
@@ -145,7 +131,8 @@ export default class Client {
   }
 
   async loadSets() {
-    let data = await this.get("https://magic.treibaer.de/api/v1/sets");
+    const path = "/sets";
+    let data = await this.get(path);
     return data.reverse();
   }
 }
