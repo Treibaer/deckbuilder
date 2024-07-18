@@ -29,7 +29,7 @@ export default function DeckGridView({
                   <h3>{formatTitle(key, structure[key])}</h3>
                   <div className="deck-grid-view-section">
                     {structure[key].map((card, index2) => (
-                      <div className="cardWrapper" key={card.id}>
+                      <div className="cardWrapper" key={card.scryfallId}>
                         <MagicCardView
                           card={card}
                           onTap={() => showCardPreview(card)}

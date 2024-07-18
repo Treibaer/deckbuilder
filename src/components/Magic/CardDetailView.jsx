@@ -24,8 +24,6 @@ export default function CardDetailView() {
 
   async function openAddToCartDialog() {
     setShowAddToDeck(true);
-    // wait 1 second
-    await new Promise((resolve) => setTimeout(resolve, 1000));
     const currentDecks = await DeckService.shared.loadMyDecks();
     setSelectedDeckId(currentDecks[0]?.id);
     setMyDecks(currentDecks);
@@ -47,7 +45,7 @@ export default function CardDetailView() {
   }
 
   return (
-    <div key={card?.id}>
+    <div key={card?.scryfallId}>
       {isLoading && <LoadingSpinner />}
       {showAddToDeck && (
         <div className="fullscreenBlurWithLoading">
@@ -123,7 +121,7 @@ export default function CardDetailView() {
             <div>{card.oracleText}</div>
             {printings && (
               <>
-                <div>Printings</div>
+                <h2>Printings</h2>
                 {previewImage && (
                   <div
                     className="printingsPreview"
@@ -141,15 +139,15 @@ export default function CardDetailView() {
                   {printings.map((print, index) => {
                     return (
                       <div key={index}>
-                        {card.id === print.id && (
+                        {card.scryfallId === print.scryfallId && (
                           <div key={print.id} className="print">
                             <div title={print.setName}>{print.setName}</div>
                           </div>
                         )}
-                        {card.id !== print.id && (
+                        {card.scryfallId !== print.scryfallId && (
                           <Link
-                            to={`/cards/${print.id}`}
-                            key={print.id}
+                            to={`/cards/${print.scryfallId}`}
+                            key={print.scryfallId}
                             onMouseEnter={() => setPreviewImage(print.image)}
                             onMouseLeave={() => setPreviewImage(null)}
                             onClick={() => setPreviewImage(null)}

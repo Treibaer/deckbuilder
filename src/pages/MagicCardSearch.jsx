@@ -149,6 +149,10 @@ export const loader = async ({ request }) => {
   }
   // await new Promise((resolve) => setTimeout(resolve, 2000));
   const json = await response.json();
+  json.data.map((card) => {
+    card.scryfallId = card.id;
+    return card;
+  });
   return {
     data: json.data,
     hasMore: json.has_more,

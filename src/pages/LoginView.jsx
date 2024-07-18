@@ -2,13 +2,15 @@ import { useState } from "react";
 import Constants from "../Services/Constants";
 
 export default function LoginView({ setIsLoggedIn }) {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleLogin(event) {
     event.preventDefault();
     setIsSubmitting(true);
+    setError("");
 
     const response = await fetch(`${Constants.backendUrl}/api/v1/login`, {
       method: "POST",
@@ -16,7 +18,7 @@ export default function LoginView({ setIsLoggedIn }) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: username,
+        email: email,
         password: password,
         client: "tb-react",
       }),
@@ -26,6 +28,9 @@ export default function LoginView({ setIsLoggedIn }) {
     if (response.ok && data.token) {
       localStorage.setItem("token", data.token);
       setIsLoggedIn(true);
+    } else {
+      setError("Invalid credentials");
+      setIsSubmitting(false);
     }
   }
   return (
@@ -34,8 +39,8 @@ export default function LoginView({ setIsLoggedIn }) {
       <form>
         <input
           type="text"
-          placeholder="Username"
-          onChange={(event) => setUsername(event.target.value)}
+          placeholder="Email"
+          onChange={(event) => setEmail(event.target.value)}
         />
         <input
           type="password"
@@ -44,6 +49,7 @@ export default function LoginView({ setIsLoggedIn }) {
         />
         <button onClick={handleLogin} disabled={isSubmitting ? "disabled": undefined}>Login</button>
       </form>
+      {error && <p>{error}</p>}
     </div>
   );
 }

@@ -18,28 +18,33 @@ export default function MagicCardList({ cards }) {
           onClose={() => setSelectedCard(null)}
         />
       )}
-      {["small", "normal", "large"].map((s) => (
-        <button
-          className={size === s ? "selected" : ""}
-          key={s}
-          onClick={() => setSize(s)}
-        >
-          {s}
-        </button>
-      ))}
-      {style === "list" && (
-        <button onClick={() => setStyle("cards")}>Show as cards</button>
-      )}
-      {style === "cards" && (
-        <button onClick={() => setStyle("list")}>Show as list</button>
-      )}
+      <div className="styleSelection">
+        <div>
+          {style === "cards" &&
+            ["small", "normal", "large"].map((s) => (
+              <button
+                className={size === s ? "selected" : ""}
+                key={s}
+                onClick={() => setSize(s)}
+              >
+                {s}
+              </button>
+            ))}
+        </div>
+        {style === "list" && (
+          <button onClick={() => setStyle("cards")}>Show as cards</button>
+        )}
+        {style === "cards" && (
+          <button onClick={() => setStyle("list")}>Show as list</button>
+        )}
+      </div>
 
       {style === "cards" && (
         <div id="card-container">
           {style === "cards" &&
             cards.map((card, index) => (
               <MagicCardView
-                key={card.id}
+                key={card.scryfallId}
                 card={card}
                 onTap={() => setSelectedCard(card)}
                 size={size}

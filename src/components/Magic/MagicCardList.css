@@ -29,4 +29,13 @@
     vertical-align: middle;
     transform: rotateY(180deg) scale(1.1);
   }
+
+  #card-container > .magicCard {
+    cursor: pointer;
+  }
+
+  .styleSelection {
+    display: flex;
+    justify-content: space-between;
+  }
 }

@@ -112,7 +112,10 @@ export default function Matches() {
                 ))}
               </select>
             </div>
-            <button onClick={createMatch}>Create</button>
+            <div className="match-creation-buttons">
+              <button onClick={() => setIsCreatingMatch(false)}>Cancel</button>
+              <button onClick={createMatch}>Create</button>
+            </div>
           </div>
         </div>
       )}

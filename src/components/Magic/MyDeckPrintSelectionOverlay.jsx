@@ -31,6 +31,11 @@ export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPri
       loadPrints();
     }
   }, []);
+  console.log(prints);
+  prints.map((print) => {
+    print.scryfallId = print.id;
+    return print;
+  });
   return (
     <div className="fullscreenBlurWithLoading">
       <div className="card-detail-overlay">
@@ -38,7 +43,7 @@ export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPri
           <div className="card-detail-overlay-header">
             <button onClick={closeOverlay}>Close</button>
             <div className="title">{card.name}</div>
-            <Link to={`/cards/${card.id}`} target="_blank">
+            <Link to={`/cards/${card.scryfallId}`} target="_blank">
             <button>Open Card 🔗</button>
             </Link>
           </div>
@@ -48,12 +53,12 @@ export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPri
               {prints.map((print) => {
                 return (
                   <div
-                    key={print.id}
-                    className={card.id === print.id ? "selected" : undefined}
+                    key={print.scryfallId}
+                    className={card.scryfallId === print.scryfallId ? "selected" : undefined}
                   >
                     <h4 title={print.set_name}>{print.set_name}</h4>
                     <MagicCardView card={print} size="normal" />
-                    {card.id !== print.id && (
+                    {card.scryfallId !== print.scryfallId && (
                       <button onClick={() => setPrint(card, print)}>
                         Select
                       </button>

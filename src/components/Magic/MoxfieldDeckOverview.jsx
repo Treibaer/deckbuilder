@@ -73,7 +73,7 @@ export default function MoxfieldDeckOverview() {
             switchFormat(event.target.value);
           }}
         >
-          {["All", "modern", "commander", "commanderPrecons"].map((format) => {
+          {["All", "modern", "commander", "commanderPrecons", "standard"].map((format) => {
             return (
               <option value={format} key={format}>
                 {format}

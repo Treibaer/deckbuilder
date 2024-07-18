@@ -23,7 +23,7 @@ export default function MoxfieldDeckDetailView() {
   const [cardPreview, setCardPreview] = useState(false);
   const [hovered, setHovered] = useState({
     isPreviewCardFromDeck: true,
-    id: null,
+    scryfallId: null,
     faceSide: 0,
   });
   const [viewStyle, setViewStyle] = useState("grid");
@@ -39,11 +39,12 @@ export default function MoxfieldDeckDetailView() {
       return card !== null;
     });
 
-  const previewId = hovered.id ?? deck.promoId;
+  const previewId = hovered.scryfallId ?? deck.promoId;
 
   const image = previewId
     ? MagicHelper.getImageUrl(previewId, "normal", hovered.faceSide ?? 0)
     : backside;
+    console.log(image);
   const structure = MagicHelper.getDeckStructureFromCards(cards);
 
   structure["Commanders"] = deck.commanders.map((card) => {
@@ -56,7 +57,7 @@ export default function MoxfieldDeckDetailView() {
   function setPreviewImage(card, faceSide) {
     setHovered({
       isPreviewCardFromDeck: true,
-      id: card.id,
+      scryfallId: card.scryfallId,
       faceSide: faceSide,
     });
   }

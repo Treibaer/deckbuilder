@@ -1,10 +1,13 @@
-import "./App.css";
-// import Header, { tabs } from "./components/Header.jsx";
 import "inter-ui/inter.css";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import "./App.css";
 import "./Magic.css";
-import Test from "./Test.jsx";
 import "./all3.css";
+import "./extensions/String.js";
+
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+
+// comopnents
+import Test from "./Test.jsx";
 import Finances from "./components/Finances/Finances.jsx";
 import CardDetailView, {
   loader as cardDetailLoader,
@@ -22,7 +25,8 @@ import MyDeckView, {
   loader as myDeckViewLoader,
 } from "./components/Magic/MyDeckView.jsx";
 import TicketOverview from "./components/Tickets2/TicketOverview.jsx";
-import "./extensions/String.js";
+
+// Pages
 import Home from "./pages/Home.jsx";
 import MagicCardSearch, {
   loader as searchCardLoader,
@@ -35,7 +39,6 @@ import Profile from "./pages/Profile.jsx";
 import RootLayout from "./pages/RootLayout.jsx";
 import Settings from "./pages/Settings.jsx";
 import Users, { loader as usersLoader } from "./pages/Users.jsx";
-import ErrorPage from "./pages/ErrorPage.jsx";
 
 const router = createBrowserRouter([
   {

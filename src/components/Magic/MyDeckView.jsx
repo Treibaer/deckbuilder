@@ -20,7 +20,7 @@ export default function MyDeckView() {
 
   const [hovered, setHovered] = useState({
     isPreviewCardFromDeck: true,
-    id: null,
+    scryfallId: null,
     faceSide: 0,
   });
   const [viewStyle, setViewStyle] = useState("grid");
@@ -49,7 +49,7 @@ export default function MyDeckView() {
       return card !== null;
     });
 
-  const previewId = hovered?.id ?? deck.promoId;
+  const previewId = hovered?.scryfallId ?? deck.promoId;
   const image = previewId
     ? MagicHelper.getImageUrl(previewId, "normal", hovered?.faceSide ?? 0)
     : backside;
@@ -73,7 +73,7 @@ export default function MyDeckView() {
   });
   // filter out with same id
   tokens = tokens.filter(
-    (token, index, self) => index === self.findIndex((t) => t.id === token.id)
+    (token, index, self) => index === self.findIndex((t) => t.scryfallId === token.scryfallId)
   );
   // map to compatible format
   tokens.map((token) => {
@@ -96,7 +96,11 @@ export default function MyDeckView() {
       console.log("Error loading cards");
       return;
     }
-    setSearchResultCards(resData.data);
+    const cards = resData.data.map((card) => {
+      card.scryfallId = card.id;
+      return card;
+    } );
+    setSearchResultCards(cards);
   }
 
   const searchTimer = useRef();
@@ -119,7 +123,7 @@ export default function MyDeckView() {
   async function updateCardAmount(card, zone, amount) {
     await DeckService.shared.updateCardAmount(deck, card, zone, amount);
     await loadDeck();
-    if (hovered.id === card.id && amount === 0) {
+    if (hovered.scryfallId === card.scryfallId && amount === 0) {
       setPreviewImage(null, 0);
     }
   }
@@ -132,7 +136,7 @@ export default function MyDeckView() {
   function setPreviewImage(card, faceSide) {
     setHovered({
       isPreviewCardFromDeck: true,
-      id: card?.id,
+      scryfallId: card?.scryfallId,
       faceSide: faceSide,
     });
   }
@@ -245,12 +249,12 @@ export default function MyDeckView() {
       >
         {searchResultCards.map((card) => {
           return (
-            <div key={card.id}>
+            <div key={card.scryfallId}>
               <img
                 onMouseEnter={() => {
                   setHovered({
                     isPreviewCardFromDeck: false,
-                    id: card.id,
+                    id: card.scryfallId,
                     faceSide: 0,
                   });
                 }}
@@ -262,7 +266,7 @@ export default function MyDeckView() {
                   borderRadius: "12px",
                   height: "167px",
                 }}
-                src={MagicHelper.getImageUrl(card.id, "normal")}
+                src={MagicHelper.getImageUrl(card.scryfallId, "normal")}
                 alt=" "
               />
             </div>

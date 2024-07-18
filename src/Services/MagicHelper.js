@@ -8,7 +8,7 @@ export default class MagicHelper {
     cards = cards.map((card) => {
       if (!card.type) {
         card.type = "Unknown";
-        console.error("Card has no type: " + card.name + ", id: " + card.id);
+        console.error("Card has no type: " + card.name + ", id: " + card.scryfallId);
       }
       return card;
     });
@@ -60,7 +60,7 @@ export default class MagicHelper {
 
   static determineImageUrl(card, faceId = 0) {
     // proxying is allowed per api guidelines
-    return `${Constants.backendUrl}/image/card/normal/${card.id}?faceSide=${faceId}`;
+    return `${Constants.backendUrl}/image/card/normal/${card.scryfallId}?faceSide=${faceId}`;
   }
 
   static determineCardType(card) {
@@ -82,7 +82,7 @@ export default class MagicHelper {
       return "Planeswalker";
     } else {
       console.error(
-        "Unknown type: " + card.typeLine + ", scryfall_id: " + card.id
+        "Unknown type: " + card.typeLine + ", scryfall_id: " + card.scryfallId
       );
       return "";
     }

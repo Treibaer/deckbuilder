@@ -39,7 +39,7 @@ export default function CardPeekView({ card, onClose }) {
           </div>
         )}
       </div>
-      <Link to={"/cards/" + card.id} target="_blank">
+      <Link to={"/cards/" + card.scryfallId} target="_blank">
         <button>Card details</button>
       </Link>
     </div>

@@ -37,3 +37,8 @@
     }
   }
 }
+
+.match-creation-buttons {
+  display: flex;
+  gap: 8px;
+}

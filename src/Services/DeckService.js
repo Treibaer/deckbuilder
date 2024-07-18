@@ -46,7 +46,7 @@ export default class DeckService {
   async addCardToDeck(deck, card, zone, quantity = 1) {
     const path = `/decks/${deck.id}/cards`;
     const cardObject = {
-      scryfallId: card.id,
+      scryfallId: card.scryfallId,
       quantity: quantity,
       zone: zone,
       action: "add",
@@ -66,7 +66,7 @@ export default class DeckService {
   async updateCardAmount(deck, card, zone, quantity) {
     const path = `/decks/${deck.id}/cards`;
     const cardObject = {
-      scryfallId: card.id,
+      scryfallId: card.scryfallId,
       quantity: quantity,
       zone: zone,
       action: "modify",
@@ -78,8 +78,8 @@ export default class DeckService {
     const path = `/decks/${deck.id}`;
     const data = {
       action: "replaceCard",
-      oldId: card.id,
-      newId: print.id,
+      oldId: card.scryfallId,
+      newId: print.scryfallId,
     };
     return await this.client.put(path, JSON.stringify(data));
   }
@@ -88,7 +88,7 @@ export default class DeckService {
     const path = `/decks/${deck.id}`;
     const data = {
       action: "moveZone",
-      cardId: card.id,
+      cardId: card.scryfallId,
       originZone: originZone,
       destinationZone: destinationZone,
     };
