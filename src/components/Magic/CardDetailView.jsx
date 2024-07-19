@@ -3,10 +3,11 @@ import { Link, useLoaderData } from "react-router-dom";
 import CardService from "../../Services/CardService";
 import MagicCardView from "./MagicCardView";
 
-import "./CardDetailView.css";
-import Helper from "./Helper";
 import DeckService from "../../Services/DeckService";
 import LoadingSpinner from "../Common/LoadingSpinner";
+import "./CardDetailView.css";
+import Dialog from "./Dialog";
+import Helper from "./Helper";
 
 export default function CardDetailView() {
   const mousePosition = useMousePosition();
@@ -33,13 +34,18 @@ export default function CardDetailView() {
     setIsLoading(true);
     setShowAddToDeck(false);
     const deck = myDecks.filter((deck) => deck.id === selectedDeckId)[0];
-    await DeckService.shared.addCardToDeck(deck, card, "mainboard", selectedQuantity);
+    await DeckService.shared.addCardToDeck(
+      deck,
+      card,
+      "mainboard",
+      selectedQuantity
+    );
 
     // await new Promise((resolve) => setTimeout(resolve, 1000));
     setIsLoading(false);
   }
 
-  function closeAddToCartDialog() {
+  function close() {
     setShowAddToDeck(false);
     setMyDecks(null);
   }
@@ -48,71 +54,58 @@ export default function CardDetailView() {
     <div key={card?.scryfallId}>
       {isLoading && <LoadingSpinner />}
       {showAddToDeck && (
-        <div className="fullscreenBlurWithLoading">
-          <div className="addToDeck">
-            <div className="titleBar">
-              <h3>Add to Deck</h3>
-              <div className="closeButton">
-                <button onClick={closeAddToCartDialog}>X</button>
-              </div>
-            </div>
-            <div className="cardPreview">
-              <MagicCardView card={card} size="small" />
-            </div>
-            <div className="deckSelect">
-              {!myDecks && (
-                <select disabled>
-                  <option>Loading...</option>
-                </select>
-              )}
-              {myDecks && (
-                <select
-                  name="deck"
-                  id="deck"
-                  onChange={(event) => {
-                    setSelectedDeckId(event.target.value);
-                  }}
-                >
-                  {myDecks.map((deck) => (
-                    <option key={deck.id} value={deck.id}>
-                      [{deck.id}] {deck.name}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
-            <div className="quantitySelect">
+        <Dialog
+          title="Add to Deck"
+          onClose={close}
+          onSubmit={addCardToDeck}
+          submitTitle="Add"
+        >
+          <div className="cardPreview">
+            <MagicCardView card={card} size="small" />
+          </div>
+          <div className="deckSelect">
+            {!myDecks && (
+              <select disabled>
+                <option>Loading...</option>
+              </select>
+            )}
+            {myDecks && (
               <select
+                name="deck"
+                id="deck"
                 onChange={(event) => {
-                  setSelectedQuantity(event.target.value);
+                  setSelectedDeckId(event.target.value);
                 }}
               >
-                {[...Array(10).keys()].map((i) => (
-                  <option key={i} value={i + 1}>
-                    {i + 1}
+                {myDecks.map((deck) => (
+                  <option key={deck.id} value={deck.id}>
+                    [{deck.id}] {deck.name}
                   </option>
                 ))}
               </select>
-            </div>
-            <div className="actionBar">
-              <button onClick={closeAddToCartDialog}>Cancel</button>
-              <button
-                disabled={myDecks?.length > 0 ? undefined : "disabled"}
-                onClick={addCardToDeck}
-              >
-                Add to Deck
-              </button>
-            </div>
+            )}
           </div>
-        </div>
+          <div className="quantitySelect">
+            <select
+              onChange={(event) => {
+                setSelectedQuantity(event.target.value);
+              }}
+            >
+              {[...Array(10).keys()].map((i) => (
+                <option key={i} value={i + 1}>
+                  {i + 1}
+                </option>
+              ))}
+            </select>
+          </div>
+        </Dialog>
       )}
-      <h1>Card Detail View</h1>
+      <h1> {card.name}</h1>
       {card && (
         <div className="card-content">
           <MagicCardView card={card} size="large" />
           <div className="card-details">
             <div className="card-headline">
-              <div> {card.name}</div>
               <div>
                 {Helper.convertCostsToImgArray(card.manaCost ?? card.mana_cost)}
               </div>
@@ -134,17 +127,20 @@ export default function CardDetailView() {
                     <img src={previewImage} alt="preview" />
                   </div>
                 )}
-                {/* {JSON.stringify(mousePosition)} */}
-                <div className="printingsWrapper">
+                <ul className="printings">
                   {printings.map((print, index) => {
+                    const isSelected = card.scryfallId === print.scryfallId;
                     return (
-                      <div key={index}>
-                        {card.scryfallId === print.scryfallId && (
+                      <li
+                        key={index}
+                        className={isSelected ? "selected" : undefined}
+                      >
+                        {isSelected && (
                           <div key={print.id} className="print">
                             <div title={print.setName}>{print.setName}</div>
                           </div>
                         )}
-                        {card.scryfallId !== print.scryfallId && (
+                        {!isSelected && (
                           <Link
                             to={`/cards/${print.scryfallId}`}
                             key={print.scryfallId}
@@ -157,20 +153,22 @@ export default function CardDetailView() {
                             </div>
                           </Link>
                         )}
-                      </div>
+                      </li>
                     );
                   })}
-                </div>
+                </ul>
               </>
             )}
           </div>
           <div>
             <div className="actionButtons">
-              <button onClick={openAddToCartDialog}>Add to deck</button>
-              <button>Save for later</button>
+              <button className="tb-button" onClick={openAddToCartDialog}>
+                Add to deck
+              </button>
+              <button className="tb-button">Save for later</button>
               {card.mapping && (
                 <Link to={"/decks/moxfield?id=" + card.mapping}>
-                  <button>Find decks with</button>
+                  <button className="tb-button">Find decks with</button>
                 </Link>
               )}
             </div>

@@ -39,6 +39,7 @@ import Profile from "./pages/Profile.jsx";
 import RootLayout from "./pages/RootLayout.jsx";
 import Settings from "./pages/Settings.jsx";
 import Users, { loader as usersLoader } from "./pages/Users.jsx";
+import PlaytestHistory from "./pages/PlaytestHistory.jsx";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +85,7 @@ const router = createBrowserRouter([
       { path: "/users", element: <Users />, loader: usersLoader },
       { path: "/matches", element: <Matches /> },
       { path: "/profile", element: <Profile /> },
+      { path: "/profile/playtests", element: <PlaytestHistory /> },
       { path: "/settings", element: <Settings /> },
     ],
     // errorElement: <ErrorPage />,

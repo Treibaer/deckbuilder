@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import "./Matches.css";
 import Client from "../Services/Client";
+import Dialog from "../components/Magic/Dialog";
 
 const client = Client.shared;
 
@@ -88,14 +89,16 @@ export default function Matches() {
     setIsLoading(false);
   }
 
+  function close() {
+    setIsCreatingMatch(false);
+  }
+
   return (
     <div>
       {isLoading && <LoadingSpinner />}
       {isCreatingMatch && (
         <div className="fullscreenBlurWithLoading">
-          <div className="new-match-form new-deck-for1m">
-            {/* {error && <ErrorView message={error.message} />} */}
-            <h2>Create Match</h2>
+          <Dialog title="Create Match" onClose={close} onSubmit={createMatch}>
             <div className="formRow">
               <label htmlFor="enemy">Enemy</label>
               {/* <label htmlFor="deck">Select Deck</label> */}
@@ -112,11 +115,7 @@ export default function Matches() {
                 ))}
               </select>
             </div>
-            <div className="match-creation-buttons">
-              <button onClick={() => setIsCreatingMatch(false)}>Cancel</button>
-              <button onClick={createMatch}>Create</button>
-            </div>
-          </div>
+          </Dialog>
         </div>
       )}
       {isSelectingDeck && (
@@ -145,7 +144,9 @@ export default function Matches() {
       )}
       <div className="header">
         <div className="title">Matches</div>
-        <button onClick={openCreateMatchForm}>Create</button>
+        <button className="tb-button" onClick={openCreateMatchForm}>
+          Create
+        </button>
       </div>
       <div className="matches">
         {matches.map((match, index) => (
@@ -156,12 +157,17 @@ export default function Matches() {
                 {match.player0.name}
               </Link>
               {match.player0.canSelectDeck && (
-                <button onClick={() => openDeckSelection(match, 0)}>
+                <button
+                  className="tb-button"
+                  onClick={() => openDeckSelection(match, 0)}
+                >
                   Select Deck
                 </button>
               )}
               {!match.player0.canSelectDeck && !match.player0.deckSelected && (
-                <button disabled={"disabled"}>Select Deck</button>
+                <button className="tb-button" disabled={"disabled"}>
+                  Select Deck
+                </button>
               )}
             </div>
             <div>
@@ -169,22 +175,27 @@ export default function Matches() {
                 {match.player1.name}
               </Link>
               {match.player1.canSelectDeck && (
-                <button onClick={() => openDeckSelection(match, 1)}>
+                <button
+                  className="tb-button"
+                  onClick={() => openDeckSelection(match, 1)}
+                >
                   Select Deck
                 </button>
               )}
               {!match.player1.canSelectDeck && !match.player1.deckSelected && (
-                <button disabled={"disabled"}>Select Deck</button>
+                <button className="tb-button" disabled={"disabled"}>
+                  Select Deck
+                </button>
               )}
             </div>
 
             <div>{match.creationDate}</div>
             <div>
               {match.player0.deckSelected && match.player0.deckSelected && (
-                <button onClick={() => openMatch(match.id)}>Play</button>
+                <button className="tb-button" onClick={() => openMatch(match.id)}>Play</button>
               )}
               {(!match.player0.deckSelected || !match.player0.deckSelected) && (
-                <button disabled={"disabled"}>Play</button>
+                <button className="tb-button" disabled={"disabled"}>Play</button>
               )}
             </div>
           </div>

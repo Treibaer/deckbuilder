@@ -23,7 +23,7 @@ export default function MagicCardList({ cards }) {
           {style === "cards" &&
             ["small", "normal", "large"].map((s) => (
               <button
-                className={size === s ? "selected" : ""}
+                className={size === s ? "active tb-button" : "tb-button"}
                 key={s}
                 onClick={() => setSize(s)}
               >
@@ -31,11 +31,21 @@ export default function MagicCardList({ cards }) {
               </button>
             ))}
         </div>
+
+        {cards.length > 0 && (
+          <div className="title">
+            {cards.length} card{cards.length === 1 ? "" : "s"} found
+          </div>
+        )}
         {style === "list" && (
-          <button onClick={() => setStyle("cards")}>Show as cards</button>
+          <button className="tb-button" onClick={() => setStyle("cards")}>
+            Show as cards
+          </button>
         )}
         {style === "cards" && (
-          <button onClick={() => setStyle("list")}>Show as list</button>
+          <button className="tb-button" onClick={() => setStyle("list")}>
+            Show as list
+          </button>
         )}
       </div>
 

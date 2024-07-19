@@ -6,6 +6,7 @@ import MagicHelper from "../Services/MagicHelper.js";
 import DeckList from "../components/Magic/DeckOverview.jsx";
 import DeckService from "../Services/DeckService.js";
 import { defer, useLoaderData } from "react-router-dom";
+import Dialog from "../components/Magic/Dialog.jsx";
 
 const deckService = DeckService.shared;
 
@@ -23,8 +24,10 @@ export default function MyDecksList() {
     const name = document.querySelector("input[name=name]").value;
     if (!name) {
       setError(new Error("Name is required"));
+      setIsUpdating(false);
       return;
     }
+
     try {
       await deckService.createDeck({
         id: 0,
@@ -41,9 +44,7 @@ export default function MyDecksList() {
       console.log(error);
       setError(error);
     }
-
     setIsUpdating(false);
-    // setIsUpdating(false);
   }
 
   function showDeckForm() {
@@ -63,24 +64,28 @@ export default function MyDecksList() {
     };
   });
 
+  function closeDialog() {
+    setIsCreatingDeck(false);
+  }
+
   return (
     <>
       <div>
         <div className="headline">
           <h1>My Decks</h1>
           {isCreatingDeck && (
-            <div className="fullscreenBlurWithLoading">
-              <div className="new-deck-form">
-                {error && <ErrorView message={error.message} />}
-                <h2>Create Deck</h2>
-                <label htmlFor="name">Name</label>
-                <input type="text" name="name" />
-                <button onClick={createDeck}>Create</button>
-              </div>
-            </div>
+            <Dialog
+              title="Create Deck"
+              onClose={closeDialog}
+              onSubmit={createDeck}
+              error={error}
+            >
+              <label htmlFor="name">Name</label>
+              <input type="text" name="name" />
+            </Dialog>
           )}
           {isUpdating && <LoadingSpinner />}
-          <button onClick={showDeckForm}> Create Deck</button>
+          <button className="tb-button" onClick={showDeckForm}>Create</button>
         </div>
         {myDecks.length === 0 && <p>No decks found</p>}
         <DeckList decks={mappedDecks} />

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import Helper from "../components/Magic/Helper";
-import "./MagicFilterView.css";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import Helper from "../components/Magic/Helper";
 import MagicHelper from "../Services/MagicHelper";
+import "./MagicFilterView.css";
 
 export default function MagicFilterView({ sets, showFilter, setShowFilter }) {
   const navigate = useNavigate();
@@ -26,19 +26,18 @@ export default function MagicFilterView({ sets, showFilter, setShowFilter }) {
     } else {
       filter.colors.push(symbol);
     }
-    console.log(filter.colors);
     setFilter({ ...filter, colors: filter.colors });
   }
-
-  console.log(filter);
 
   return (
     <div className={`filterBlurBackground ${showFilter ? "active" : ""}`}>
       <div className={`filter `}>
-        <div className="closeButton" onClick={() => setShowFilter(false)}>
-          X
+        <div className="titleBar">
+          <h2>Filter</h2>
+          <button className="tb-button" onClick={() => setShowFilter(false)}>
+            X
+          </button>
         </div>
-        <h2>Filter</h2>
         <div className="filterList">
           <div className="inputGroup">
             <label htmlFor="name">Name</label>
@@ -261,6 +260,7 @@ export default function MagicFilterView({ sets, showFilter, setShowFilter }) {
             />
           </div>
           <button
+            className="tb-button"
             onClick={() => {
               const url = MagicHelper.createUrlFromFilter(filter);
               navigate(url);

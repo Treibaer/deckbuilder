@@ -1,8 +1,9 @@
 import { lazy, useRef, useState } from "react";
+import Constants from "../../Services/Constants";
 import MagicHelper from "../../Services/MagicHelper";
+import rotateImage from "../../assets/rotate.svg";
 import LazyImage from "./LazyImage";
 import "./MagicCardView.css";
-import Constants from "../../Services/Constants";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 
@@ -52,9 +53,12 @@ export default function MagicCardView({
         />
       </div>
       {card.cardFaces.length > 0 && (
-        <div className="magicCardRotateButton" onClick={changeFaceSide}>
-          R
-        </div>
+          <img
+            src={rotateImage}
+            alt="R"
+            className="magicCardRotateButton"
+            onClick={changeFaceSide}
+          />
       )}
     </div>
   );

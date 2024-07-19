@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import Client from "../../Services/Client.js";
+import Constants from "../../Services/Constants.js";
 import DeckService from "../../Services/DeckService.js";
 import MagicHelper from "../../Services/MagicHelper.js";
 import Confirmation from "../Common/Confirmation.jsx";
@@ -8,8 +10,9 @@ import DeckGridView from "./DeckViews/DeckGridView.jsx";
 import DeckListView from "./DeckViews/DeckListView";
 import "./MoxfieldDeckDetailView.css";
 import MyDeckPrintSelectionOverlay from "./MyDeckPrintSelectionOverlay.jsx";
-import Client from "../../Services/Client.js";
-import Constants from "../../Services/Constants.js";
+import chevronLeftImage from "../../assets/chevron-left.svg";
+import deleteImage from "../../assets/delete.svg";
+import playgameImage from "../../assets/playgame.svg";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
@@ -73,7 +76,8 @@ export default function MyDeckView() {
   });
   // filter out with same id
   tokens = tokens.filter(
-    (token, index, self) => index === self.findIndex((t) => t.scryfallId === token.scryfallId)
+    (token, index, self) =>
+      index === self.findIndex((t) => t.scryfallId === token.scryfallId)
   );
   // map to compatible format
   tokens.map((token) => {
@@ -99,7 +103,7 @@ export default function MyDeckView() {
     const cards = resData.data.map((card) => {
       card.scryfallId = card.id;
       return card;
-    } );
+    });
     setSearchResultCards(cards);
   }
 
@@ -205,22 +209,32 @@ export default function MyDeckView() {
         />
       )}
       <div className="deck-details-header">
-        <Link to=".." relative="path">
-          <button>Back</button>
-        </Link>
-        <button onClick={() => setShowDeletionConfirmation(true)}>
-          Delete
-        </button>
-        <button className="play-button" onClick={() => didTapPlay()}>
-          Play
-        </button>
+        <div className="tb-button-group">
+          <Link to=".." relative="path">
+            <button className="tb-button">
+              <img src={chevronLeftImage} className="icon" alt=" " />
+              Back
+            </button>
+          </Link>
+          <button
+            className="tb-button"
+            onClick={() => setShowDeletionConfirmation(true)}
+          >
+            <img src={deleteImage} className="icon" alt=" " />
+            Delete
+          </button>
+          <button className="tb-button" onClick={didTapPlay}>
+            <img src={playgameImage} className="icon" alt=" " />
+            Play
+          </button>
+        </div>
         <input type="text" value={searchTerm} onChange={handleChange} />
         <div className="title">{deck.name}</div>
 
-        <div>
+        <div className="tb-button-group">
           {viewStyles.map((s) => (
             <button
-              className={viewStyle === s ? "selected" : ""}
+              className={viewStyle === s ? "active tb-button" : "tb-button"}
               key={s}
               onClick={() => {
                 setViewStyle(s);

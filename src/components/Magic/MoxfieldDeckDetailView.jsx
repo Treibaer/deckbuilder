@@ -9,6 +9,9 @@ import DeckGridView from "./DeckViews/DeckGridView.jsx";
 import DeckListView from "./DeckViews/DeckListView.jsx";
 import "./MoxfieldDeckDetailView.css";
 import Constants from "../../Services/Constants.js";
+import chevronLeftImage from "../../assets/chevron-left.svg";
+import cardStackImage from "../../assets/cardstack.svg";
+import playgameImage from "../../assets/playgame.svg";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const client = Client.shared;
@@ -44,7 +47,7 @@ export default function MoxfieldDeckDetailView() {
   const image = previewId
     ? MagicHelper.getImageUrl(previewId, "normal", hovered.faceSide ?? 0)
     : backside;
-    console.log(image);
+  console.log(image);
   const structure = MagicHelper.getDeckStructureFromCards(cards);
 
   structure["Commanders"] = deck.commanders.map((card) => {
@@ -93,25 +96,30 @@ export default function MoxfieldDeckDetailView() {
         <CardPeekView card={cardPreview} onClose={() => setCardPreview(null)} />
       )}
       <div className="deck-details-header">
-        <div>
+        <div className="tb-button-group">
           <button
+            className="tb-button"
             onClick={() => {
               navigator(-1);
             }}
           >
+            <img src={chevronLeftImage} className="icon" alt=" " />
             Back
           </button>
-
-          <button onClick={clone}>Clone</button>
-          <button className="play-button" onClick={didTapPlay}>
+          <button className="tb-button" onClick={clone}>
+            <img src={cardStackImage} className="icon" alt=" " />
+            Clone
+          </button>
+          <button className="tb-button" onClick={didTapPlay}>
+            <img src={playgameImage} className="icon" alt=" " />
             Play
           </button>
         </div>
         <h2>{deck.name}</h2>
-        <div>
+        <div className="tb-button-group">
           {viewStyles.map((s) => (
             <button
-              className={viewStyle === s ? "selected" : ""}
+              className={viewStyle === s ? "active tb-button" : "tb-button"}
               key={s}
               onClick={() => {
                 setViewStyle(s);

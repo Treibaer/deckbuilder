@@ -73,6 +73,11 @@
     color: #63667b;
 }
 
+.tb-button-group {
+    display: flex;
+    gap: 8px;
+}
+
 .tb-button {
     display: inline-flex;
     align-items: center;
@@ -87,19 +92,20 @@
     background-color: rgb(38, 41, 57);
     color: rgb(228, 229, 244);
     min-width: 28px;
-    height: 28px;
+    height: 34px;
     padding: 0 14px;
     gap: 4px;
 }
 
-.tb-button:hover {
-    background-color: rgb(45, 48, 66);
+.tb-button:hover, .tb-button.active {
+    background-color: rgb(91, 96, 125);
     border-color: rgb(69, 73, 97);
 }
 
 .tb-button:disabled {
-    background-color: rgb(74, 78, 98);
+    background-color: rgb(78, 81, 93);
     border-color: rgb(69, 73, 97);
+    cursor: not-allowed;
 }
 
 .tb-button.tb-loading {

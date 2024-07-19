@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MagicCardView from "./MagicCardView";
 
-export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPrint }) {
+export default function MyDeckPrintSelectionOverlay({
+  closeOverlay,
+  card,
+  setPrint,
+}) {
   const [isLoading, setIsLoading] = useState(false);
   const [prints, setPrints] = useState([]);
 
@@ -20,7 +24,7 @@ export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPri
     }
 
     for (let i = 0; i < resData.data.length; i++) {
-      resData.data[i].cardFaces = resData.data[i].card_faces ?? []
+      resData.data[i].cardFaces = resData.data[i].card_faces ?? [];
     }
 
     setPrints(resData.data);
@@ -41,10 +45,12 @@ export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPri
       <div className="card-detail-overlay">
         <div className="card-detail-overlay-content">
           <div className="card-detail-overlay-header">
-            <button onClick={closeOverlay}>Close</button>
+            <button className="tb-button" onClick={closeOverlay}>
+              Close
+            </button>
             <div className="title">{card.name}</div>
             <Link to={`/cards/${card.scryfallId}`} target="_blank">
-            <button>Open Card 🔗</button>
+              <button className="tb-button">Open Card 🔗</button>
             </Link>
           </div>
           {isLoading && <div>Loading...</div>}
@@ -54,12 +60,19 @@ export default function MyDeckPrintSelectionOverlay({ closeOverlay, card, setPri
                 return (
                   <div
                     key={print.scryfallId}
-                    className={card.scryfallId === print.scryfallId ? "selected" : undefined}
+                    className={
+                      card.scryfallId === print.scryfallId
+                        ? "selected"
+                        : undefined
+                    }
                   >
                     <h4 title={print.set_name}>{print.set_name}</h4>
                     <MagicCardView card={print} size="normal" />
                     {card.scryfallId !== print.scryfallId && (
-                      <button onClick={() => setPrint(card, print)}>
+                      <button
+                        className="tb-button"
+                        onClick={() => setPrint(card, print)}
+                      >
                         Select
                       </button>
                     )}

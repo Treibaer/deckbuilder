@@ -3,6 +3,18 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 8px;
+
+  .footer {
+    display: flex;
+    width: calc(100% - 16px);
+    
+    justify-content: space-between;
+    align-items: center;
+    /* gap: 8px; */
+    margin-top: 8px;
+    margin-left: 8px;
+    margin-right: 8px;
+  }
 }
 
 #set-wrapper > * {
@@ -11,7 +23,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 225px;
-  height: 80px;
+  height: 110px;
   /* margin: 8px; */
   display: flex;
   flex-direction: column;

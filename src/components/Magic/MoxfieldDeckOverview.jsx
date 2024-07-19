@@ -105,7 +105,7 @@ export default function MoxfieldDeckOverview() {
         <div className="pagination">
           {Array.from({ length: Math.min(20, data.totalPages) }, (_, i) => (
             <Link to={`?id=${id}&format=${format}&page=${i + 1}`} key={i}>
-              <button className={selectedPage === i ? "active" : ""}>
+              <button className={selectedPage === i ? "active tb-button" : "tb-button"}>
                 {i + 1}
               </button>
             </Link>

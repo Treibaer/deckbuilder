@@ -1,6 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import Client from "../Services/Client";
 import PlayComponent from "../components/PlayComponent";
+import "./Users.css";
 
 export default function Users() {
   const users = useLoaderData();
@@ -8,11 +9,15 @@ export default function Users() {
   return (
     <div>
       <h1>Users</h1>
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.username}</li>
-        ))}
-      </ul>
+      <div id="usersList">
+          {users.map((user) => (
+        <div class="user-card">
+            <div key={user.id} class="user-info">
+              <h2>{user.username}</h2>
+            </div>
+            </div>
+          ))}
+      </div>
     </div>
   );
 }

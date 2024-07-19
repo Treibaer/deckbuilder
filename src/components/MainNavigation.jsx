@@ -25,7 +25,7 @@ export default function MainNavigation() {
               }
               end
             >
-              Cards
+              Search
             </NavLink>
           </li>
           <li>

@@ -31,14 +31,11 @@
   overflow-y: scroll;
   padding: 16px;
 
-
-  .closeButton {
-    position: absolute;
-    width: 24px;
-    height: 24px;
-    top: 8px;
-    right: 8px;
-    cursor: pointer;
+  .titleBar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
   }
 
   .filterList {

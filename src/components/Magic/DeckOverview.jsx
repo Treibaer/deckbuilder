@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import "./DeckOverview.css";
 import Helper from "./Helper";
+import cardStackImage from "../../assets/cardstack.svg";
+import viewsImage from "../../assets/views.svg";
 
 export default function DeckOverview({ decks }) {
   return (
@@ -9,13 +11,13 @@ export default function DeckOverview({ decks }) {
         <Link to={deck.link} key={deck.id}>
           <div className="promoWrapper">
             {deck.img && <img src={deck.img} alt="Loading Promo..." />}
+
+            <div className="overlay"></div>
           </div>
+          <div className="format">{deck.format}</div>
+
           <div className="deck-title" title={deck.name}>
             {deck.name}
-          </div>
-          <div className="deckInfo">
-            {deck.description && <p>{deck.description}</p>}
-            <p>Format: {deck.format}</p>
           </div>
 
           {deck.colors.length > 0 && (
@@ -26,10 +28,19 @@ export default function DeckOverview({ decks }) {
             </div>
           )}
 
-          {deck.viewCount !== undefined && (
-            <div className="viewCount">{deck.viewCount} views</div>
-          )}
-          <div className="cardCount">{deck.cardCount} cards</div>
+          <div className="statistics">
+            {deck.viewCount !== undefined && deck.viewCount > 0 && (
+              <div>
+                <img src={viewsImage} alt="Views" />
+                <div>{deck.viewCount}</div>
+              </div>
+            )}
+
+            <div>
+              <img src={cardStackImage} alt="Card Stack" />
+              <div>{deck.cardCount}</div>
+            </div>
+          </div>
         </Link>
       ))}
     </div>

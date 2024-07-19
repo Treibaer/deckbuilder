@@ -58,17 +58,14 @@ export default function MagicCardSearch({}) {
     let url = `/search?q=${searchTerm}`;
     navigate(url);
   }
+  console.log(data.data.length);
 
   return (
     <>
       <div className="searchHeader">
-        <div className="title">Search</div>
-
-        {data.amount > 0 && (
-          <h2>
-            {data.amount} card{data.amount === 1 ? "" : "s"} found
-          </h2>
-        )}
+        <div className={"title " + (data.data.length === 0 ? "" : "hide")}>
+          Search
+        </div>
       </div>
       <div className="searchBar">
         <input
@@ -81,8 +78,11 @@ export default function MagicCardSearch({}) {
             }
           }}
         />
-        <button onClick={handleSearch}>Search</button>
+        <button className="tb-button" onClick={handleSearch}>
+          Search
+        </button>
         <button
+          className="tb-button"
           onClick={() => {
             setShowFilter(true);
           }}
@@ -102,7 +102,7 @@ export default function MagicCardSearch({}) {
           <div>
             {Array.from({ length: pages }, (_, i) => (
               <button
-                className={selectedPage === i ? "active" : ""}
+              className={selectedPage === i ? "active tb-button" : "tb-button"}
                 key={i}
                 onClick={() => {
                   let url = `/search?q=${searchTerm}&page=${i + 1}`;

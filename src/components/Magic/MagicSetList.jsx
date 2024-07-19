@@ -11,9 +11,19 @@ export default function MagicSetList() {
       <h1>Magic Card Sets</h1>
       <div id="set-wrapper">
         {sets.map((set, index) => (
-          <Link to={MagicHelper.createUrlFromFilter({set: set.code, order: "set"})} key={index}>
+          <Link
+            to={MagicHelper.createUrlFromFilter({
+              set: set.code,
+              order: "set",
+            })}
+            key={index}
+          >
             <div>{set.name}</div>
             <img src={set.iconSvgUri} />
+            <div className="footer">
+              <div>{set.releasedAt}</div>
+              <div>{set.cardCount}</div>
+            </div>
           </Link>
         ))}
       </div>
