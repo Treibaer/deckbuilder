@@ -91,13 +91,6 @@ export default class Client {
     return await response.json();
   }
 
-  async getFinancesDashboard() {
-    let data = await get("https://mac.treibaer.de/api/v2/accounts/dashboard");
-    return await data.json();
-  }
-
-  // api = "https://magic.treibaer.de/api/v1/moxfield";
-
   async getDecks(format, page, shouldBeCommander) {
     const path = `/moxfield/decks?format=${format}&page=${page}&commander=${
       shouldBeCommander ? 1 : 0

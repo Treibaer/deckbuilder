@@ -1,4 +1,4 @@
-import MainNavigation from "../components/MainNavigation";
+import MainNavigation from "../components/Navigation/MainNavigation";
 
 export default function ErrorPage() {
   return (

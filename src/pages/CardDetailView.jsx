@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
-import CardService from "../../Services/CardService";
-import MagicCardView from "./MagicCardView";
+import CardService from "../Services/CardService";
+import MagicCardView from "../components/MagicCardView";
 
-import DeckService from "../../Services/DeckService";
-import LoadingSpinner from "../Common/LoadingSpinner";
+import DeckService from "../Services/DeckService";
+import LoadingSpinner from "../components/Common/LoadingSpinner";
 import "./CardDetailView.css";
-import Dialog from "./Dialog";
-import Helper from "./Helper";
+import Dialog from "../components/Common/Dialog";
+import Helper from "../Services/Helper";
 
 export default function CardDetailView() {
   const mousePosition = useMousePosition();
@@ -184,12 +184,12 @@ export const loader = async ({ params }) => {
 };
 
 const useMousePosition = () => {
-  const [mousePosition, setMousePosition] = React.useState({
+  const [mousePosition, setMousePosition] = useState({
     x: null,
     y: null,
   });
 
-  React.useEffect(() => {
+  useEffect(() => {
     const updateMousePosition = (ev) => {
       setMousePosition({ x: ev.clientX, y: ev.clientY });
     };

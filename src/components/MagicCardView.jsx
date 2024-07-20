@@ -1,8 +1,8 @@
 import { lazy, useRef, useState } from "react";
-import Constants from "../../Services/Constants";
-import MagicHelper from "../../Services/MagicHelper";
-import rotateImage from "../../assets/rotate.svg";
-import LazyImage from "./LazyImage";
+import Constants from "../Services/Constants";
+import MagicHelper from "../Services/MagicHelper";
+import rotateImage from "../assets/rotate.svg";
+import LazyImage from "./Common/LazyImage";
 import "./MagicCardView.css";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;

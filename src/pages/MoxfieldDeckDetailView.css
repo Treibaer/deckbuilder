@@ -44,9 +44,7 @@
 }
 
 .card-detail-overlay {
-  
   position: static;
-  /* background-color: rgba(0, 0, 0, 0.7); */
   background-color: rgba(81, 81, 81, 0.7);
   width: 1024px;
   height: 80%;
@@ -73,7 +71,6 @@
       }
     }
     .card-detail-overlay-prints {
-      /* width: 100%; */
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
@@ -88,7 +85,6 @@
   position: relative;
 }
 .card-detail-overlay .card-detail-overlay-prints h4 {
-  /* overflow-x: hidden; */
   width: 180px;
   height: 22px;
   white-space: nowrap;

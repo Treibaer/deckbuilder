@@ -1,18 +1,18 @@
 import { useRef, useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
-import Client from "../../Services/Client.js";
-import Constants from "../../Services/Constants.js";
-import DeckService from "../../Services/DeckService.js";
-import MagicHelper from "../../Services/MagicHelper.js";
-import Confirmation from "../Common/Confirmation.jsx";
-import CardPeekView from "./CardPeekView.jsx";
-import DeckGridView from "./DeckViews/DeckGridView.jsx";
-import DeckListView from "./DeckViews/DeckListView";
+import chevronLeftImage from "../assets/chevron-left.svg";
+import deleteImage from "../assets/delete.svg";
+import playgameImage from "../assets/playgame.svg";
+import Client from "../Services/Client.js";
+import Constants from "../Services/Constants.js";
+import DeckService from "../Services/DeckService.js";
+import MagicHelper from "../Services/MagicHelper.js";
+import Confirmation from "../components/Common/Confirmation.jsx";
+import CardPeekView from "../components/CardPeekView.jsx";
+import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView.jsx";
+import DeckDetailsListView from "../components/Decks/DeckDetailsListView.jsx";
 import "./MoxfieldDeckDetailView.css";
-import MyDeckPrintSelectionOverlay from "./MyDeckPrintSelectionOverlay.jsx";
-import chevronLeftImage from "../../assets/chevron-left.svg";
-import deleteImage from "../../assets/delete.svg";
-import playgameImage from "../../assets/playgame.svg";
+import MyDeckPrintSelectionOverlay from "../components/Decks/MyDeckPrintSelectionOverlay.jsx";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
@@ -297,6 +297,7 @@ export default function MyDeckView() {
           <p>Valid: {DeckService.shared.isValid(deck) ? "yes" : "no"}</p>
           {deck.promoId !== previewId && hovered.isPreviewCardFromDeck && (
             <button
+              className="tb-button"
               onClick={() => {
                 setPromoId(previewId);
               }}
@@ -308,7 +309,7 @@ export default function MyDeckView() {
 
         {cards.length === 0 && <p>No cards in deck</p>}
         {viewStyle === "list" && (
-          <DeckListView
+          <DeckDetailsListView
             structure={structure}
             setPreviewImage={setPreviewImage}
             addToDeck={addToDeck}
@@ -319,7 +320,7 @@ export default function MyDeckView() {
           />
         )}
         {viewStyle === "grid" && (
-          <DeckGridView
+          <DeckDetailsGridView
             structure={structure}
             setPreviewImage={setPreviewImage}
             addToDeck={addToDeck}

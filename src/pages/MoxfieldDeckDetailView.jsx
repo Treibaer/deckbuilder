@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
-import Client from "../../Services/Client.js";
-import DeckService from "../../Services/DeckService.js";
-import MagicHelper from "../../Services/MagicHelper.js";
-import LoadingSpinner from "../Common/LoadingSpinner.jsx";
-import CardPeekView from "./CardPeekView.jsx";
-import DeckGridView from "./DeckViews/DeckGridView.jsx";
-import DeckListView from "./DeckViews/DeckListView.jsx";
+import { useLoaderData, useNavigate } from "react-router-dom";
+import Client from "../Services/Client.js";
+import Constants from "../Services/Constants.js";
+import DeckService from "../Services/DeckService.js";
+import MagicHelper from "../Services/MagicHelper.js";
+import cardStackImage from "../assets/cardstack.svg";
+import chevronLeftImage from "../assets/chevron-left.svg";
+import playgameImage from "../assets/playgame.svg";
+import LoadingSpinner from "../components/Common/LoadingSpinner.jsx";
+import CardPeekView from "../components/CardPeekView.jsx";
+import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView.jsx";
+import DeckDetailsListView from "../components/Decks/DeckDetailsListView.jsx";
 import "./MoxfieldDeckDetailView.css";
-import Constants from "../../Services/Constants.js";
-import chevronLeftImage from "../../assets/chevron-left.svg";
-import cardStackImage from "../../assets/cardstack.svg";
-import playgameImage from "../../assets/playgame.svg";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const client = Client.shared;
@@ -138,13 +138,13 @@ export default function MoxfieldDeckDetailView() {
           <div>Cards: {deck.cardCount}</div>
         </div>
         {viewStyle === "list" && (
-          <DeckListView
+          <DeckDetailsListView
             structure={structure}
             setPreviewImage={setPreviewImage}
           />
         )}
         {viewStyle === "grid" && (
-          <DeckGridView
+          <DeckDetailsGridView
             structure={structure}
             setPreviewImage={setPreviewImage}
             showCardPreview={showCardPreview}

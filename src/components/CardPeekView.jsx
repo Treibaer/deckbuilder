@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import rotateImage from "../../assets/rotate.svg";
-import MagicHelper from "../../Services/MagicHelper";
+import rotateImage from "../assets/rotate.svg";
+import MagicHelper from "../Services/MagicHelper";
 import "./CardPeekView.css";
 
 export default function CardPeekView({ card, onClose }) {

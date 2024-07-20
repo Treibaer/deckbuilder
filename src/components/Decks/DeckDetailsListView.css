@@ -30,17 +30,13 @@
   }
   .deck-list-view-section > * {
     display: flex;
-    /* gap: 8px; */
     justify-content: space-between;
-    /* flex: 1; */
-    /* flex-shrink: 0; */
     cursor: pointer;
   }
   .actions {
     width: 20px;
     font-size: 1.3rem;
     cursor: pointer;
-    /* padding: 20px; */
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */

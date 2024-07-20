@@ -1,7 +1,6 @@
 import { useState } from "react";
-import LoadingSpinner from "../Common/LoadingSpinner";
 import CardPeekView from "./CardPeekView";
-import Helper from "./Helper";
+import Helper from "../Services/Helper";
 import "./MagicCardList.css";
 import MagicCardView from "./MagicCardView";
 

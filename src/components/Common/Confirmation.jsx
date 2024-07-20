@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 export default function Confirmation({ onConfirm, onCancel }) {
   return (
     <div className="tb-dialog2">

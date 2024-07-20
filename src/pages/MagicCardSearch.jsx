@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import Client from "../Services/Client.js";
-import MagicCardList from "../components/Magic/MagicCardList.jsx";
+import MagicCardList from "../components/MagicCardList.jsx";
 import "./MagicCardSearch.css";
-import MagicFilterView from "./MagicFilterView.jsx";
+import MagicFilterView from "../components/Search/MagicFilterView.jsx";
 
 export default function MagicCardSearch({}) {
   /*

@@ -20,11 +20,11 @@ export default function LoginView({ setIsLoggedIn }) {
       body: JSON.stringify({
         email: email,
         password: password,
-        client: "tb-react",
+        client: "deckbuilder",
       }),
     });
     const data = await response.json();
-    console.log(data);
+    
     if (response.ok && data.token) {
       localStorage.setItem("token", data.token);
       setIsLoggedIn(true);

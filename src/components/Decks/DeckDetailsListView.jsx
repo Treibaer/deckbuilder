@@ -1,7 +1,7 @@
-import Helper from "../Helper";
-import "./DeckListView.css";
+import Helper from "../../Services/Helper";
+import "./DeckDetailsListView.css";
 
-export default function DeckListView({
+export default function DeckDetailsListView({
   structure,
   setPreviewImage,
   addToDeck,

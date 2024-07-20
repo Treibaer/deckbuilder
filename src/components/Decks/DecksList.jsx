@@ -1,17 +1,16 @@
 import { Link } from "react-router-dom";
-import "./DeckOverview.css";
-import Helper from "./Helper";
+import Helper from "../../Services/Helper";
 import cardStackImage from "../../assets/cardstack.svg";
 import viewsImage from "../../assets/views.svg";
+import "./DecksList.css";
 
-export default function DeckOverview({ decks }) {
+export default function DecksList({ decks }) {
   return (
     <div className="deckList">
       {decks.map((deck) => (
         <Link to={deck.link} key={deck.id}>
           <div className="promoWrapper">
             {deck.img && <img src={deck.img} alt="Loading Promo..." />}
-
             <div className="overlay"></div>
           </div>
           <div className="format">{deck.format}</div>

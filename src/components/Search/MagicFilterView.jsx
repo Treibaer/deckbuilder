@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import Helper from "../components/Magic/Helper";
-import MagicHelper from "../Services/MagicHelper";
+import Helper from "../../Services/Helper";
+import MagicHelper from "../../Services/MagicHelper";
 import "./MagicFilterView.css";
 
 export default function MagicFilterView({ sets, showFilter, setShowFilter }) {

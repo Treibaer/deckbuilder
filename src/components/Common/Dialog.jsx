@@ -1,4 +1,4 @@
-import ErrorView from "../Common/ErrorView";
+import ErrorView from "./ErrorView";
 
 export default function Dialog({
   title,

@@ -1,10 +1,10 @@
-import B from "../../assets/card-symbols/B.svg";
-import G from "../../assets/card-symbols/G.svg";
-import R from "../../assets/card-symbols/R.svg";
-import U from "../../assets/card-symbols/U.svg";
-import W from "../../assets/card-symbols/W.svg";
-import C from "../../assets/card-symbols/C.svg";
-import symbolMap from "../../assets/symbolmap.js";
+import B from "../assets/card-symbols/B.svg";
+import G from "../assets/card-symbols/G.svg";
+import R from "../assets/card-symbols/R.svg";
+import U from "../assets/card-symbols/U.svg";
+import W from "../assets/card-symbols/W.svg";
+import C from "../assets/card-symbols/C.svg";
+import symbolMap from "../assets/symbolmap.js";
 
 export default class Helper {
   static replaceColorSymbolsByImage(symbol) {

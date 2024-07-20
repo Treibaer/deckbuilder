@@ -1,7 +1,7 @@
 import MagicCardView from "../MagicCardView";
-import "./DeckGridView.css";
+import "./DeckDetailsGridView.css";
 
-export default function DeckGridView({
+export default function DeckDetailsGridView({
   structure,
   setPreviewImage,
   addToDeck,
@@ -17,7 +17,6 @@ export default function DeckGridView({
     }
     return `${title} (${cardAmount})`;
   }
-  // console.log(structure);
   return (
     <div id="deck-grid-view">
       {Object.keys(structure).map((key, index) => {

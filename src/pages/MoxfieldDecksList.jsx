@@ -4,14 +4,14 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import Client from "../../Services/Client";
-import MagicHelper from "../../Services/MagicHelper";
-import DeckList from "./DeckOverview";
-import "./MoxfieldDeckOverview.css";
+import Client from "../Services/Client";
+import MagicHelper from "../Services/MagicHelper";
+import DeckList from "../components/Decks/DecksList";
+import "./MoxfieldDecksList.css";
 
 const client = Client.shared;
 
-export default function MoxfieldDeckOverview() {
+export default function MoxfieldDecksList() {
   const data = useLoaderData();
   const navigate = useNavigate();
 
@@ -73,13 +73,15 @@ export default function MoxfieldDeckOverview() {
             switchFormat(event.target.value);
           }}
         >
-          {["All", "modern", "commander", "commanderPrecons", "standard"].map((format) => {
-            return (
-              <option value={format} key={format}>
-                {format}
-              </option>
-            );
-          })}
+          {["All", "modern", "commander", "commanderPrecons", "standard"].map(
+            (format) => {
+              return (
+                <option value={format} key={format}>
+                  {format}
+                </option>
+              );
+            }
+          )}
         </select>
         {data.referenceCard && (
           <select
@@ -105,7 +107,11 @@ export default function MoxfieldDeckOverview() {
         <div className="pagination">
           {Array.from({ length: Math.min(20, data.totalPages) }, (_, i) => (
             <Link to={`?id=${id}&format=${format}&page=${i + 1}`} key={i}>
-              <button className={selectedPage === i ? "active tb-button" : "tb-button"}>
+              <button
+                className={
+                  selectedPage === i ? "active tb-button" : "tb-button"
+                }
+              >
                 {i + 1}
               </button>
             </Link>

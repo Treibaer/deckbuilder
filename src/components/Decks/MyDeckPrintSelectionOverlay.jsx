@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import MagicCardView from "./MagicCardView";
+import MagicCardView from "../MagicCardView";
 
 export default function MyDeckPrintSelectionOverlay({
   closeOverlay,

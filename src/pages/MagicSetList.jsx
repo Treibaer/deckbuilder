@@ -1,6 +1,6 @@
 import { Link, useLoaderData } from "react-router-dom";
-import Client from "../../Services/Client";
-import MagicHelper from "../../Services/MagicHelper";
+import Client from "../Services/Client";
+import MagicHelper from "../Services/MagicHelper";
 import "./MagicSetList.css";
 
 export default function MagicSetList() {
