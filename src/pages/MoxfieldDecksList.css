@@ -1,0 +1,25 @@
+#deck-overview {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+#deck-overview > * {
+  padding: 8px;
+  width: 150px;
+  height: auto;
+  border: 1px solid black;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.headline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

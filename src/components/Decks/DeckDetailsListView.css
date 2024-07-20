@@ -1,0 +1,44 @@
+#deck-list-view {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: start;
+  gap: 1rem;
+  overflow-y: scroll;
+  max-height: 79vh;
+  padding-right: 24px;
+  width: 100%;
+
+  & > * {
+    /* flex: 1; */
+    flex: 40%;
+  }
+  @media (min-width: 1400px) {
+    & > * {
+      flex: 30%;
+    }
+  }
+  @media (max-width: 768px) {  
+    & > * {
+      flex: 90%;
+    }
+  }
+  .deck-list-view-section {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  .deck-list-view-section > * {
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .actions {
+    width: 20px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+  }
+}

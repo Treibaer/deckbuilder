@@ -1,0 +1,46 @@
+#magic-card-list {
+  button.selected {
+    border-color: #646cff;
+  }
+
+  #card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  #card-list-container > * {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  #card-list-container > * > * {
+    flex: 1;
+  }
+
+  #card-container > .magicCard > .image-wrapper > img:hover {
+    vertical-align: middle;
+    transform: scale(1.1);
+  }
+  #card-container > .magicCard > .image-wrapper.flipped > img:hover {
+    vertical-align: middle;
+    transform: rotateY(180deg) scale(1.1);
+  }
+
+  #card-container > .magicCard {
+    cursor: pointer;
+  }
+
+  .styleSelection {
+    display: flex;
+    justify-content: space-between;
+    .title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: auto;
+    }
+  }
+}
