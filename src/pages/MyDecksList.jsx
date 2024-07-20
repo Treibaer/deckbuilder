@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
-import "./MyDecksList.css";
+import { useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import Dialog from "../components/Common/Dialog.jsx";
 import LoadingSpinner from "../components/Common/LoadingSpinner.jsx";
-import ErrorView from "../components/Common/ErrorView.jsx";
-import MagicHelper from "../Services/MagicHelper.js";
-import DeckList from "../components/Magic/DeckOverview.jsx";
+import DeckList from "../components/Decks/DecksList.jsx";
 import DeckService from "../Services/DeckService.js";
-import { defer, useLoaderData } from "react-router-dom";
-import Dialog from "../components/Magic/Dialog.jsx";
+import MagicHelper from "../Services/MagicHelper.js";
+import "./MyDecksList.css";
 
 const deckService = DeckService.shared;
 

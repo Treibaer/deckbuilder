@@ -1,6 +1,5 @@
 import { useLoaderData } from "react-router-dom";
 import Client from "../Services/Client";
-import PlayComponent from "../components/PlayComponent";
 import "./Users.css";
 
 export default function Users() {

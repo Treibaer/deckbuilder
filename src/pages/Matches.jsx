@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import "./Matches.css";
 import Client from "../Services/Client";
-import Dialog from "../components/Magic/Dialog";
+import Dialog from "../components/Common/Dialog";
 
 const client = Client.shared;
 
@@ -101,7 +101,6 @@ export default function Matches() {
           <Dialog title="Create Match" onClose={close} onSubmit={createMatch}>
             <div className="formRow">
               <label htmlFor="enemy">Enemy</label>
-              {/* <label htmlFor="deck">Select Deck</label> */}
             </div>
             <div className="formRow">
               <select
@@ -119,11 +118,8 @@ export default function Matches() {
         </div>
       )}
       {isSelectingDeck && (
-        <div className="fullscreenBlurWithLoading">
-          <div className="new-match-form new-deck-for1m">
-            {/* {error && <ErrorView message={error.message} />} */}
-            <h2>Select Deck</h2>
-            <div className="formRow">
+        <Dialog title="Select Deck" onClose={close} onSubmit={selectDeck} submitTitle="Select">
+          <div className="formRow">
               <label htmlFor="enemy">My Deck</label>
             </div>
             <div className="formRow">
@@ -138,9 +134,7 @@ export default function Matches() {
                 ))}
               </select>
             </div>
-            <button onClick={selectDeck}>Select</button>
-          </div>
-        </div>
+          </Dialog>
       )}
       <div className="header">
         <div className="title">Matches</div>

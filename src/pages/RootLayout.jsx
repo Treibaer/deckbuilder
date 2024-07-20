@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigation } from "react-router-dom";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
-import MainNavigation from "../components/MainNavigation";
-import LoginView from "./LoginView";
+import MainNavigation from "../components/Navigation/MainNavigation";
 import Constants from "../Services/Constants";
+import LoginView from "../components/LoginView";
 
 export default function RootLayout() {
   const navigation = useNavigation();
   const [checkingLogin, setCheckingLogin] = useState(true);
-  // const isLoggedIn = localStorage.getItem("token") !== null;
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
