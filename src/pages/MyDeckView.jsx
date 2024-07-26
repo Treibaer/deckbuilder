@@ -223,10 +223,12 @@ export default function MyDeckView() {
             <img src={deleteImage} className="icon" alt=" " />
             Delete
           </button>
-          <button className="tb-button" onClick={didTapPlay}>
-            <img src={playgameImage} className="icon" alt=" " />
-            Play
-          </button>
+          {Constants.playModeEnabled && (
+            <button className="tb-button" onClick={didTapPlay}>
+              <img src={playgameImage} className="icon" alt=" " />
+              Play
+            </button>
+          )}
         </div>
         <input type="text" value={searchTerm} onChange={handleChange} />
         <div className="title">{deck.name}</div>

@@ -1,5 +1,6 @@
 import classes from "./MainNavigation.module.css";
 import NavigationLink from "./NavigationLink";
+import Constants from "../../Services/Constants";
 
 export default function MainNavigation() {
   return (
@@ -11,10 +12,13 @@ export default function MainNavigation() {
           <NavigationLink to="/sets" title="Sets" />
           <NavigationLink to="/decks/moxfield" title="Moxfield Decks" />
           <NavigationLink to="/decks/my" title="My Decks" />
-          <NavigationLink to="/users" title="Users" />
-          <NavigationLink to="/matches" title="Matches" />
+
+          {Constants.beta && <NavigationLink to="/users" title="Users" />}
+          {Constants.playModeEnabled && (
+            <NavigationLink to="/matches" title="Matches" />
+          )}
           <NavigationLink to="/profile" title="Profile" />
-          <NavigationLink to="/settings" title="Settings" />
+          {Constants.beta && <NavigationLink to="/settings" title="Settings" />}
         </ul>
       </nav>
     </header>

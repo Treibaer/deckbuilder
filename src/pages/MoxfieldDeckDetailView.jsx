@@ -110,10 +110,12 @@ export default function MoxfieldDeckDetailView() {
             <img src={cardStackImage} className="icon" alt=" " />
             Clone
           </button>
-          <button className="tb-button" onClick={didTapPlay}>
-            <img src={playgameImage} className="icon" alt=" " />
-            Play
-          </button>
+          {Constants.playModeEnabled && (
+            <button className="tb-button" onClick={didTapPlay}>
+              <img src={playgameImage} className="icon" alt=" " />
+              Play
+            </button>
+          )}
         </div>
         <h2>{deck.name}</h2>
         <div className="tb-button-group">

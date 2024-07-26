@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
       plugins: [react()],
       server: {
         // host: "https://test-rr.treibaer.de",
+        port: 3050,
       },
     };
   } else if (mode === "production") {

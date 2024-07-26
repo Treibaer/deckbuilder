@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
+import Constants from "../Services/Constants";
 
 export default function Profile() {
   return (
     <div>
       <h1>Profile</h1>
-      <Link to="/profile/playtests">
-        <button className="tb-button">Playtest History</button>
-      </Link>
+      {Constants.playModeEnabled && (
+        <Link to="/profile/playtests">
+          <button className="tb-button">Playtest History</button>
+        </Link>
+      )}
     </div>
   );
 }
