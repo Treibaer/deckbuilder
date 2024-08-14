@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import CardService from "../Services/CardService";
-import MagicCardView from "../components/MagicCardView";
-
 import DeckService from "../Services/DeckService";
-import LoadingSpinner from "../components/Common/LoadingSpinner";
-import "./CardDetailView.css";
-import Dialog from "../components/Common/Dialog";
 import Helper from "../Services/Helper";
+import Dialog from "../components/Common/Dialog";
+import LoadingSpinner from "../components/Common/LoadingSpinner";
+import MagicCardView from "../components/MagicCardView";
+import "./CardDetailView.css";
 
 export default function CardDetailView() {
   const mousePosition = useMousePosition();

@@ -12,6 +12,7 @@ export default function MainNavigation() {
           <NavigationLink to="/sets" title="Sets" />
           <NavigationLink to="/decks/moxfield" title="Moxfield Decks" />
           <NavigationLink to="/decks/my" title="My Decks" />
+          <NavigationLink to="/drafts" title="Drafter" />
 
           {Constants.beta && <NavigationLink to="/users" title="Users" />}
           {Constants.playModeEnabled && (

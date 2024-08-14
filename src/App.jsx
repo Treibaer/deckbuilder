@@ -7,6 +7,12 @@ import "./extensions/String.js";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // comopnents
+import CardDetailView, {
+  loader as cardDetailLoader,
+} from "./pages/CardDetailView.jsx";
+import MagicSetList, {
+  loader as setsLoader,
+} from "./pages/MagicSetList.jsx";
 import MoxfieldDeckDetailView, {
   loader as moxfieldDeckDetailLoader,
 } from "./pages/MoxfieldDeckDetailView.jsx";
@@ -16,14 +22,11 @@ import MoxfieldDeckOverview, {
 import MyDeckView, {
   loader as myDeckViewLoader,
 } from "./pages/MyDeckView.jsx";
-import CardDetailView, {
-  loader as cardDetailLoader,
-} from "./pages/CardDetailView.jsx";
-import MagicSetList, {
-  loader as setsLoader,
-} from "./pages/MagicSetList.jsx";
 
 // Pages
+import DraftView, {
+  loader as draftViewLoader,
+} from "./pages/DraftList.jsx";
 import Home from "./pages/Home.jsx";
 import MagicCardSearch, {
   loader as searchCardLoader,
@@ -65,6 +68,7 @@ const router = createBrowserRouter([
         element: <MoxfieldDeckDetailView />,
         loader: moxfieldDeckDetailLoader,
       },
+      { path: "/drafts", element:  <DraftView />, loader: draftViewLoader },
       { path: "/decks", element: <h1>All Public Decks</h1> },
       {
         path: "/decks/my",

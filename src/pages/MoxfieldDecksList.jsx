@@ -15,8 +15,6 @@ export default function MoxfieldDecksList() {
   const data = useLoaderData();
   const navigate = useNavigate();
 
-  console.log(data);
-
   const [searchParams, _] = useSearchParams();
   const q = searchParams.get("q");
   const format = searchParams.get("format") ?? "";

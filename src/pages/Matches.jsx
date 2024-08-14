@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "../components/Common/LoadingSpinner";
-import "./Matches.css";
 import Client from "../Services/Client";
 import Dialog from "../components/Common/Dialog";
+import LoadingSpinner from "../components/Common/LoadingSpinner";
+import "./Matches.css";
 
 const client = Client.shared;
 
@@ -31,15 +31,9 @@ export default function Matches() {
 
   async function openCreateMatchForm() {
     setIsLoading(true);
-    // wait 2 seconds
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
-    // load users
-    // load my decks
     const users = await client.get("/users");
     setUsers(users);
     setEnemyId(users[0].id);
-    // const decks = await client.get("/decks");
-    // setDecks(decks);
 
     setIsCreatingMatch(true);
     setIsLoading(false);
@@ -48,9 +42,9 @@ export default function Matches() {
   async function createMatch() {
     setIsLoading(true);
     setIsCreatingMatch(false);
-    // await new Promise((resolve) => setTimeout(resolve, 1000));
+
     const data = { enemyId: enemyId };
-    const match = await client.post("/matches", JSON.stringify(data));
+    await client.post("/matches", JSON.stringify(data));
     await loadMatches();
     setIsLoading(false);
   }
@@ -118,23 +112,28 @@ export default function Matches() {
         </div>
       )}
       {isSelectingDeck && (
-        <Dialog title="Select Deck" onClose={close} onSubmit={selectDeck} submitTitle="Select">
+        <Dialog
+          title="Select Deck"
+          onClose={close}
+          onSubmit={selectDeck}
+          submitTitle="Select"
+        >
           <div className="formRow">
-              <label htmlFor="enemy">My Deck</label>
-            </div>
-            <div className="formRow">
-              <select
-                name="deck"
-                onChange={(event) => setSelectedDeckId(event.target.value)}
-              >
-                {decks.map((deck, index) => (
-                  <option key={index} value={deck.id}>
-                    [{deck.id}] {deck.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </Dialog>
+            <label htmlFor="enemy">My Deck</label>
+          </div>
+          <div className="formRow">
+            <select
+              name="deck"
+              onChange={(event) => setSelectedDeckId(event.target.value)}
+            >
+              {decks.map((deck, index) => (
+                <option key={index} value={deck.id}>
+                  [{deck.id}] {deck.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        </Dialog>
       )}
       <div className="header">
         <div className="title">Matches</div>
@@ -186,10 +185,17 @@ export default function Matches() {
             <div>{match.creationDate}</div>
             <div>
               {match.player0.deckSelected && match.player0.deckSelected && (
-                <button className="tb-button" onClick={() => openMatch(match.id)}>Play</button>
+                <button
+                  className="tb-button"
+                  onClick={() => openMatch(match.id)}
+                >
+                  Play
+                </button>
               )}
               {(!match.player0.deckSelected || !match.player0.deckSelected) && (
-                <button className="tb-button" disabled={"disabled"}>Play</button>
+                <button className="tb-button" disabled={"disabled"}>
+                  Play
+                </button>
               )}
             </div>
           </div>
