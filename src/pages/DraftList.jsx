@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import DraftCreateView from "../components/DraftCreateView";
-import Client from "../Services/Client";
+import CardService from "../Services/CardService";
+
+const cardService = CardService.shared
 
 export default function DraftView() {
   const [isCreatingDraft, setIsCreatingDraft] = useState(false);
   const drafts = [{ id: 1 }, { id: 2 }, { id: 3 }];
   const sets = useLoaderData();
+
   function closeDialog() {
     setIsCreatingDraft(false);
   }
@@ -25,7 +28,11 @@ export default function DraftView() {
       </div>
 
       {isCreatingDraft && (
-        <DraftCreateView closeDialog={closeDialog} onSubmit={() => {}} sets={sets} />
+        <DraftCreateView
+          closeDialog={closeDialog}
+          onSubmit={() => {}}
+          sets={sets}
+        />
       )}
 
       <ul id="draft-wrapper">
@@ -43,6 +50,5 @@ export default function DraftView() {
 }
 
 export const loader = async () => {
-  const response = await Client.shared.loadSets();
-  return response;
+  return cardService.getSets();
 };

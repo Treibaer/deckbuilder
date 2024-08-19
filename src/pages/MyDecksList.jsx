@@ -18,8 +18,6 @@ export default function MyDecksList() {
 
   async function createDeck() {
     setIsUpdating(true);
-    // setIsUpdating(true);
-    // setIsCreatingDeck(false);
     const name = document.querySelector("input[name=name]").value;
     if (!name) {
       setError(new Error("Name is required"));
@@ -35,7 +33,7 @@ export default function MyDecksList() {
         mainboard: [],
         promoId: "",
       });
-      let decks = await deckService.loadMyDecks();
+      let decks = await deckService.getDecks();
       setMyDecks(decks);
       setIsCreatingDeck(false);
       setError(null);
@@ -94,5 +92,5 @@ export default function MyDecksList() {
 }
 
 export const loader = async () => {
-  return await deckService.loadMyDecks();
+  return await deckService.getDecks();
 };

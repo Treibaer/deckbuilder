@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
-import Client from "../Services/Client.js";
 import MagicCardList from "../components/MagicCardList.jsx";
-import "./MagicCardSearch.css";
 import MagicFilterView from "../components/Search/MagicFilterView.jsx";
+import SearchPagination from "../components/Search/Pagination.jsx";
+import SearchBar from "../components/Search/SearchBar.jsx";
+import CardService from "../Services/CardService.js";
+import "./MagicCardSearch.css";
+
+const cardService = CardService.shared
 
 export default function MagicCardSearch({}) {
   /*
@@ -31,6 +35,7 @@ export default function MagicCardSearch({}) {
   const [showFilter, setShowFilter] = useState(false);
 
   let pages = Math.ceil(data.amount / cards.length);
+
   if (!data.hasMore) {
     pages = selectedPage + 1;
   }
@@ -40,25 +45,14 @@ export default function MagicCardSearch({}) {
   useEffect(() => {
     setSearchTerm(q ?? "");
   }, [q]);
-
-  function loadCards2(term) {
-    fetch("https://magic.treibaer.de/cards?term=" + term)
-      .then((response) => response.json())
-      .then((data) => {
-        setCards(data.cards);
-
-        // setIsLoading(false);
-      });
-  }
+  
   function handleChange(event) {
     setSearchTerm(event.target.value);
   }
 
   function handleSearch() {
-    let url = `/search?q=${searchTerm}`;
-    navigate(url);
+    navigate(`/search?q=${searchTerm}`);
   }
-  console.log(data.data.length);
 
   return (
     <>
@@ -67,54 +61,22 @@ export default function MagicCardSearch({}) {
           Search
         </div>
       </div>
-      <div className="searchBar">
-        <input
-          type="text"
-          value={searchTerm}
-          onChange={handleChange}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
-              handleSearch();
-            }
-          }}
-        />
-        <button className="tb-button" onClick={handleSearch}>
-          Search
-        </button>
-        <button
-          className="tb-button"
-          onClick={() => {
-            setShowFilter(true);
-          }}
-        >
-          Advanced
-        </button>
-      </div>
-      {
-        <MagicFilterView
-          sets={data.sets}
-          showFilter={showFilter}
-          setShowFilter={setShowFilter}
-        />
-      }
-      <div className="searchResultsHeader">
-        {pages > 1 && (
-          <div>
-            {Array.from({ length: pages }, (_, i) => (
-              <button
-              className={selectedPage === i ? "active tb-button" : "tb-button"}
-                key={i}
-                onClick={() => {
-                  let url = `/search?q=${searchTerm}&page=${i + 1}`;
-                  navigate(url);
-                }}
-              >
-                {i + 1}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+      <SearchBar
+        handleSearch={handleSearch}
+        searchTerm={searchTerm}
+        handleChange={handleChange}
+        setShowFilter={setShowFilter}
+      />
+      <MagicFilterView
+        sets={data.sets}
+        showFilter={showFilter}
+        setShowFilter={setShowFilter}
+      />
+      <SearchPagination
+        pages={pages}
+        selectedPage={selectedPage}
+        searchTerm={searchTerm}
+      />
       <div>
         {data.amount === 0 && <p>No cards found</p>}
         {cards.length > 0 && <MagicCardList cards={cards} />}
@@ -124,11 +86,8 @@ export default function MagicCardSearch({}) {
 }
 
 export const loader = async ({ request }) => {
-  const sets = await Client.shared.loadSets();
+  const sets = await cardService.getSets();
   sets.sort((a, b) => (a.name > b.name ? 1 : -1));
-  // filter logic
-  let url = `https://api.scryfall.com/cards/search?q=c%3Ar,u,g,b,w`;
-  // let url = `https://api.scryfall.com/cards/search?q=`;
 
   const queryParameters = new URL(request.url).searchParams;
   let q = queryParameters.get("q");
@@ -138,8 +97,7 @@ export const loader = async ({ request }) => {
   }
   q += " game:paper";
 
-  url = `https://api.scryfall.com/cards/search?q=ab+order:name+direction:ascending+c%3Dwu+prefer:usd-low+include:extras&page=1`;
-  url = `https://api.scryfall.com/cards/search?q=${q}`;
+  let url = `https://api.scryfall.com/cards/search?q=${q}`;
   if (queryParameters.has("page")) {
     url += `&page=${queryParameters.get("page")}`;
   }
@@ -147,7 +105,7 @@ export const loader = async ({ request }) => {
   if (!response.ok) {
     return { data: [], sets: sets, amount: 0, hasMore: false };
   }
-  // await new Promise((resolve) => setTimeout(resolve, 2000));
+
   const json = await response.json();
   json.data.map((card) => {
     card.scryfallId = card.id;

@@ -14,7 +14,7 @@ export default function MagicCardList({ cards }) {
       {selectedCard && (
         <CardPeekView
           card={selectedCard}
-          onClose={() => setSelectedCard(null)}
+          onClose={setSelectedCard.bind(null, null)}
         />
       )}
       <div className="styleSelection">
@@ -51,7 +51,7 @@ export default function MagicCardList({ cards }) {
       {style === "cards" && (
         <div id="card-container">
           {style === "cards" &&
-            cards.map((card, index) => (
+            cards.map((card, _) => (
               <MagicCardView
                 key={card.scryfallId}
                 card={card}

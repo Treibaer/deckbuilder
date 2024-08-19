@@ -1,22 +1,16 @@
-import MagicHelper from "./MagicHelper";
-import Constants from "./Constants.js";
 import Client from "./Client.js";
+import MagicHelper from "./MagicHelper";
 // console.log(Settings());
 export default class DeckService {
   client = Client.shared;
 
   static shared = new DeckService();
 
-  async cloneMoxfieldDeck(moxfieldId) {
-    const path = `/moxfield/decks/${moxfieldId}/clone`;
-    return await this.client.post(path, JSON.stringify({}));
+  async getDecks() {
+    return this.client.get("/decks");
   }
 
-  async loadMyDecks() {
-    return await this.client.get("/decks");
-  }
-
-  async loadDeck(deckId) {
+  async getDeck(deckId) {
     const resData = await this.client.get(`/decks/${deckId}`);
     resData.mainboard = resData.mainboard.sort((a, b) =>
       a.card.name.localeCompare(b.card.name)
@@ -33,7 +27,7 @@ export default class DeckService {
       promoId: deck.promoId,
     };
     // let startingTime = new Date().getTime();
-    return await this.client.post(path, JSON.stringify(data));
+    return await this.client.post(path, data);
 
     // let endingTime = new Date().getTime();
     // if (endingTime - startingTime < 700) {
@@ -51,7 +45,7 @@ export default class DeckService {
       zone: zone,
       action: "add",
     };
-    return await this.client.post(path, JSON.stringify(cardObject));
+    return await this.client.post(path, cardObject);
   }
 
   async setPromoId(deck, promoId) {
@@ -60,7 +54,7 @@ export default class DeckService {
       promoId: promoId,
       action: "modify",
     };
-    return await this.client.post(url, JSON.stringify(cardObject));
+    return await this.client.post(url, cardObject);
   }
 
   async updateCardAmount(deck, card, zone, quantity) {
@@ -71,7 +65,7 @@ export default class DeckService {
       zone: zone,
       action: "modify",
     };
-    return await this.client.post(path, JSON.stringify(cardObject));
+    return await this.client.post(path, cardObject);
   }
 
   async setPrint(deck, card, print) {
@@ -81,7 +75,7 @@ export default class DeckService {
       oldId: card.scryfallId,
       newId: print.scryfallId,
     };
-    return await this.client.put(path, JSON.stringify(data));
+    return await this.client.put(path, data);
   }
 
   async moveZone(deck, card, originZone, destinationZone) {
@@ -92,7 +86,7 @@ export default class DeckService {
       originZone: originZone,
       destinationZone: destinationZone,
     };
-    return await this.client.put(path, JSON.stringify(data));
+    return await this.client.put(path, data);
   }
 
   async deleteDeck(deck) {

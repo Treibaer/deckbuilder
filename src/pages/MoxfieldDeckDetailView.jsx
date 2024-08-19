@@ -4,6 +4,7 @@ import Client from "../Services/Client.js";
 import Constants from "../Services/Constants.js";
 import DeckService from "../Services/DeckService.js";
 import MagicHelper from "../Services/MagicHelper.js";
+import MoxfieldService from "../Services/MoxfieldService.js";
 import cardStackImage from "../assets/cardstack.svg";
 import chevronLeftImage from "../assets/chevron-left.svg";
 import playgameImage from "../assets/playgame.svg";
@@ -16,6 +17,7 @@ import "./MoxfieldDeckDetailView.css";
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const client = Client.shared;
 const deckService = DeckService.shared;
+const moxfieldService = MoxfieldService.shared;
 const viewStyles = ["list", "grid"];
 
 export default function MoxfieldDeckDetailView() {
@@ -47,7 +49,6 @@ export default function MoxfieldDeckDetailView() {
   const image = previewId
     ? MagicHelper.getImageUrl(previewId, "normal", hovered.faceSide ?? 0)
     : backside;
-  console.log(image);
   const structure = MagicHelper.getDeckStructureFromCards(cards);
 
   structure["Commanders"] = deck.commanders.map((card) => {
@@ -67,7 +68,7 @@ export default function MoxfieldDeckDetailView() {
 
   async function clone() {
     setIsLoading(true);
-    const newDeck = await deckService.cloneMoxfieldDeck(deck.id);
+    const newDeck = await moxfieldService.clone(deck.id);
     // wait 1 seconds for the deck to be created, otherwise, it's too fast and you don't see that a deck is created
     await new Promise((resolve) => setTimeout(resolve, 1000));
     navigator("/decks/my/" + newDeck.id);
@@ -82,9 +83,9 @@ export default function MoxfieldDeckDetailView() {
     const data = {
       moxFieldDeckId: deck.id,
     };
-    const response = await Client.shared.post(path, JSON.stringify(data));
+    const response = await Client.shared.post(path, data);
     window
-      .open("/magic-web-js/play3.html?mId=" + response.id, "_blank")
+      .open("/magic-web-js/play.html?mId=" + response.id, "_blank")
       .focus();
   }
 
@@ -93,7 +94,7 @@ export default function MoxfieldDeckDetailView() {
       {isLoading && <LoadingSpinner />}
 
       {cardPreview && (
-        <CardPeekView card={cardPreview} onClose={() => setCardPreview(null)} />
+        <CardPeekView card={cardPreview} onClose={setCardPreview.bind(null, null)} />
       )}
       <div className="deck-details-header">
         <div className="tb-button-group">
@@ -158,6 +159,5 @@ export default function MoxfieldDeckDetailView() {
 }
 
 export const loader = async ({ params }) => {
-  const response = await client.getDeck(params.publicId);
-  return response;
+  return await moxfieldService.getDeck(params.publicId);
 };

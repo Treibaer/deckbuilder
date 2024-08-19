@@ -18,13 +18,11 @@
 }
 
 #set-wrapper > * {
-  /* card design */
   border-radius: 12px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   width: 225px;
   height: 110px;
-  /* margin: 8px; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -39,7 +37,6 @@
 #set-wrapper img {
   margin: 8px;
   width: 24px;
-  /* filter: invert(42%) sepia(93%) saturate(1352%) hue-rotate(87deg) brightness(119%) contrast(119%); */
 }
 
 #loadingSpinnerWrapper {
@@ -56,6 +53,7 @@
   height: 100%;
   display: flex;
 }
+
 #loadingSpinner > div {
   margin: auto;
 }

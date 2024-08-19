@@ -1,7 +1,9 @@
 import { Link, useLoaderData } from "react-router-dom";
-import Client from "../Services/Client";
+import CardService from "../Services/CardService";
 import MagicHelper from "../Services/MagicHelper";
 import "./MagicSetList.css";
+
+const cardService = CardService.shared;
 
 export default function MagicSetList() {
   const sets = useLoaderData();
@@ -32,6 +34,5 @@ export default function MagicSetList() {
 }
 
 export const loader = async () => {
-  const response = await Client.shared.loadSets();
-  return response;
+  return await cardService.getSets();
 };

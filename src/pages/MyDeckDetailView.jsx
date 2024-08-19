@@ -17,7 +17,7 @@ import "./MoxfieldDeckDetailView.css";
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
 
-export default function MyDeckView() {
+export default function MyDeckDetailView() {
   const navigator = useNavigate();
   const data = useLoaderData();
 
@@ -37,7 +37,7 @@ export default function MyDeckView() {
   const [cardPreview, setCardPreview] = useState(false);
 
   async function loadDeck() {
-    const response = await DeckService.shared.loadDeck(deck.id);
+    const response = await DeckService.shared.getDeck(deck.id);
     setDeck(response);
   }
 
@@ -161,14 +161,12 @@ export default function MyDeckView() {
   }
 
   async function setPrint(card, print) {
-    // console.log("setPrint", card, print);
     await DeckService.shared.setPrint(deck, card, print);
     await loadDeck();
     if (card.id === hovered?.id) {
       setPreviewImage(print, 0);
     }
     setCardDetails(print);
-    // setCardDetails(null);
   }
   async function deleteDeck() {
     await DeckService.shared.deleteDeck(deck);
@@ -180,10 +178,10 @@ export default function MyDeckView() {
     const data = {
       deckId: deck.id,
     };
-    const response = await Client.shared.post(path, JSON.stringify(data));
+    const response = await Client.shared.post(path, data);
 
     window
-      .open("/magic-web-js/play3.html?mId=" + response.id, "_blank")
+      .open("/magic-web-js/play.html?mId=" + response.id, "_blank")
       .focus();
   }
 
@@ -204,7 +202,7 @@ export default function MyDeckView() {
       {cardDetails && (
         <MyDeckPrintSelectionOverlay
           card={cardDetails}
-          closeOverlay={() => setCardDetails(null)}
+          closeOverlay={setCardDetails.bind(null, null)}
           setPrint={setPrint}
         />
       )}
@@ -218,7 +216,7 @@ export default function MyDeckView() {
           </Link>
           <button
             className="tb-button"
-            onClick={() => setShowDeletionConfirmation(true)}
+            onClick={setShowDeletionConfirmation.bind(null, true)}
           >
             <img src={deleteImage} className="icon" alt=" " />
             Delete
@@ -338,5 +336,5 @@ export default function MyDeckView() {
 }
 
 export const loader = async ({ params }) => {
-  return await DeckService.shared.loadDeck(params.deckId);
+  return await DeckService.shared.getDeck(params.deckId);
 };

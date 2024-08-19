@@ -21,7 +21,7 @@ export default function PlaytestHistory() {
   });
 
   function play(id) {
-    window.open("/magic-web-js/play3.html?mId=" + id, "_blank");
+    window.open("/magic-web-js/play.html?mId=" + id, "_blank");
   }
 
   return (

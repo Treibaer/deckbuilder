@@ -8,8 +8,10 @@ import Client from "../Services/Client";
 import MagicHelper from "../Services/MagicHelper";
 import DeckList from "../components/Decks/DecksList";
 import "./MoxfieldDecksList.css";
+import MoxfieldService from "../Services/MoxfieldService";
 
 const client = Client.shared;
+const moxfieldService = MoxfieldService.shared;
 
 export default function MoxfieldDecksList() {
   const data = useLoaderData();
@@ -130,13 +132,7 @@ export const loader = async ({ request }) => {
   const commander = queryParameters.get("commander");
 
   if (id) {
-    const response = await client.getDecksByCardId(
-      id,
-      format,
-      page,
-      commander !== null
-    );
-    return response;
+    return await moxfieldService.getDecksByCardId(id, format, page, commander !== null);
   }
-  return await client.getDecks(format, page, commander !== null);
+  return await moxfieldService.getDecks(format, page, commander !== null);
 };

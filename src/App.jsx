@@ -19,9 +19,9 @@ import MoxfieldDeckDetailView, {
 import MoxfieldDeckOverview, {
   loader as moxfieldLoader,
 } from "./pages/MoxfieldDecksList.jsx";
-import MyDeckView, {
+import MyDeckDetailView, {
   loader as myDeckViewLoader,
-} from "./pages/MyDeckView.jsx";
+} from "./pages/MyDeckDetailView.jsx";
 
 // Pages
 import DraftView, {
@@ -77,7 +77,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/decks/my/:deckId",
-        element: <MyDeckView />,
+        element: <MyDeckDetailView />,
         loader: myDeckViewLoader,
       },
       { path: "/users", element: <Users />, loader: usersLoader },

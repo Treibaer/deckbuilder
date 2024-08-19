@@ -1,6 +1,6 @@
+import Constants from "../../Services/Constants";
 import classes from "./MainNavigation.module.css";
 import NavigationLink from "./NavigationLink";
-import Constants from "../../Services/Constants";
 
 export default function MainNavigation() {
   return (
