@@ -47,7 +47,7 @@ const Matches = () => {
     setIsLoading(true);
     setIsCreatingMatch(false);
 
-    await matchService.createMatch(enemyId);
+    await matchService.create(enemyId);
     await loadMatches();
     setIsLoading(false);
   }
@@ -61,7 +61,7 @@ const Matches = () => {
 
     setSelectedPlayerPosition(playerIndex);
     setSelectedMatch(match);
-    const decks = await deckService.getDecks();
+    const decks = await deckService.getAll();
     if (decks.length > 0) {
       setSelectedDeckId(decks[0].id);
     }

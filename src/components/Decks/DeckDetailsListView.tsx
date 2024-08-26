@@ -1,8 +1,9 @@
 import { DeckCard, MagicCard } from "../../pages/deck";
 import "./DeckDetailsListView.css";
+import { DeckStructure } from "./structure";
 
 const DeckDetailsListView: React.FC<{
-  structure: any;
+  structure: DeckStructure;
   setPreviewImage: (card: MagicCard, faceSide?: number) => void;
   addToDeck?: (card: MagicCard, zone: string) => void;
   updateCardAmount?: (card: MagicCard, zone: string, amount: number) => void;
@@ -18,6 +19,29 @@ const DeckDetailsListView: React.FC<{
   openPrintSelection,
   moveZone,
 }) => {
+  const handleAddToDeck = (card: DeckCard, key: string) => {
+    const zone = key === "Commanders" ? "commandZone" : "mainboard";
+    if (addToDeck) {
+      addToDeck(card.card, zone);
+    }
+  };
+
+  const handleRemoveFromDeck = (card: DeckCard, key: string) => {
+    const zone = key === "Commanders" ? "commandZone" : "mainboard";
+    if (updateCardAmount) {
+      updateCardAmount(card.card, zone, card.quantity - 1);
+    }
+  };
+  const handleMoveZone = (card: MagicCard, key: string) => {
+    if (moveZone) {
+      const from = key === "Commanders" ? "commandZone" : "mainboard";
+      const to = key === "Commanders" ? "mainboard" : "commandZone";
+      moveZone(card, from, to);
+    }
+  };
+
+  const canEdit = addToDeck && updateCardAmount && openPrintSelection;
+
   return (
     <div id="deck-list-view">
       {Object.keys(structure).map((key, index) => {
@@ -46,40 +70,23 @@ const DeckDetailsListView: React.FC<{
                           {/* {Helper.convertCostsToImgArray(
                             card.card.manaCost ?? card.card.mana_cost
                           )} */}
-                          {addToDeck && updateCardAmount && (
+                          {canEdit && (
                             <span className="actions">
                               <span
                                 onClick={() => {
-                                  const zone =
-                                    key === "Commanders"
-                                      ? "commandZone"
-                                      : "mainboard";
-                                  addToDeck(card.card, zone);
+                                  handleAddToDeck(card, key);
                                 }}
                               >
                                 ➕
                               </span>
                               <span
-                                onClick={() => {
-                                  const zone =
-                                    key === "Commanders"
-                                      ? "commandZone"
-                                      : "mainboard";
-                                  updateCardAmount(
-                                    card.card,
-                                    zone,
-                                    card.quantity - 1
-                                  );
-                                }}
+                                onClick={() => handleRemoveFromDeck(card, key)}
                               >
                                 ➖
                               </span>
                               {card.card.reprint && (
                                 <span
-                                  onClick={() =>
-                                    openPrintSelection &&
-                                    openPrintSelection(card.card)
-                                  }
+                                  onClick={() => openPrintSelection(card.card)}
                                 >
                                   ...
                                 </span>
@@ -89,25 +96,12 @@ const DeckDetailsListView: React.FC<{
                                   <span
                                     className="action"
                                     onClick={() => {
-                                      if (key === "Commanders") {
-                                        moveZone(
-                                          card.card,
-                                          "commandZone",
-                                          "mainboard"
-                                        );
-                                      } else {
-                                        moveZone(
-                                          card.card,
-                                          "mainboard",
-                                          "commandZone"
-                                        );
-                                      }
+                                      handleMoveZone(card.card, key);
                                     }}
                                   >
                                     C
                                   </span>
                                 )}
-                              {!card.card.reprint && <span> </span>}
                             </span>
                           )}
                         </div>

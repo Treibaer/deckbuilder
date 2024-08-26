@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import Dialog from "../components/Common/Dialog";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
+import { Button } from "../components/Decks/Button";
 import DeckList from "../components/Decks/DecksList";
 import DeckService from "../Services/DeckService";
 import MagicHelper from "../Services/MagicHelper";
@@ -18,33 +19,20 @@ const MyDecksList = () => {
   const [isCreatingDeck, setIsCreatingDeck] = useState(false);
   const data = useLoaderData() as Deck[];
   const [myDecks, setMyDecks] = useState<Deck[]>(data);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   async function createDeck() {
     setIsUpdating(true);
-    const name = (
-      document.querySelector("input[name=name]")! as HTMLInputElement
-    ).value;
-    if (!name) {
+
+    if (!inputRef.current?.value) {
       setError({ message: "Name is required" });
       setIsUpdating(false);
       return;
     }
 
     try {
-      await deckService.createDeck({
-        id: 0,
-        name: name ?? "Deck 1",
-        description: "nice deck",
-        promoId: "",
-        format: "standard",
-        cardCount: 0,
-        viewCount: 0,
-        colors: [],
-        commanders: [],
-        mainboard: [],
-        sideboard: [],
-      });
-      let decks = await deckService.getDecks();
+      await deckService.create(inputRef.current.value);
+      let decks = await deckService.getAll();
       setMyDecks(decks);
       setIsCreatingDeck(false);
       setError(undefined);
@@ -77,35 +65,31 @@ const MyDecksList = () => {
   }
 
   return (
-    <>
-      <div>
-        <div className="headline">
-          <h1>My Decks</h1>
-          {isCreatingDeck && (
-            <Dialog
-              title="Create Deck"
-              onClose={closeDialog}
-              onSubmit={createDeck}
-              error={error}
-            >
-              <label htmlFor="name">Name</label>
-              <input type="text" name="name" />
-            </Dialog>
-          )}
-          {isUpdating && <LoadingSpinner />}
-          <button className="tb-button" onClick={showDeckForm}>
-            Create
-          </button>
-        </div>
-        {myDecks.length === 0 && <p>No decks found</p>}
-        <DeckList decks={mappedDecks} />
+    <div>
+      <div className="headline">
+        <h1>My Decks</h1>
+        {isCreatingDeck && (
+          <Dialog
+            title="Create Deck"
+            onClose={closeDialog}
+            onSubmit={createDeck}
+            error={error}
+          >
+            <label htmlFor="name">Name</label>
+            <input ref={inputRef} type="text" name="name" />
+          </Dialog>
+        )}
+        {isUpdating && <LoadingSpinner />}
+        <Button title="Create" onClick={showDeckForm} />
       </div>
-    </>
+      {myDecks.length === 0 && <p>No decks found</p>}
+      <DeckList decks={mappedDecks} />
+    </div>
   );
 };
 
 export const loader = async () => {
-  return await deckService.getDecks();
+  return await deckService.getAll();
 };
 
 export default MyDecksList;

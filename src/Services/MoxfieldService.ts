@@ -3,7 +3,8 @@ import Client from "./Client";
 
 export default class MoxfieldService {
   static shared = new MoxfieldService();
-  client = Client.shared;
+  private client = Client.shared;
+  private constructor() {}
 
   async getDecks(format: string, page: number, shouldBeCommander: boolean) {
     const path = `/moxfield/decks?format=${format}&page=${page}&commander=${

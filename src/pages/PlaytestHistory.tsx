@@ -1,25 +1,12 @@
-import { useEffect, useState } from "react";
+import { useLoaderData } from "react-router-dom";
+import PlaytestService from "../Services/PlaytestService";
 import "./PlaytestHistory.css";
 import { Playtest } from "./deck";
-import PlaytestService from "../Services/PlaytestService";
 
 const playtestService = PlaytestService.shared;
 
 const PlaytestHistory = () => {
-  const [playtestHistory, setPlaytestHistory] = useState<Playtest[]>([]);
-
-  async function getPlaytestHistory() {
-    const pt = await playtestService.getAll();
-    setPlaytestHistory(pt);
-  }
-  useEffect(() => {
-    getPlaytestHistory();
-  }, []);
-
-  // convert unix timestamp to human readable date
-  playtestHistory.forEach((pt) => {
-    pt.createdAtString = new Date(pt.createdAt * 1000).toLocaleDateString();
-  });
+  const playtestHistory = useLoaderData() as Playtest[];
 
   function play(id: number) {
     window.open("/magic-web-js/play.html?mId=" + id, "_blank");
@@ -37,15 +24,21 @@ const PlaytestHistory = () => {
         {playtestHistory.reverse().map((pt) => (
           <li key={pt.id} className="playtest-row">
             <p>{pt.id}</p>
-            <p>{pt.createdAtString}</p>
+            <p>{new Date(pt.createdAt * 1000).toLocaleDateString()}</p>
             <p>
-              <button className="tb-button" onClick={() => play(pt.id)}>Play</button>
+              <button className="tb-button" onClick={() => play(pt.id)}>
+                Play
+              </button>
             </p>
           </li>
         ))}
       </ul>
     </div>
   );
-}
+};
 
 export default PlaytestHistory;
+
+export const loader = async () => {
+  return await playtestService.getAll();
+};

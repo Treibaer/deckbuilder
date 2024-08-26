@@ -27,7 +27,7 @@ const MagicCardSearch: React.FC = () => {
   const navigate = useNavigate();
   const data = useLoaderData() as any;
   const cards = data.data;
-  const [searchParams, _] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
   const page = searchParams.get("page");
   const selectedPage = page ? parseInt(page) - 1 : 0;

@@ -49,10 +49,7 @@ const LoginView: React.FC<{
           placeholder="Password"
           onChange={(event) => setPassword(event.target.value)}
         />
-        <button
-          onClick={handleLogin}
-          disabled={isSubmitting}
-        >
+        <button onClick={handleLogin} disabled={isSubmitting}>
           Login
         </button>
       </form>

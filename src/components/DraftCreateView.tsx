@@ -7,7 +7,7 @@ const DraftCreateView: React.FC<{
   sets: any[];
 }> = ({ closeDialog, sets }) => {
   const [players, setPlayers] = useState(8);
-  const [booster, setBooster] = useState<any>([]);
+  const [booster, setBooster] = useState<string[]>([]);
   const [key, setKey] = useState(Math.floor(Math.random() * 1000000));
   sets.sort((a, b) => a.name.localeCompare(b.name));
 

@@ -1,9 +1,8 @@
 // import "inter-ui/inter.css";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 import "./Magic.css";
 import "./all3.css";
-import "./extensions/String";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 // comopnents
 import CardDetailView, {
@@ -27,10 +26,8 @@ import MagicCardSearch, {
   loader as searchCardLoader,
 } from "./pages/MagicCardSearch";
 import Matches from "./pages/Matches";
-import MyDecksList, {
-  loader as myDecksListLoader,
-} from "./pages/MyDecksList";
-import PlaytestHistory from "./pages/PlaytestHistory";
+import MyDecksList, { loader as myDecksListLoader } from "./pages/MyDecksList";
+import PlaytestHistory, {loader as playtestHistoryLoader} from "./pages/PlaytestHistory";
 import Profile from "./pages/Profile";
 import RootLayout from "./pages/RootLayout";
 import Settings from "./pages/Settings";
@@ -78,7 +75,7 @@ const router = createBrowserRouter([
       { path: "/users", element: <Users />, loader: usersLoader },
       { path: "/matches", element: <Matches /> },
       { path: "/profile", element: <Profile /> },
-      { path: "/profile/playtests", element: <PlaytestHistory /> },
+      { path: "/profile/playtests", element: <PlaytestHistory />, loader: playtestHistoryLoader },
       { path: "/settings", element: <Settings /> },
     ],
     // errorElement: <ErrorPage />,

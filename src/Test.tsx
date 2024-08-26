@@ -1,10 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import Client from "./Services/Client";
 import DeckService from "./Services/DeckService";
 import { Deck } from "./pages/deck";
 // import WebSocket from 'ws';
-
-let client = Client.shared;
 
 function connect() {
   const wsUrl = "ws://localhost:1236";
@@ -44,7 +41,7 @@ const Test = () => {
 
   function loadDecks() {
     console.log("loadDecks");
-    DeckService.shared.getDecks().then((decks) => {
+    DeckService.shared.getAll().then((decks) => {
       console.log(decks);
       // setDecks(decks);
       decks2.current = decks;

@@ -2,16 +2,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MagicCardView from "../MagicCardView";
 import { MagicCard } from "../../pages/deck";
+import { CardSize } from "./structure";
 
- const MyDeckPrintSelectionOverlay: React.FC<{
+const MyDeckPrintSelectionOverlay: React.FC<{
   closeOverlay: () => void;
   card: any;
   setPrint: (card: MagicCard, print: any) => void;
- }> = ({
-  closeOverlay,
-  card,
-  setPrint,
-}) => {
+}> = ({ closeOverlay, card, setPrint }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [prints, setPrints] = useState<any>([]);
 
@@ -39,8 +36,8 @@ import { MagicCard } from "../../pages/deck";
     if (card.reprint) {
       loadPrints();
     }
-  }, []);
-  console.log(prints);
+  });
+
   prints.map((print: any) => {
     print.scryfallId = print.id;
     return print;
@@ -72,7 +69,7 @@ import { MagicCard } from "../../pages/deck";
                     }
                   >
                     <h4 title={print.set_name}>{print.set_name}</h4>
-                    <MagicCardView card={print} size="normal" />
+                    <MagicCardView card={print} size={CardSize.small} />
                     {card.scryfallId !== print.scryfallId && (
                       <button
                         className="tb-button"
@@ -90,6 +87,6 @@ import { MagicCard } from "../../pages/deck";
       </div>
     </div>
   );
-}
+};
 
 export default MyDeckPrintSelectionOverlay;

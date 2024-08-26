@@ -2,8 +2,8 @@ import { Match, User } from "../pages/deck";
 import Client from "./Client";
 
 export default class MatchService {
-  private client = Client.shared;
   static shared = new MatchService();
+  private client = Client.shared;
   private constructor() {}
 
   async getAll() {
@@ -14,8 +14,8 @@ export default class MatchService {
     return this.client.get<User[]>("/users");
   }
 
-  async createMatch(enemyId: number) {
-    return await this.client.post("/matches", { enemyId: enemyId });
+  async create(enemyId: number) {
+    return this.client.post("/matches", { enemyId: enemyId });
   }
 
   async selectDeck(

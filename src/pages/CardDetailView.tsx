@@ -7,6 +7,7 @@ import LoadingSpinner from "../components/Common/LoadingSpinner";
 import MagicCardView from "../components/MagicCardView";
 import { useMousePosition } from "../hooks/useMousePosition";
 import "./CardDetailView.css";
+import { CardSize } from "../components/Decks/structure";
 
 const CardDetailView: React.FC<{}> = () => {
   const mousePosition = useMousePosition();
@@ -40,7 +41,7 @@ const CardDetailView: React.FC<{}> = () => {
       <h1> {card.name}</h1>
       {card && (
         <div className="card-content">
-          <MagicCardView card={card} size="large" />
+          <MagicCardView card={card} size={CardSize.large} />
           <div className="card-details">
             <div className="card-headline">
               <div>
@@ -117,7 +118,7 @@ const CardDetailView: React.FC<{}> = () => {
 };
 
 export const loader: any = async ({ params }: { params: any }) => {
-  return await CardService.shared.getCardById(params.cardId);
+  return await CardService.shared.get(params.cardId);
 };
 
 export default CardDetailView;

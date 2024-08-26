@@ -3,13 +3,14 @@ import Client from "./Client";
 
 export default class CardService {
   static shared = new CardService();
-  client = Client.shared;
+  private client = Client.shared;
+  private constructor() {}
 
   async getSets() {
     return this.client.get<CardSet[]>("/sets");
   }
 
-  async getCardById(id: number) {
-    return Client.shared.get(`/cards/${id}`);
+  async get(id: number) {
+    return this.client.get(`/cards/${id}`);
   }
 }

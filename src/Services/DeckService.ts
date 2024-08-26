@@ -1,17 +1,17 @@
-import { Deck, DeckCard, MagicCard } from "../pages/deck";
+import { Deck, MagicCard } from "../pages/deck";
 import Client from "./Client";
 import MagicHelper from "./MagicHelper";
 
 export default class DeckService {
-  private client = Client.shared;
   static shared = new DeckService();
+  private client = Client.shared;
   private constructor() {}
 
-  async getDecks() {
+  async getAll() {
     return this.client.get<Deck[]>("/decks");
   }
 
-  async getDeck(deckId: number) {
+  async get(deckId: number) {
     const deck = await this.client.get<Deck>(`/decks/${deckId}`);
     deck.mainboard = deck.mainboard.sort((a, b) =>
       a.card.name.localeCompare(b.card.name)
@@ -19,13 +19,13 @@ export default class DeckService {
     return deck;
   }
 
-  async createDeck(deck: Deck) {
+  async create(name: string) {
     const path = `/decks`;
     const data = {
-      id: deck.id,
-      name: deck.name,
-      description: deck.description,
-      promoId: deck.promoId,
+      id: 0,
+      name: name,
+      description: "",
+      promoId: "",
     };
     // let startingTime = new Date().getTime();
     return await this.client.post(path, data);

@@ -5,7 +5,7 @@ import rotateImage from "../assets/rotate.svg";
 import { MagicCard } from "../pages/deck";
 import LazyImage from "./Common/LazyImage";
 import "./MagicCardView.css";
-
+import { CardSize } from "./Decks/structure";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 
@@ -13,13 +13,13 @@ const MagicCardView: React.FC<{
   card: MagicCard;
   onTap?: () => void;
   onMouseOver?: (faceSide: number) => void;
-  size?: "small" | "normal" | "large";
+  size?: CardSize;
 }> = ({
   card,
   onTap = () => {},
   onMouseOver = (faceSide) => {},
   size = "normal",
-})  => {
+}) => {
   // be compatible with scryfall api
   const card2: any = card;
   if (card2.card_faces && card2.card_faces.length > 0) {
@@ -61,15 +61,15 @@ const MagicCardView: React.FC<{
         />
       </div>
       {card.cardFaces.length > 0 && (
-          <img
-            src={rotateImage}
-            alt="R"
-            className="magicCardRotateButton"
-            onClick={changeFaceSide}
-          />
+        <img
+          src={rotateImage}
+          alt="R"
+          className="magicCardRotateButton"
+          onClick={changeFaceSide}
+        />
       )}
     </div>
   );
-}
+};
 
 export default MagicCardView;

@@ -1,9 +1,11 @@
 import { DeckCard, MagicCard } from "../../pages/deck";
 import MagicCardView from "../MagicCardView";
+import { Button } from "./Button";
 import "./DeckDetailsGridView.css";
+import { CardSize, DeckStructure } from "./structure";
 
 const DeckDetailsGridView: React.FC<{
-  structure: any;
+  structure: DeckStructure;
   setPreviewImage: (card: MagicCard | null, faceSide?: number) => void;
   addToDeck?: (card: MagicCard, zone: string) => void;
   updateCardAmount?: (card: MagicCard, zone: string, amount: number) => void;
@@ -26,6 +28,30 @@ const DeckDetailsGridView: React.FC<{
     }
     return `${title} (${cardAmount})`;
   }
+
+  const handleAddToDeck = (card: DeckCard, key: string) => {
+    const zone = key === "Commanders" ? "commandZone" : "mainboard";
+    if (addToDeck) {
+      addToDeck(card.card, zone);
+    }
+  };
+
+  const handleRemoveFromDeck = (card: DeckCard, key: string) => {
+    const zone = key === "Commanders" ? "commandZone" : "mainboard";
+    if (updateCardAmount) {
+      updateCardAmount(card.card, zone, card.quantity - 1);
+    }
+  };
+  const handleMoveZone = (card: MagicCard, key: string) => {
+    if (moveZone) {
+      const from = key === "Commanders" ? "commandZone" : "mainboard";
+      const to = key === "Commanders" ? "mainboard" : "commandZone";
+      moveZone(card, from, to);
+    }
+  };
+
+  const canEdit = addToDeck && updateCardAmount && openPrintSelection;
+
   return (
     <div id="deck-grid-view">
       {Object.keys(structure).map((key, index) => {
@@ -44,74 +70,35 @@ const DeckDetailsGridView: React.FC<{
                           onMouseOver={(faceSide) => {
                             setPreviewImage(card.card, faceSide);
                           }}
-                          size="small"
+                          size={CardSize.small}
                         />
                         {card.quantity > 1 && (
                           <div className="amountOverlay">x{card.quantity}</div>
                         )}
 
-                        {addToDeck && updateCardAmount && (
+                        {canEdit && (
                           <div className="actionButtons">
                             <div
                               className="action"
-                              onClick={() => {
-                                const zone =
-                                  key === "Commanders"
-                                    ? "commandZone"
-                                    : "mainboard";
-                                addToDeck(card.card, zone);
-                              }}
+                              onClick={() => handleAddToDeck(card, key)}
                             >
                               +
                             </div>
-                            <div
-                              className="action"
-                              onClick={() => {
-                                const zone =
-                                  key === "Commanders"
-                                    ? "commandZone"
-                                    : "mainboard";
-                                updateCardAmount(
-                                  card.card,
-                                  zone,
-                                  card.quantity - 1
-                                );
-                              }}
-                            >
-                              -
-                            </div>
+                            <Button
+                              title="-"
+                              onClick={() => handleRemoveFromDeck(card, key)}
+                            />
                             {card.card.reprint && (
-                              <div
-                                className="action"
-                                onClick={() =>
-                                  openPrintSelection &&
-                                  openPrintSelection(card.card)
-                                }
-                              >
-                                ...
-                              </div>
+                              <Button
+                                title="..."
+                                onClick={() => openPrintSelection(card.card)}
+                              />
                             )}
                             {card.card.typeLine.includes("Legendary") && (
-                              <div
-                                className="action"
-                                onClick={() => {
-                                  if (key === "Commanders") {
-                                    moveZone && moveZone(
-                                      card.card,
-                                      "commandZone",
-                                      "mainboard"
-                                    );
-                                  } else {
-                                    moveZone && moveZone(
-                                      card.card,
-                                      "mainboard",
-                                      "commandZone"
-                                    );
-                                  }
-                                }}
-                              >
-                                C
-                              </div>
+                              <Button
+                                title="C"
+                                onClick={() => handleMoveZone(card.card, key)}
+                              />
                             )}
                           </div>
                         )}

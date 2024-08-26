@@ -44,7 +44,7 @@ const MyDeckDetailView = () => {
   const [cardPreview, setCardPreview] = useState<MagicCard | null>(null);
 
   async function loadDeck() {
-    const response = await DeckService.shared.getDeck(deck.id);
+    const response = await DeckService.shared.get(deck.id);
     setDeck(response);
   }
 
@@ -332,7 +332,7 @@ const MyDeckDetailView = () => {
 };
 
 export const loader = async ({ params }: any) => {
-  return await DeckService.shared.getDeck(params.deckId);
+  return await DeckService.shared.get(params.deckId);
 };
 
 export default MyDeckDetailView;

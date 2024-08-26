@@ -1,5 +1,4 @@
-
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const LazyImage: React.FC<{
   src: string;
@@ -29,6 +28,7 @@ const LazyImage: React.FC<{
 
     return () => {
       if (imgRef.current) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         observer.unobserve(imgRef.current);
       }
     };

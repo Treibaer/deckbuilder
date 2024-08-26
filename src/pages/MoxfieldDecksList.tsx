@@ -1,8 +1,8 @@
 import {
-  Link,
+  NavLink,
   useLoaderData,
   useNavigate,
-  useSearchParams,
+  useSearchParams
 } from "react-router-dom";
 import MagicHelper from "../Services/MagicHelper";
 import MoxfieldService from "../Services/MoxfieldService";
@@ -62,9 +62,9 @@ const MoxfieldDecksList = () => {
         {data.referenceCard && (
           <h1>
             Moxfield Decks for{" "}
-            <Link to={"/cards/" + data.referenceCard.scryfallId}>
+            <NavLink to={"/cards/" + data.referenceCard.scryfallId}>
               {data.referenceCard?.name}
-            </Link>
+            </NavLink>
           </h1>
         )}
         <select
@@ -106,7 +106,7 @@ const MoxfieldDecksList = () => {
       {data.totalPages > 1 && (
         <div className="pagination">
           {Array.from({ length: Math.min(20, data.totalPages) }, (_, i) => (
-            <Link to={`?id=${id}&format=${format}&page=${i + 1}`} key={i}>
+            <NavLink to={`?id=${id}&format=${format}&page=${i + 1}`} key={i}>
               <button
                 className={
                   selectedPage === i ? "active tb-button" : "tb-button"
@@ -114,7 +114,7 @@ const MoxfieldDecksList = () => {
               >
                 {i + 1}
               </button>
-            </Link>
+            </NavLink>
           ))}
         </div>
       )}

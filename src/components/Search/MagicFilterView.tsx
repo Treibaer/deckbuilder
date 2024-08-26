@@ -1,17 +1,37 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { CardSet } from "../../pages/deck";
 import Helper from "../../Services/Helper";
 import MagicHelper from "../../Services/MagicHelper";
 import "./MagicFilterView.css";
-import { CardSet } from "../../pages/deck";
+
+const formats = [
+  "",
+  "standard",
+  "modern",
+  "legacy",
+  "vintage",
+  "commander",
+  "pauper",
+  "pioneer",
+  "historic",
+  "penny",
+  "brawl",
+  "duel",
+  "oldschool",
+  "premodern",
+  "frontier",
+  "future",
+];
+const colors = ["w", "u", "b", "r", "g", "c"];
 
 const MagicFilterView: React.FC<{
   sets: CardSet[];
   showFilter: boolean;
   setShowFilter: (show: boolean) => void;
-}> = ({ sets, showFilter, setShowFilter })  =>{
+}> = ({ sets, showFilter, setShowFilter }) => {
   const navigate = useNavigate();
-  const [searchParams, _] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const q = searchParams.get("q") ?? "";
 
   const prevFilter = MagicHelper.extractFilterFromQuery(q);
@@ -153,24 +173,7 @@ const MagicFilterView: React.FC<{
                 setFilter({ ...filter, format: event.target.value });
               }}
             >
-              {[
-                "",
-                "standard",
-                "modern",
-                "legacy",
-                "vintage",
-                "commander",
-                "pauper",
-                "pioneer",
-                "historic",
-                "penny",
-                "brawl",
-                "duel",
-                "oldschool",
-                "premodern",
-                "frontier",
-                "future",
-              ].map((format) => {
+              {formats.map((format) => {
                 return (
                   <option
                     value={format}
@@ -215,7 +218,7 @@ const MagicFilterView: React.FC<{
               </div>
               <label htmlFor="colorsAnd">And</label>
               <div className="colors">
-                {["w", "u", "b", "r", "g", "c"].map((symbol) => {
+                {colors.map((symbol) => {
                   return (
                     <div
                       key={symbol}
@@ -277,6 +280,6 @@ const MagicFilterView: React.FC<{
       </div>
     </div>
   );
-}
+};
 
 export default MagicFilterView;

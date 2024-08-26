@@ -3,10 +3,12 @@ import Helper from "../Services/Helper";
 import CardPeekView from "./CardPeekView";
 import "./MagicCardList.css";
 import MagicCardView from "./MagicCardView";
+import { Button } from "./Decks/Button";
+import { CardSize, CardStyle } from "./Decks/structure";
 
 const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
-  let [style, setStyle] = useState("cards");
-  let [size, setSize] = useState("normal");
+  let [style, setStyle] = useState(CardStyle.cards);
+  let [size, setSize] = useState(CardSize.normal);
   let [selectedCard, setSelectedCard] = useState(null);
 
   return (
@@ -19,8 +21,8 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
       )}
       <div className="styleSelection">
         <div>
-          {style === "cards" &&
-            ["small", "normal", "large"].map((s) => (
+          {style === CardStyle.cards &&
+            [CardSize.small, CardSize.normal, CardSize.large].map((s) => (
               <button
                 className={size === s ? "active tb-button" : "tb-button"}
                 key={s}
@@ -36,32 +38,26 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
             {cards.length} card{cards.length === 1 ? "" : "s"} found
           </div>
         )}
-        {style === "list" && (
-          <button className="tb-button" onClick={() => setStyle("cards")}>
-            Show as cards
-          </button>
+        {style === CardStyle.list && (
+          <Button title="Card View" onClick={() => setStyle(CardStyle.cards)} />
         )}
-        {style === "cards" && (
-          <button className="tb-button" onClick={() => setStyle("list")}>
-            Show as list
-          </button>
+        {style === CardStyle.cards && (
+          <Button title="List View" onClick={() => setStyle(CardStyle.list)} />
         )}
       </div>
 
-      {style === "cards" && (
+      {style === CardStyle.cards && (
         <div id="card-container">
-          {style === "cards" &&
-            cards.map((card, _) => (
-              <MagicCardView
-                key={card.scryfallId}
-                card={card}
-                onTap={() => setSelectedCard(card)}
-                size={size as any}
-              />
-            ))}
+          {cards.map((card, _) => (
+            <MagicCardView
+              key={card.scryfallId}
+              card={card}
+              onTap={() => setSelectedCard(card)}
+            />
+          ))}
         </div>
       )}
-      {style === "list" && (
+      {style === CardStyle.list && (
         <div id="card-list-container">
           {cards.map((card, index) => (
             <div key={index}>
