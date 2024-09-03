@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import DeckService from "./Services/DeckService";
-import { Deck } from "./pages/deck";
+import { Deck } from "./models/dtos";
 // import WebSocket from 'ws';
 
 function connect() {

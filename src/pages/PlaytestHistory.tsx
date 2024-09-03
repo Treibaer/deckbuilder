@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router-dom";
+import { Playtest } from "../models/dtos";
 import PlaytestService from "../Services/PlaytestService";
 import "./PlaytestHistory.css";
-import { Playtest } from "./deck";
 
 const playtestService = PlaytestService.shared;
 

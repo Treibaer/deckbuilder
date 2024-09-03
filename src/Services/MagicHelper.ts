@@ -1,4 +1,4 @@
-import { DeckCard, MagicCard, SearchFilter, Structure } from "../pages/deck";
+import { DeckCard, MagicCard, SearchFilter, Structure } from "../models/dtos";
 import Constants from "./Constants";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;

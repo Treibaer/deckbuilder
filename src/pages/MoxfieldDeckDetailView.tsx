@@ -12,7 +12,7 @@ import LoadingSpinner from "../components/Common/LoadingSpinner";
 import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
 import "./MoxfieldDeckDetailView.css";
-import { Deck, MagicCard } from "./deck";
+import { Deck, MagicCard } from "../models/dtos";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;

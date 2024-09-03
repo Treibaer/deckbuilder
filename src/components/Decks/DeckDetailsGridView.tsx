@@ -1,8 +1,8 @@
-import { DeckCard, MagicCard } from "../../pages/deck";
+import { DeckCard, MagicCard } from "../../models/dtos";
 import MagicCardView from "../MagicCardView";
-import { Button } from "./Button";
+import Button from "./Button";
 import "./DeckDetailsGridView.css";
-import { CardSize, DeckStructure } from "./structure";
+import { CardSize, DeckStructure } from "../../models/structure";
 
 const DeckDetailsGridView: React.FC<{
   structure: DeckStructure;
@@ -54,8 +54,8 @@ const DeckDetailsGridView: React.FC<{
 
   return (
     <div id="deck-grid-view">
-      {Object.keys(structure).map((key, index) => {
-        return (
+      {Object.keys(structure).map(
+        (key, index) =>
           structure[key].length > 0 && (
             <div key={index + 200}>
               {key !== "Hide" && (
@@ -109,8 +109,7 @@ const DeckDetailsGridView: React.FC<{
               )}
             </div>
           )
-        );
-      })}
+      )}
     </div>
   );
 };

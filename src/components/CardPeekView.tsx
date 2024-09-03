@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import rotateImage from "../assets/rotate.svg";
-import { MagicCard } from "../pages/deck";
 import MagicHelper from "../Services/MagicHelper";
 import "./CardPeekView.css";
+import { MagicCard } from "../models/dtos";
 
 const CardPeekView: React.FC<{
   card: MagicCard;

@@ -1,124 +1,66 @@
 import { useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, LoaderFunction, useLoaderData } from "react-router-dom";
 import CardService from "../Services/CardService";
 import Helper from "../Services/Helper";
 import AddToDeckDialog from "../components/CardDetails/AddToDeckDialog";
+import CardDetailPrintings from "../components/CardDetails/CardDetailPrintings";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
+import Button from "../components/Decks/Button";
+import { CardSize } from "../models/structure";
 import MagicCardView from "../components/MagicCardView";
-import { useMousePosition } from "../hooks/useMousePosition";
+import { CardDetailWithPrintings } from "../models/dtos";
 import "./CardDetailView.css";
-import { CardSize } from "../components/Decks/structure";
 
 const CardDetailView: React.FC<{}> = () => {
-  const mousePosition = useMousePosition();
-  const cardDetails = useLoaderData() as any;
-  const [previewImage, setPreviewImage] = useState(null);
+  const cardDetails = useLoaderData() as CardDetailWithPrintings;
   const [isLoading, setIsLoading] = useState(false);
-
-  const card = cardDetails?.card;
-  const printings = cardDetails?.printings ?? [];
-
   const [showAddToDeck, setShowAddToDeck] = useState(false);
+
+  const card = cardDetails.card;
+  const printings = cardDetails.printings;
 
   async function openAddToCartDialog() {
     setShowAddToDeck(true);
   }
 
-  function close() {
-    setShowAddToDeck(false);
-  }
-
   return (
-    <div key={card?.scryfallId}>
+    <>
       {isLoading && <LoadingSpinner />}
       {showAddToDeck && (
         <AddToDeckDialog
-          onClose={close}
+          onClose={() => setShowAddToDeck(false)}
           card={card}
           setIsLoading={setIsLoading}
         />
       )}
       <h1> {card.name}</h1>
-      {card && (
-        <div className="card-content">
-          <MagicCardView card={card} size={CardSize.large} />
-          <div className="card-details">
-            <div className="card-headline">
-              <div>
-                {Helper.convertCostsToImgArray(card.manaCost ?? card.mana_cost)}
-              </div>
-            </div>
-            <div>{card.typeLine}</div>
-            <div>{card.oracleText}</div>
-            {printings && (
-              <>
-                <h2>Printings</h2>
-                {previewImage && mousePosition.x && mousePosition.y && (
-                  <div
-                    className="printingsPreview"
-                    style={{
-                      position: "absolute",
-                      top: mousePosition.y + 10,
-                      left: mousePosition.x + 10,
-                    }}
-                  >
-                    <img src={previewImage} alt="preview" />
-                  </div>
-                )}
-                <ul className="printings">
-                  {printings.map((print: any, index: number) => {
-                    const isSelected = card.scryfallId === print.scryfallId;
-                    return (
-                      <li
-                        key={index}
-                        className={isSelected ? "selected" : undefined}
-                      >
-                        {isSelected && (
-                          <div key={print.id} className="print">
-                            <div title={print.setName}>{print.setName}</div>
-                          </div>
-                        )}
-                        {!isSelected && (
-                          <Link
-                            to={`/cards/${print.scryfallId}`}
-                            key={print.scryfallId}
-                            onMouseEnter={() => setPreviewImage(print.image)}
-                            onMouseLeave={() => setPreviewImage(null)}
-                            onClick={() => setPreviewImage(null)}
-                          >
-                            <div className="print">
-                              <div title={print.setName}>{print.setName}</div>
-                            </div>
-                          </Link>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
-              </>
-            )}
+      <div className="card-content">
+        <MagicCardView card={card} size={CardSize.large} />
+        <div className="card-details">
+          <div className="card-headline">
+            <div>{Helper.convertCostsToImgArray(card.manaCost)}</div>
           </div>
-          <div>
-            <div className="actionButtons">
-              <button className="tb-button" onClick={openAddToCartDialog}>
-                Add to deck
-              </button>
-              <button className="tb-button">Save for later</button>
-              {card.mapping && (
-                <Link to={"/decks/moxfield?id=" + card.mapping}>
-                  <button className="tb-button">Find decks with</button>
-                </Link>
-              )}
-            </div>
-          </div>
+          <div>{card.typeLine}</div>
+          <div>{card.oracleText}</div>
+          {printings && <CardDetailPrintings cardDetails={cardDetails} />}
         </div>
-      )}
-    </div>
+        <div className="actionButtons">
+          <Button title="Add to deck" onClick={openAddToCartDialog} />
+          {card.mapping && (
+            <Link to={"/decks/moxfield?id=" + card.mapping}>
+              <Button title="Find decks with" />
+            </Link>
+          )}
+        </div>
+      </div>
+    </>
   );
 };
 
-export const loader: any = async ({ params }: { params: any }) => {
-  return await CardService.shared.get(params.cardId);
+export const loader: LoaderFunction<{ cardId: string }> = async ({
+  params,
+}) => {
+  return await CardService.shared.getWithPrintings(params.cardId ?? "");
 };
 
 export default CardDetailView;

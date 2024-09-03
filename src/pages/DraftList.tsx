@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import DraftCreateView from "../components/DraftCreateView";
 import CardService from "../Services/CardService";
-import { CardSet } from "./deck";
+import { CardSet } from "../models/dtos";
 
 const cardService = CardService.shared;
 

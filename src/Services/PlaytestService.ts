@@ -1,4 +1,4 @@
-import { Playtest } from "../pages/deck";
+import { Playtest } from "../models/dtos";
 import Client from "./Client";
 
 export default class PlaytestService {

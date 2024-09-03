@@ -1,5 +1,5 @@
-import { Match, User } from "../pages/deck";
 import Client from "./Client";
+import { Match, User } from "../models/dtos";
 
 export default class MatchService {
   static shared = new MatchService();

@@ -1,4 +1,4 @@
-import { CardSet } from "../pages/deck";
+import { CardDetailWithPrintings, CardSet } from "../models/dtos";
 import Client from "./Client";
 
 export default class CardService {
@@ -10,7 +10,7 @@ export default class CardService {
     return this.client.get<CardSet[]>("/sets");
   }
 
-  async get(id: number) {
-    return this.client.get(`/cards/${id}`);
+  async getWithPrintings(scryfallId: string) {
+    return this.client.get<CardDetailWithPrintings>(`/cards/${scryfallId}`);
   }
 }

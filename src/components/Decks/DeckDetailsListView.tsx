@@ -1,6 +1,6 @@
-import { DeckCard, MagicCard } from "../../pages/deck";
+import { DeckCard, MagicCard } from "../../models/dtos";
 import "./DeckDetailsListView.css";
-import { DeckStructure } from "./structure";
+import { DeckStructure } from "../../models/structure";
 
 const DeckDetailsListView: React.FC<{
   structure: DeckStructure;

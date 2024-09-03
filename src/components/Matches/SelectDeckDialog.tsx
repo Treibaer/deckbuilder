@@ -1,5 +1,5 @@
+import { Deck } from "../../models/dtos";
 import Dialog from "../Common/Dialog";
-import { Deck } from "../../pages/deck";
 
 const SelectDeckDialog: React.FC<{
   onSubmit: () => void;

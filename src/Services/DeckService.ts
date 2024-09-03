@@ -1,4 +1,4 @@
-import { Deck, MagicCard } from "../pages/deck";
+import { Deck, MagicCard } from "../models/dtos";
 import Client from "./Client";
 import MagicHelper from "./MagicHelper";
 

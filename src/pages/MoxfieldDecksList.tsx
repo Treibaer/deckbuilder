@@ -8,7 +8,7 @@ import MagicHelper from "../Services/MagicHelper";
 import MoxfieldService from "../Services/MoxfieldService";
 import DeckList from "../components/Decks/DecksList";
 import "./MoxfieldDecksList.css";
-import { Deck } from "./deck";
+import { Deck } from "../models/dtos";
 
 const moxfieldService = MoxfieldService.shared;
 

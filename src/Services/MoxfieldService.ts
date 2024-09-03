@@ -1,4 +1,4 @@
-import { Deck } from "../pages/deck";
+import { Deck } from "../models/dtos";
 import Client from "./Client";
 
 export default class MoxfieldService {

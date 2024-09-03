@@ -3,8 +3,8 @@ import Helper from "../Services/Helper";
 import CardPeekView from "./CardPeekView";
 import "./MagicCardList.css";
 import MagicCardView from "./MagicCardView";
-import { Button } from "./Decks/Button";
-import { CardSize, CardStyle } from "./Decks/structure";
+import Button from "./Decks/Button";
+import { CardSize, CardStyle } from "../models/structure";
 
 const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
   let [style, setStyle] = useState(CardStyle.cards);
@@ -16,7 +16,7 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
       {selectedCard && (
         <CardPeekView
           card={selectedCard}
-          onClose={setSelectedCard.bind(null, null)}
+          onClose={() => setSelectedCard(null)}
         />
       )}
       <div className="styleSelection">

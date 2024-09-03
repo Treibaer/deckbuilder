@@ -1,7 +1,7 @@
 import { useLoaderData } from "react-router-dom";
 import MatchService from "../Services/MatchService";
 import "./Users.css";
-import { User } from "./deck";
+import { User } from "../models/dtos";
 
 const Users = () => {
   const users = useLoaderData() as User[];

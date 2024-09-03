@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
-import { Deck, MagicCard } from "../../pages/deck";
+import { Deck, MagicCard } from "../../models/dtos";
 import DeckService from "../../Services/DeckService";
 import Dialog from "../Common/Dialog";
+import { CardSize } from "../../models/structure";
 import MagicCardView from "../MagicCardView";
-import { CardSize } from "../Decks/structure";
 
 const deckService = DeckService.shared;
 
 const AddToDeckDialog: React.FC<{
   onClose: () => void;
   card: MagicCard;
-  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsLoading: (value: boolean) => void;
 }> = ({ onClose, card, setIsLoading }) => {
   const [myDecks, setMyDecks] = useState<Deck[]>([]);
   const [selectedDeckId, setSelectedDeckId] = useState<number | null>(null);

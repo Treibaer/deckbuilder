@@ -1,5 +1,10 @@
 import { useRef, useState } from "react";
-import { Link, useLoaderData, useNavigate } from "react-router-dom";
+import {
+  Link,
+  LoaderFunction,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom";
 import chevronLeftImage from "../assets/chevron-left.svg";
 import deleteImage from "../assets/delete.svg";
 import playgameImage from "../assets/playgame.svg";
@@ -12,8 +17,8 @@ import Constants from "../Services/Constants";
 import DeckService from "../Services/DeckService";
 import MagicHelper from "../Services/MagicHelper";
 import PlaytestService from "../Services/PlaytestService";
-import { Deck, MagicCard } from "./deck";
 import "./MoxfieldDeckDetailView.css";
+import { Deck, MagicCard } from "../models/dtos";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
@@ -26,7 +31,7 @@ type HoveredType = {
 
 const MyDeckDetailView = () => {
   const navigator = useNavigate();
-  const data = useLoaderData() as Deck;
+  const initialDeck = useLoaderData() as Deck;
 
   const [hovered, setHovered] = useState<HoveredType>({
     isPreviewCardFromDeck: true,
@@ -37,7 +42,7 @@ const MyDeckDetailView = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResultCards, setSearchResultCards] = useState([]);
-  const [deck, setDeck] = useState(data);
+  const [deck, setDeck] = useState(initialDeck);
   const [showDeletionConfirmation, setShowDeletionConfirmation] =
     useState(false);
 
@@ -331,8 +336,10 @@ const MyDeckDetailView = () => {
   );
 };
 
-export const loader = async ({ params }: any) => {
-  return await DeckService.shared.get(params.deckId);
+export const loader: LoaderFunction<{ deckId: number }> = async ({
+  params,
+}) => {
+  return await DeckService.shared.get(Number(params.deckId));
 };
 
 export default MyDeckDetailView;

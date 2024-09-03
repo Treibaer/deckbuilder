@@ -1,6 +1,8 @@
+import Button from "../Decks/Button";
+
 const SearchBar: React.FC<{
   handleSearch: () => void;
-  setShowFilter: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowFilter: (value: boolean) => void;
   searchTerm: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }> = ({ handleSearch, setShowFilter, searchTerm, handleChange }) => {
@@ -16,17 +18,8 @@ const SearchBar: React.FC<{
           }
         }}
       />
-      <button className="tb-button" onClick={handleSearch}>
-        Search
-      </button>
-      <button
-        className="tb-button"
-        onClick={() => {
-          setShowFilter(true);
-        }}
-      >
-        Advanced
-      </button>
+      <Button title="Search" onClick={handleSearch} />
+      <Button title="Advanced" onClick={() => setShowFilter(true)} />
     </div>
   );
 };

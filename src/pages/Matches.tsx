@@ -5,14 +5,16 @@ import CreateMatchDialog from "../components/Matches/CreateMatchDialog";
 import MatchRow from "../components/Matches/MatchRow";
 import SelectDeckDialog from "../components/Matches/SelectDeckDialog";
 import "./Matches.css";
-import { Deck, Match, User } from "./deck";
 import DeckService from "../Services/DeckService";
+import { Deck, Match, User } from "../models/dtos";
+import { LoaderFunction, useLoaderData } from "react-router-dom";
+import Button from "../components/Decks/Button";
 
 const matchService = MatchService.shared;
 const deckService = DeckService.shared;
 
 const Matches = () => {
-  const [matches, setMatches] = useState<Match[]>([]);
+  const [matches, setMatches] = useState<Match[]>(useLoaderData() as Match[]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreatingMatch, setIsCreatingMatch] = useState(false);
   const [isSelectingDeck, setIsSelectingDeck] = useState(false);
@@ -77,7 +79,11 @@ const Matches = () => {
     }
     setIsLoading(true);
     setIsSelectingDeck(false);
-    await matchService.selectDeck(selectedMatch, selectedPlayerPosition, selectedDeckId);
+    await matchService.selectDeck(
+      selectedMatch,
+      selectedPlayerPosition,
+      selectedDeckId
+    );
     await loadMatches();
     setIsLoading(false);
   }
@@ -108,9 +114,7 @@ const Matches = () => {
       )}
       <div className="header">
         <div className="title">Matches</div>
-        <button className="tb-button" onClick={openCreateMatchForm}>
-          Create
-        </button>
+        <Button title="Create" onClick={openCreateMatchForm} />
       </div>
       <div className="matches">
         {matches.map((match, _) => (
@@ -126,3 +130,9 @@ const Matches = () => {
 };
 
 export default Matches;
+
+export const loader: LoaderFunction<{ cardId: string }> = async ({
+  params,
+}) => {
+  return await matchService.getAll();
+};

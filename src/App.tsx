@@ -25,7 +25,7 @@ import Home from "./pages/Home";
 import MagicCardSearch, {
   loader as searchCardLoader,
 } from "./pages/MagicCardSearch";
-import Matches from "./pages/Matches";
+import Matches, {loader as matchesLoader} from "./pages/Matches";
 import MyDecksList, { loader as myDecksListLoader } from "./pages/MyDecksList";
 import PlaytestHistory, {loader as playtestHistoryLoader} from "./pages/PlaytestHistory";
 import Profile from "./pages/Profile";
@@ -73,7 +73,7 @@ const router = createBrowserRouter([
         loader: myDeckViewLoader,
       },
       { path: "/users", element: <Users />, loader: usersLoader },
-      { path: "/matches", element: <Matches /> },
+      { path: "/matches", element: <Matches />, loader: matchesLoader },
       { path: "/profile", element: <Profile /> },
       { path: "/profile/playtests", element: <PlaytestHistory />, loader: playtestHistoryLoader },
       { path: "/settings", element: <Settings /> },

@@ -2,7 +2,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import CardService from "../Services/CardService";
 import MagicHelper from "../Services/MagicHelper";
 import "./MagicSetList.css";
-import { CardSet } from "./deck";
+import { CardSet } from "../models/dtos";
 const cardService = CardService.shared;
 
 const MagicSetList = () => {

@@ -1,5 +1,4 @@
 import Constants from "./Constants";
-import MagicHelper from "./MagicHelper";
 
 /**
  * Service class for making HTTP requests to the backend API.
@@ -111,18 +110,5 @@ export default class Client {
       throw new Error("An error occurred");
     }
     return response.json();
-  }
-
-  findCardFaces(card: any) {
-    if (!card.card.card_faces || card.card.card_faces.length === 0) {
-      return undefined;
-    }
-    const faces: { image: string }[] = [];
-    for (let i = 0; i < card.card.card_faces.length; i++) {
-      faces.push({
-        image: MagicHelper.getImageUrl(card.card.scryfall_id, "normal", i),
-      });
-    }
-    return faces;
   }
 }

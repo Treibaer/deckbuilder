@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Constants from "../Services/Constants";
+import Button from "./Decks/Button";
 
 const LoginView: React.FC<{
   setIsLoggedIn: (isLoggedIn: boolean) => void;
@@ -9,8 +10,7 @@ const LoginView: React.FC<{
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  async function handleLogin(event: React.MouseEvent) {
-    event.preventDefault();
+  async function handleLogin() {
     setIsSubmitting(true);
     setError("");
 
@@ -35,26 +35,23 @@ const LoginView: React.FC<{
       setIsSubmitting(false);
     }
   }
+
   return (
-    <div>
+    <>
       <h1>Login</h1>
-      <form>
-        <input
-          type="text"
-          placeholder="Email"
-          onChange={(event) => setEmail(event.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          onChange={(event) => setPassword(event.target.value)}
-        />
-        <button onClick={handleLogin} disabled={isSubmitting}>
-          Login
-        </button>
-      </form>
+      <input
+        type="text"
+        placeholder="Email"
+        onChange={(event) => setEmail(event.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Password"
+        onChange={(event) => setPassword(event.target.value)}
+      />
+      <Button title="Login" onClick={handleLogin} disabled={isSubmitting} />
       {error && <p>{error}</p>}
-    </div>
+    </>
   );
 };
 

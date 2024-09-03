@@ -2,12 +2,12 @@ import { useRef, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import Dialog from "../components/Common/Dialog";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
-import { Button } from "../components/Decks/Button";
+import Button from "../components/Decks/Button";
 import DeckList from "../components/Decks/DecksList";
 import DeckService from "../Services/DeckService";
 import MagicHelper from "../Services/MagicHelper";
-import { Deck } from "./deck";
 import "./MyDecksList.css";
+import { Deck } from "../models/dtos";
 
 const deckService = DeckService.shared;
 

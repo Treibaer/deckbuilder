@@ -1,4 +1,4 @@
-import { DeckCard } from "../../pages/deck";
+import { DeckCard } from "./dtos";
 
 export type DeckStructure = {
   [key: string]: DeckCard[];

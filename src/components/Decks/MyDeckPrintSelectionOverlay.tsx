@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import MagicCardView from "../MagicCardView";
-import { MagicCard } from "../../pages/deck";
-import { CardSize } from "./structure";
+import { CardSize } from "../../models/structure";
+import { MagicCard } from "../../models/dtos";
+import Button from "./Button";
 
 const MyDeckPrintSelectionOverlay: React.FC<{
   closeOverlay: () => void;
@@ -32,55 +33,51 @@ const MyDeckPrintSelectionOverlay: React.FC<{
     setPrints(resData.data);
     setIsLoading(false);
   }
+
   useEffect(() => {
     if (card.reprint) {
       loadPrints();
     }
-  });
+  }, [card.reprint]);
 
   prints.map((print: any) => {
     print.scryfallId = print.id;
     return print;
   });
+
   return (
     <div className="fullscreenBlurWithLoading">
       <div className="card-detail-overlay">
         <div className="card-detail-overlay-content">
           <div className="card-detail-overlay-header">
-            <button className="tb-button" onClick={closeOverlay}>
-              Close
-            </button>
+            <Button title="Close" onClick={closeOverlay} />
             <div className="title">{card.name}</div>
             <Link to={`/cards/${card.scryfallId}`} target="_blank">
-              <button className="tb-button">Open Card 🔗</button>
+              <Button title="Open Card 🔗" />
             </Link>
           </div>
           {isLoading && <div>Loading...</div>}
           {!isLoading && (
             <div className="card-detail-overlay-prints">
-              {prints.map((print: any) => {
-                return (
-                  <div
-                    key={print.scryfallId}
-                    className={
-                      card.scryfallId === print.scryfallId
-                        ? "selected"
-                        : undefined
-                    }
-                  >
-                    <h4 title={print.set_name}>{print.set_name}</h4>
-                    <MagicCardView card={print} size={CardSize.small} />
-                    {card.scryfallId !== print.scryfallId && (
-                      <button
-                        className="tb-button"
-                        onClick={() => setPrint(card, print)}
-                      >
-                        Select
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
+              {prints.map((print: any) => (
+                <div
+                  key={print.scryfallId}
+                  className={
+                    card.scryfallId === print.scryfallId
+                      ? "selected"
+                      : undefined
+                  }
+                >
+                  <h4 title={print.set_name}>{print.set_name}</h4>
+                  <MagicCardView card={print} size={CardSize.small} />
+                  {card.scryfallId !== print.scryfallId && (
+                    <Button
+                      title="Select"
+                      onClick={() => setPrint(card, print)}
+                    />
+                  )}
+                </div>
+              ))}
             </div>
           )}
         </div>

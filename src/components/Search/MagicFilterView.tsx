@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { CardSet } from "../../pages/deck";
 import Helper from "../../Services/Helper";
 import MagicHelper from "../../Services/MagicHelper";
 import "./MagicFilterView.css";
+import { CardSet } from "../../models/dtos";
+import Button from "../Decks/Button";
 
 const formats = [
   "",
@@ -52,6 +53,12 @@ const MagicFilterView: React.FC<{
       filter.colors.push(symbol);
     }
     setFilter({ ...filter, colors: filter.colors });
+  }
+
+  function onSubmit() {
+    const url = MagicHelper.createUrlFromFilter(filter);
+    navigate(url);
+    setShowFilter(false);
   }
 
   return (
@@ -146,7 +153,6 @@ const MagicFilterView: React.FC<{
           </div>
           <div className="inputGroup">
             <label htmlFor="set">Set</label>
-            {/* <input type="text" key={`set_${key}`} name="set" /> */}
             <select
               name="set"
               key={`set_${key}`}
@@ -266,16 +272,7 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <button
-            className="tb-button"
-            onClick={() => {
-              const url = MagicHelper.createUrlFromFilter(filter);
-              navigate(url);
-              setShowFilter(false);
-            }}
-          >
-            Submit
-          </button>
+          <Button title="Submit" onClick={onSubmit} />
         </div>
       </div>
     </div>

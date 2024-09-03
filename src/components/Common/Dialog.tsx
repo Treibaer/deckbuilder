@@ -1,3 +1,4 @@
+import Button from "../Decks/Button";
 import ErrorView from "./ErrorView";
 
 const Dialog: React.FC<{
@@ -15,16 +16,12 @@ const Dialog: React.FC<{
         <div className="titleBar">
           <h3>{title}</h3>
           <div className="closeButton">
-            <button className="tb-button" onClick={onClose}>
-              X
-            </button>
+            <Button title="X" onClick={onClose} />
           </div>
         </div>
         {children}
         <div className="actionBar">
-          <button className="tb-button" onClick={onSubmit}>
-            {submitTitle ?? "Create"}
-          </button>
+          <Button title={submitTitle ?? "Create"} onClick={onSubmit} />
         </div>
       </div>
     </div>

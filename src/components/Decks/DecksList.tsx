@@ -14,7 +14,6 @@ const DecksList: React.FC<{ decks: any[] }> = ({ decks }) => {
             <div className="overlay"></div>
           </div>
           <div className="format">{deck.format}</div>
-
           <div className="deck-title" title={deck.name}>
             {deck.name}
           </div>
@@ -34,7 +33,6 @@ const DecksList: React.FC<{ decks: any[] }> = ({ decks }) => {
                 <div>{deck.viewCount}</div>
               </div>
             )}
-
             <div>
               <img src={cardStackImage} alt="Card Stack" />
               <div>{deck.cardCount}</div>

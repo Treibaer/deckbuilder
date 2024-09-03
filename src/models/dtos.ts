@@ -1,3 +1,25 @@
+export type CardDetailWithPrintings = {
+  card: MagicCard;
+  printings: MagicCard[];
+};
+export type MagicCard = {
+  scryfallId: string;
+  name: string;
+  typeLine: string;
+  reprint: boolean;
+  printSearchUri: string;
+  cardFaces: string[];
+  releasedAt: string;
+  setCode: string;
+  setName: string;
+  oracleText: string;
+  manaCost: string;
+  image: string;
+  colors: string;
+  rarity: string;
+  mapping: string;
+};
+
 export type Deck = {
   id: number;
   name: string;
@@ -16,15 +38,6 @@ export type DeckCard = {
   id: number;
   card: MagicCard;
   quantity: number;
-};
-
-export type MagicCard = {
-  scryfallId: string;
-  name: string;
-  typeLine: string;
-  reprint: boolean;
-  printSearchUri: string;
-  cardFaces: string[];
 };
 
 export type Structure = {
@@ -92,4 +105,3 @@ export type Playtest = {
   createdAtString: string;
   match: Match;
 };
-

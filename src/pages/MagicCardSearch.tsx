@@ -25,7 +25,12 @@ const MagicCardSearch: React.FC = () => {
   }, []);
   */
   const navigate = useNavigate();
-  const data = useLoaderData() as any;
+  const data = useLoaderData() as {
+    data: any[];
+    amount: number;
+    hasMore: boolean;
+    sets: any[];
+  };
   const cards = data.data;
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
