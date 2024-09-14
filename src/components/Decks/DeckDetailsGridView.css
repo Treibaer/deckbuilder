@@ -1,6 +1,6 @@
 #deck-grid-view {
   overflow-y: scroll;
-  max-height: 79vh;
+  max-height: 75vh;
   width: 100%;
 
   .deck-grid-view-section {

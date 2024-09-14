@@ -17,7 +17,7 @@ export default class Helper {
       C: C,
     } as any;
     const image = symbolToImageMap[symbol] || "";
-    return <img key={symbol} className="manaSymbol" src={image} />;
+    return <img key={symbol} className="manaSymbol" src={image} alt="" />;
   }
 
   static convertCostsToImgArray(costs: string) {

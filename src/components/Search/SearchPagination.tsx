@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Button from "../Decks/Button";
 
 const SearchPagination: React.FC<{
   pages: number;
@@ -7,24 +8,23 @@ const SearchPagination: React.FC<{
 }> = ({ pages, selectedPage, searchTerm }) => {
   const navigate = useNavigate();
   return (
-    <div className="searchResultsHeader">
+    <>
       {pages > 1 && (
-        <div>
+        <div className="flex justify-center gap-2 mt-2">
           {Array.from({ length: pages }, (_, i) => (
-            <button
-              className={selectedPage === i ? "active tb-button" : "tb-button"}
+            <Button
               key={i}
               onClick={() => {
                 let url = `/search?q=${searchTerm}&page=${i + 1}`;
                 navigate(url);
               }}
-            >
-              {i + 1}
-            </button>
+              title={`${i + 1}`}
+              className={selectedPage === i ? "active" : ""}
+            />
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

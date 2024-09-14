@@ -53,7 +53,7 @@
   }
 }
 .deckList > * {
-  width: 270px;
+  width: 260px;
   height: 198px;
   position: relative;
   cursor: pointer;
@@ -62,7 +62,7 @@
 }
 .promoWrapper {
   position: relative;
-  width: 270px;
+  width: 260px;
   height: 198px;
 
   img {

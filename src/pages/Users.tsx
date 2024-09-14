@@ -8,10 +8,10 @@ const Users = () => {
 
   return (
     <div>
-      <h1>Users</h1>
-      <div id="usersList">
+      <div className="text-4xl">Users</div>
+      <div className="flex gap-2 my-2">
         {users.map((user) => (
-          <div className="user-card">
+          <div className="user-card cursor-pointer">
             <div key={user.id} className="user-info">
               <h2>{user.username}</h2>
             </div>

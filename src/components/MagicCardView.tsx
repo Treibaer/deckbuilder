@@ -14,6 +14,7 @@ const MagicCardView: React.FC<{
   onTap?: () => void;
   onMouseOver?: (faceSide: number) => void;
   size?: CardSize;
+  hoverable?: boolean;
 }> = ({
   card,
   onTap = () => {},

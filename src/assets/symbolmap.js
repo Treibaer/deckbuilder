@@ -1,4 +1,4 @@
-export default {
+const map= {
   "{T}": "https://svgs.scryfall.io/card-symbols/T.svg",
   "{Q}": "https://svgs.scryfall.io/card-symbols/Q.svg",
   "{E}": "https://svgs.scryfall.io/card-symbols/E.svg",
@@ -80,3 +80,5 @@ export default {
   "{C}": "https://svgs.scryfall.io/card-symbols/C.svg",
   "{S}": "https://svgs.scryfall.io/card-symbols/S.svg"
 }
+
+export default map;

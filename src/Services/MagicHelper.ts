@@ -1,7 +1,7 @@
 import { DeckCard, MagicCard, SearchFilter, Structure } from "../models/dtos";
 import Constants from "./Constants";
 
-const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
+// const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 
 export default class MagicHelper {
   static getDeckStructureFromCards(cards: DeckCard[]): Structure {
@@ -91,10 +91,6 @@ export default class MagicHelper {
     return `${Constants.backendUrl}/image/card/${type}/${scryfallId}${
       faceSide > 0 ? "?faceSide=1" : ""
     }`;
-
-    let firstChar = scryfallId.charAt(0);
-    let secondChar = scryfallId.charAt(1);
-    return `https://cards.scryfall.io/${type}/front/${firstChar}/${secondChar}/${scryfallId}.jpg?1562908368`;
   }
   static getCardFace(scryfallId: string, faceId = 0) {
     // not implemented yet, will be done in backend, when importing the moxfield deck

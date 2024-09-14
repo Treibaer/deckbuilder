@@ -16,7 +16,7 @@ const MagicSetList = () => {
   return (
     <div>
       <h1>Magic Card Sets</h1>
-      <div id="set-wrapper">
+      <div className="flex flex-wrap mt-4">
         {sets.map((set, index) => (
           <Link
             to={MagicHelper.createUrlFromFilter({
@@ -25,10 +25,11 @@ const MagicSetList = () => {
               colors: [],
             })}
             key={index}
+            className="w-48 border border-lightBlue m-2 p-2 rounded-lg bg-mediumBlue text-center flex flex-col hover:bg-lightBlue"
           >
-            <div>{set.name}</div>
-            <img src={set.iconSvgUri} alt="" />
-            <div className="footer">
+            <div className="flex-1">{set.name}</div>
+            <img className="w-6 h-6 mx-auto my-2 invert" src={set.iconSvgUri} alt="" />
+            <div>
               <div>{set.releasedAt}</div>
               <div>{set.cardCount}</div>
             </div>

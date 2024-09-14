@@ -1,7 +1,6 @@
 import { useLoaderData } from "react-router-dom";
 import { Playtest } from "../models/dtos";
 import PlaytestService from "../Services/PlaytestService";
-import "./PlaytestHistory.css";
 
 const playtestService = PlaytestService.shared;
 
@@ -14,15 +13,18 @@ const PlaytestHistory = () => {
 
   return (
     <div>
-      <h1>Playtest History</h1>
-      <ul>
-        <li className="playtest-row">
+      <h1 className="mb-4">Playtest History</h1>
+      <div className="flex flex-col gap-2">
+        <div className="flex justify-between text-xl">
           <p>Playtest ID</p>
           <p>Date</p>
           <p>Actions</p>
-        </li>
+        </div>
         {playtestHistory.reverse().map((pt) => (
-          <li key={pt.id} className="playtest-row">
+          <div
+            key={pt.id}
+            className="flex justify-between gap border-b border-b-slate-600"
+          >
             <p>{pt.id}</p>
             <p>{new Date(pt.createdAt * 1000).toLocaleDateString()}</p>
             <p>
@@ -30,9 +32,9 @@ const PlaytestHistory = () => {
                 Play
               </button>
             </p>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

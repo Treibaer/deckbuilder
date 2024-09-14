@@ -38,6 +38,7 @@ const MyDeckPrintSelectionOverlay: React.FC<{
     if (card.reprint) {
       loadPrints();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [card.reprint]);
 
   prints.map((print: any) => {
