@@ -35,7 +35,7 @@ const CardDetailView: React.FC<{}> = () => {
       )}
       <h1> {card.name}</h1>
       <div className="card-content">
-        <MagicCardView card={card} size={CardSize.large} />
+        <MagicCardView key={card.scryfallId} card={card} size={CardSize.large} />
         <div className="card-details">
           <div className="card-headline">
             <div>{Helper.convertCostsToImgArray(card.manaCost)}</div>
@@ -57,10 +57,10 @@ const CardDetailView: React.FC<{}> = () => {
   );
 };
 
+export default CardDetailView;
+
 export const loader: LoaderFunction<{ cardId: string }> = async ({
   params,
 }) => {
   return await CardService.shared.getWithPrintings(params.cardId ?? "");
 };
-
-export default CardDetailView;
