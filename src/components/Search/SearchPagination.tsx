@@ -10,7 +10,7 @@ const SearchPagination: React.FC<{
   return (
     <>
       {pages > 1 && (
-        <div className="flex justify-center gap-2 mt-2">
+        <div className="flex flex-wrap justify-center gap-2 mt-2">
           {Array.from({ length: pages }, (_, i) => (
             <Button
               key={i}

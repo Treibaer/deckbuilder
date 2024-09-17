@@ -178,13 +178,13 @@ const MagicFilterView: React.FC<{
               onChange={(event) => {
                 setFilter({ ...filter, format: event.target.value });
               }}
+              defaultValue={filter.format}
             >
               {formats.map((format) => {
                 return (
                   <option
                     value={format}
                     key={format}
-                    selected={filter.format === format}
                   >
                     {format}
                   </option>
