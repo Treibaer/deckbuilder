@@ -5,7 +5,7 @@ const prod = {
 };
 
 const dev = {
-  backendUrl: `https://magic.treibaer.de`,
+  backendUrl: `http://192.168.2.47:3820`,
   playModeEnabled: true,
   beta: true
 };
