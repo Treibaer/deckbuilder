@@ -8,11 +8,11 @@ export default class DeckService {
   private constructor() {}
 
   async getAll() {
-    return this.client.get<Deck[]>("/decks");
+    return this.client.get<Deck[]>("/decks", true);
   }
 
   async get(deckId: number) {
-    const deck = await this.client.get<Deck>(`/decks/${deckId}`);
+    const deck = await this.client.get<Deck>(`/decks/${deckId}`, true);
     deck.mainboard = deck.mainboard.sort((a, b) =>
       a.card.name.localeCompare(b.card.name)
     );
@@ -22,20 +22,9 @@ export default class DeckService {
   async create(name: string) {
     const path = `/decks`;
     const data = {
-      id: 0,
-      name: name,
-      description: "",
-      promoId: "",
+      name,
     };
-    // let startingTime = new Date().getTime();
-    return await this.client.post(path, data);
-
-    // let endingTime = new Date().getTime();
-    // if (endingTime - startingTime < 700) {
-    //   await new Promise((resolve) =>
-    //     setTimeout(resolve, 700 - (endingTime - startingTime))
-    //   );
-    // }
+    return await this.client.post(path, data, true);
   }
 
   async addCardToDeck(deck: Deck, card: MagicCard, zone: string, quantity = 1) {
@@ -46,19 +35,23 @@ export default class DeckService {
       zone: zone,
       action: "add",
     };
-    return await this.client.post(path, cardObject);
+    return await this.client.post(path, cardObject, true);
   }
 
   async setPromoId(deck: Deck, promoId: string) {
     const url = `/decks/${deck.id}`;
     const cardObject = {
-      promoId: promoId,
-      action: "modify",
+      promoId,
     };
-    return await this.client.post(url, cardObject);
+    return await this.client.patch(url, cardObject, true);
   }
 
-  async updateCardAmount(deck: Deck, card: MagicCard, zone: string, quantity: number) {
+  async updateCardAmount(
+    deck: Deck,
+    card: MagicCard,
+    zone: string,
+    quantity: number
+  ) {
     const path = `/decks/${deck.id}/cards`;
     const cardObject = {
       scryfallId: card.scryfallId,
@@ -66,7 +59,7 @@ export default class DeckService {
       zone: zone,
       action: "modify",
     };
-    return await this.client.post(path, cardObject);
+    return await this.client.post(path, cardObject, true);
   }
 
   async setPrint(deck: Deck, card: MagicCard, print: MagicCard) {
@@ -76,10 +69,15 @@ export default class DeckService {
       oldId: card.scryfallId,
       newId: print.scryfallId,
     };
-    return await this.client.put(path, data);
+    return await this.client.put(path, data, true);
   }
 
-  async moveZone(deck : Deck, card: MagicCard, originZone: string, destinationZone: string) {
+  async moveZone(
+    deck: Deck,
+    card: MagicCard,
+    originZone: string,
+    destinationZone: string
+  ) {
     const path = `/decks/${deck.id}`;
     const data = {
       action: "moveZone",
@@ -87,34 +85,17 @@ export default class DeckService {
       originZone: originZone,
       destinationZone: destinationZone,
     };
-    return await this.client.put(path, data);
+    return await this.client.put(path, data, true);
   }
 
   async deleteDeck(deck: Deck) {
-    return await this.client.delete(`/decks/${deck.id}`);
+    return await this.client.delete(`/decks/${deck.id}`, true);
   }
 
   cardCount(deck: Deck) {
     return deck.mainboard.reduce((acc, card) => {
       return acc + card.quantity;
     }, 0);
-  }
-
-  calculateWorth(deck: Deck) {
-    return 0;
-    // console.log(deck);
-    // return deck.mainboard.reduce((acc, card) => {
-    //   if (card.card.foil) {
-    //     if (!card.card.prices.eur_foil) {
-    //       return acc;
-    //     }
-    //     return acc + card.amount * parseInt(card.card.prices.eur_foil);
-    //   }
-    //   if (!card.card.prices.eur) {
-    //     return acc;
-    //   }
-    //   return acc + card.amount * parseInt(card.card.prices.eur);
-    // }, 0);
   }
 
   isValid(deck: Deck) {

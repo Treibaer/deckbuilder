@@ -6,6 +6,7 @@ import Constants from "./Constants";
 export default class MagicHelper {
   static getDeckStructureFromCards(cards: DeckCard[]): Structure {
     // MagicHelper.determineCardType(newCard)
+    // todo: multiple zones are possible with this logic -> fix
     let lands = cards
       .filter((card) => card.card.typeLine.includes("Land"))
       .sort((a, b) => a.card.name.localeCompare(b.card.name));
@@ -19,7 +20,7 @@ export default class MagicHelper {
       .filter((card) => card.card.typeLine.includes("Instant"))
       .sort((a, b) => a.card.name.localeCompare(b.card.name));
     let artifacts = cards
-      .filter((card) => card.card.typeLine.includes("Artifact"))
+      .filter((card) => card.card.typeLine.includes("Artifact") && !card.card.typeLine.includes("Creature"))
       .sort((a, b) => a.card.name.localeCompare(b.card.name));
     let enchantments = cards
       .filter((card) => card.card.typeLine.includes("Enchantment"))
@@ -91,10 +92,6 @@ export default class MagicHelper {
     return `${Constants.backendUrl}/image/card/${type}/${scryfallId}${
       faceSide > 0 ? "?faceSide=1" : ""
     }`;
-  }
-  static getCardFace(scryfallId: string, faceId = 0) {
-    // not implemented yet, will be done in backend, when importing the moxfield deck
-    return `${Constants.backendUrl}/image/card/backside.jpg`;
   }
 
   static extractFilterFromQuery(q: string) {

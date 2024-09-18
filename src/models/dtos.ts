@@ -35,7 +35,6 @@ export type Deck = {
 };
 
 export type DeckCard = {
-  id: number;
   card: MagicCard;
   quantity: number;
 };

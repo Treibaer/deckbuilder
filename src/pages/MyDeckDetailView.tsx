@@ -13,12 +13,12 @@ import Confirmation from "../components/Common/Confirmation";
 import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
 import MyDeckPrintSelectionOverlay from "../components/Decks/MyDeckPrintSelectionOverlay";
+import { Deck, MagicCard } from "../models/dtos";
 import Constants from "../Services/Constants";
 import DeckService from "../Services/DeckService";
 import MagicHelper from "../Services/MagicHelper";
 import PlaytestService from "../Services/PlaytestService";
 import "./MoxfieldDeckDetailView.css";
-import { Deck, MagicCard } from "../models/dtos";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
@@ -294,7 +294,6 @@ const MyDeckDetailView = () => {
           <img className="backside" src={backside} alt=" " />
           <img style={{ zIndex: 1 }} src={image} alt=" " />
           <div>Cards: {deck.cardCount}</div>
-          <div>Worth: {DeckService.shared.calculateWorth(deck)}€</div>
           <p>Valid: {DeckService.shared.isValid(deck) ? "yes" : "no"}</p>
           {deck.promoId !== previewId && hovered.isPreviewCardFromDeck && (
             <button
