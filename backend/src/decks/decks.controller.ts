@@ -72,7 +72,6 @@ export class DecksController {
 
   @Patch(":id")
   updatePatch(@Param("id") id: string, @Body() deckDto: DeckDto) {
-    console.log(deckDto);
     return this.decksService.update(+id, deckDto);
   }
 

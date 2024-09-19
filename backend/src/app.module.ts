@@ -11,7 +11,10 @@ import { logger } from "./utils/logger.middleware";
 import { DecksController } from "./decks/decks.controller";
 import { HttpExceptionFilter } from "./utils/http-exception.filter";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { ImageModule } from './image/image.module';
+import { ImageModule } from "./image/image.module";
+import { AuthModule } from "./auth/auth.module";
+import { UsersModule } from "./users/users.module";
+import { AccessToken } from "./auth/entities/access-token";
 
 @Module({
   imports: [
@@ -29,12 +32,14 @@ import { ImageModule } from './image/image.module';
       username: "root",
       password: "",
       database: "magic_dev",
-      models: [Deck, User, DeckCard, Card],
+      models: [Deck, User, DeckCard, Card, AccessToken],
       autoLoadModels: true,
       logging: false,
     }),
 
     ImageModule,
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService, ConfigService],

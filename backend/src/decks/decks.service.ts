@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
+import { UsersService } from "src/users/users.service";
 import { DeckDto } from "./dto/deck.dto";
 import { PatchDeckDto } from "./dto/patch-deck.dto";
 import { PostDeckCardsDto } from "./dto/post-deck-cards.dt";
@@ -15,9 +16,15 @@ import { User } from "./entities/user.entity";
 
 @Injectable()
 export class DecksService {
-  static userId = 3;
+  get userId() {
+    if (!this.userService.user) {
+      throw new UnauthorizedException();
+    }
+    return this.userService.user.id;
+  }
   constructor(
     @InjectModel(Deck) private deckModel: typeof Deck,
+    private readonly userService: UsersService,
     // private readonly sequelize: Sequelize,
   ) {}
 
@@ -25,20 +32,21 @@ export class DecksService {
     try {
       await this.deckModel.create({
         ...createDeckDto,
-        creator_id: DecksService.userId,
+        creator_id: this.userId,
         promoId: "",
         format: "",
         description: "",
       });
       return createDeckDto;
     } catch (e) {
+      console.log(e);
       throw e;
     }
   }
 
   async findAll(): Promise<Deck[]> {
     return await this.deckModel.findAll({
-      where: { creator_id: DecksService.userId },
+      where: { creator_id: this.userId },
       include: [DeckCard],
     });
   }
@@ -58,7 +66,7 @@ export class DecksService {
   async updatePut(id: number, patchDeckDto: PatchDeckDto) {
     const deck = await this.findOne(id);
 
-    if (deck && deck.creator.id !== DecksService.userId) {
+    if (deck && deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
     }
 
@@ -130,7 +138,7 @@ export class DecksService {
   async remove(id: number) {
     const deck = await this.findOne(id);
 
-    if (deck && deck.creator.id !== DecksService.userId) {
+    if (deck && deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
     }
 
@@ -140,7 +148,7 @@ export class DecksService {
   async update(id: number, deckDto: DeckDto) {
     const deck = await this.findOne(id);
 
-    if (deck && deck.creator.id !== DecksService.userId) {
+    if (deck && deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
     }
 
@@ -167,7 +175,7 @@ export class DecksService {
     const deck = await this.findOne(id);
     const zone = cardDto.zone || "mainboard";
 
-    if (deck && deck.creator.id !== DecksService.userId) {
+    if (deck && deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
     }
 

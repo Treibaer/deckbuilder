@@ -11,11 +11,13 @@ import { DeckCard } from "./entities/deck-card.entity";
 import { Deck } from "./entities/deck.entity";
 import { User } from "./entities/user.entity";
 import { MoxFieldMapping } from "./entities/moxfield.entity";
+import { UsersModule } from "src/users/users.module";
+import { UsersService } from "src/users/users.service";
 
 @Module({
-  imports: [SequelizeModule.forFeature([Deck, User, DeckCard, Card, MoxFieldMapping])],
+  imports: [SequelizeModule.forFeature([Deck, User, DeckCard, Card, MoxFieldMapping]), UsersModule],
   controllers: [DecksController, CardController],
-  providers: [DecksService, DeckTransformer, ConfigService, UrlService],
+  providers: [DecksService, DeckTransformer, ConfigService, UrlService, UsersService],
   exports: [
     SequelizeModule,
     // , DecksService

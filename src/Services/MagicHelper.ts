@@ -84,12 +84,12 @@ export default class MagicHelper {
   }
 
   static artCropUrl(scryfallId: string) {
-    return `${Constants.backendUrl}/image/card/art_crop/${scryfallId}`;
+    return `${Constants.newBackendUrl}/image/card/art_crop/${scryfallId}`;
   }
 
   static getImageUrl(scryfallId: string, type = "normal", faceSide = 0) {
     // proxying is allowed per api guidelines
-    return `${Constants.backendUrl}/image/card/${type}/${scryfallId}${
+    return `${Constants.newBackendUrl}/image/card/${type}/${scryfallId}${
       faceSide > 0 ? "?faceSide=1" : ""
     }`;
   }
