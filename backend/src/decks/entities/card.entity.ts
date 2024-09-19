@@ -31,6 +31,28 @@ export class Card extends Model {
   @Column({ field: "card_faces_names" })
   cardFacesNames: string;
 
+  @Column({ field: "set_code" })
+  setCode: string;
+
+  @Column({ field: "set_name" })
+  setName: string;
+
+  @Column({ field: "oracle_text" })
+  oracleText: string;
+
+  @Column({ field: "mana_cost" })
+  manaCost: string;
+
+  @Column
+  colors: string;
+
+  @Column
+  rarity: string;
+  
+  @Column({ field: "image_art_crop" })
+  imageArtCrop: string;
+
+
   // Define the hasMany association here
   static associate() {
     Card.hasMany(DeckCard, { foreignKey: 'scryfallId', sourceKey: 'scryfallId' });

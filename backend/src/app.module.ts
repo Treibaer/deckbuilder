@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { DecksModule } from "./decks/decks.module";
@@ -7,10 +7,20 @@ import { Deck } from "./decks/entities/deck.entity";
 import { User } from "./decks/entities/user.entity";
 import { DeckCard } from "./decks/entities/deck-card.entity";
 import { Card } from "./decks/entities/card.entity";
+import { logger } from "./utils/logger.middleware";
+import { DecksController } from "./decks/decks.controller";
+import { HttpExceptionFilter } from "./utils/http-exception.filter";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [".env.local", ".env"],
+    }),
     DecksModule,
+    ImageModule,
 
     SequelizeModule.forRoot({
       dialect: "mariadb",
@@ -23,9 +33,14 @@ import { Card } from "./decks/entities/card.entity";
       autoLoadModels: true,
       logging: false,
     }),
+
+    ImageModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ConfigService],
 })
-
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(logger).forRoutes(DecksController);
+  }
+}

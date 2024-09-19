@@ -4,7 +4,7 @@ import { Deck } from "./entities/deck.entity";
 
 @Injectable()
 export class DeckTransformer {
-  transformDeckWithoutCard(deck: Deck): DeckDto {
+  transformDeckWithoutCards(deck: Deck): DeckDto {
     const cardCount = deck.cards.filter(
       (card) => card.zone !== "sideboard",
     ).length;
@@ -22,6 +22,7 @@ export class DeckTransformer {
       sideboard: [],
     };
   }
+
   transformDeck(deck: Deck): DeckDto {
     let cardCount = 0;
     const commanderCards = deck.cards

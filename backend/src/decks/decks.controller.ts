@@ -3,18 +3,23 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
   Put,
+  UseFilters,
 } from "@nestjs/common";
 import { DeckTransformer } from "./deck.transformer";
 import { DecksService } from "./decks.service";
 import { DeckDto } from "./dto/deck.dto";
 import { PatchDeckDto } from "./dto/patch-deck.dto";
 import { PostDeckCardsDto } from "./dto/post-deck-cards.dt";
+import { HttpExceptionFilter } from "../utils/http-exception.filter";
 
 @Controller("api/v1/decks")
+@UseFilters(HttpExceptionFilter)
 export class DecksController {
   constructor(
     private readonly decksService: DecksService,
@@ -57,7 +62,7 @@ export class DecksController {
     if (deck) {
       return this.deckTransformer.transformDeck(deck);
     }
-    throw new Error("Deck not found");
+    throw new HttpException("Deck not found", HttpStatus.NOT_FOUND);
   }
 
   @Put(":id")

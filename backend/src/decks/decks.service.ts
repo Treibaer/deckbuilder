@@ -1,8 +1,11 @@
-import { Injectable } from "@nestjs/common";
-import { DeckDto } from "./dto/deck.dto";
-// import { Sequelize } from 'sequelize-typescript';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { DeckTransformer } from "./deck.transformer";
+import { DeckDto } from "./dto/deck.dto";
 import { PatchDeckDto } from "./dto/patch-deck.dto";
 import { PostDeckCardsDto } from "./dto/post-deck-cards.dt";
 import { Card } from "./entities/card.entity";
@@ -15,7 +18,6 @@ export class DecksService {
   static userId = 3;
   constructor(
     @InjectModel(Deck) private deckModel: typeof Deck,
-    private readonly deckTransformer: DeckTransformer,
     // private readonly sequelize: Sequelize,
   ) {}
 
@@ -57,12 +59,11 @@ export class DecksService {
     const deck = await this.findOne(id);
 
     if (deck && deck.creator.id !== DecksService.userId) {
-      throw new Error("Unauthorized");
+      throw new UnauthorizedException();
     }
 
     if (!deck) {
-      // todo: throw 404
-      throw new Error("Deck not found");
+      throw new NotFoundException("Deck not found");
     }
     if (
       patchDeckDto.action === "moveZone" &&
@@ -79,8 +80,7 @@ export class DecksService {
           card.zone === originZone,
       );
       if (!oldDeckCard) {
-        // todo: throw 404
-        throw new Error("Card not found");
+        throw new NotFoundException("Card not found in deck");
       }
       const existingCardInDestinationZone = deck.cards.find(
         (card) =>
@@ -109,13 +109,11 @@ export class DecksService {
         (card) => card.card.scryfallId === oldId,
       );
       if (!oldDeckCard) {
-        // todo: throw 404
-        throw new Error("Card not found in deck");
+        throw new NotFoundException("Card not found in deck");
       }
       const newCard = await Card.findByPk(newId);
       if (!newCard) {
-        // todo: throw 404
-        throw new Error("Card not found");
+        throw new NotFoundException("Card not found");
       }
       oldDeckCard.scryfallId = newCard.scryfallId;
 
@@ -126,15 +124,14 @@ export class DecksService {
       await deck.save();
       return [];
     }
-
-    throw new Error("invalid data.");
+    throw new BadRequestException("Invalid data");
   }
 
   async remove(id: number) {
     const deck = await this.findOne(id);
 
     if (deck && deck.creator.id !== DecksService.userId) {
-      throw new Error("Unauthorized");
+      throw new UnauthorizedException();
     }
 
     await deck?.destroy();
@@ -144,12 +141,11 @@ export class DecksService {
     const deck = await this.findOne(id);
 
     if (deck && deck.creator.id !== DecksService.userId) {
-      throw new Error("Unauthorized");
+      throw new UnauthorizedException();
     }
 
     if (!deck) {
-      // todo: throw 404
-      throw new Error("Deck not found");
+      throw new NotFoundException("Deck not found");
     }
 
     if (deckDto.promoId !== undefined) {
@@ -164,8 +160,7 @@ export class DecksService {
     if (deckDto.format !== undefined) {
       deck.format = deckDto.format;
     }
-    await deck.save();
-    return deck;
+    return await deck.save();
   }
 
   async modifyCard(id: number, cardDto: PostDeckCardsDto) {
@@ -173,16 +168,16 @@ export class DecksService {
     const zone = cardDto.zone || "mainboard";
 
     if (deck && deck.creator.id !== DecksService.userId) {
-      throw new Error("Unauthorized");
+      throw new UnauthorizedException();
     }
 
-    if (!deck) throw new Error("Deck not found");
-    {
+    if (!deck) {
+      throw new NotFoundException("Deck not found");
     }
 
     const card = await Card.findByPk(cardDto.scryfallId);
     if (!card) {
-      throw new Error("Card not found");
+      throw new NotFoundException("Card not found");
     }
     // check if card is already in deck in the same zone
     const existingCard = deck.cards.find(
@@ -215,14 +210,14 @@ export class DecksService {
         }
       case "modify":
         if (!existingCard) {
-          throw new Error("Card not found in deck");
+          throw new NotFoundException("Card not found in deck");
         }
         existingCard.quantity = cardDto.quantity;
         await existingCard.save();
         return [];
       case "remove":
         if (!existingCard) {
-          throw new Error("Card not found in deck");
+          throw new NotFoundException("Card not found in deck");
         }
         await existingCard.destroy();
         if (deck.promoId === cardDto.scryfallId) {
@@ -236,7 +231,7 @@ export class DecksService {
         }
         return [];
       default:
-        throw new Error("invalid action");
+        throw new BadRequestException("invalid action");
     }
   }
 }

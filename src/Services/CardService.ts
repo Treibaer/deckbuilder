@@ -11,6 +11,6 @@ export default class CardService {
   }
 
   async getWithPrintings(scryfallId: string) {
-    return this.client.get<CardDetailWithPrintings>(`/cards/${scryfallId}`);
+    return this.client.get<CardDetailWithPrintings>(`/cards/${scryfallId}`, true);
   }
 }

@@ -55,7 +55,7 @@ export default class MagicHelper {
 
   static determineImageUrl(card: MagicCard, faceId = 0) {
     // proxying is allowed per api guidelines
-    return `${Constants.backendUrl}/image/card/normal/${card.scryfallId}?faceSide=${faceId}`;
+    return `${Constants.newBackendUrl}/image/card/normal/${card.scryfallId}?faceSide=${faceId}`;
   }
 
   static determineCardType(card: MagicCard) {
