@@ -1,14 +1,11 @@
 // import "inter-ui/inter.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
-import "./Magic.css";
-import "./all3.css";
 
 // comopnents
 import CardDetailView, {
   loader as cardDetailLoader,
 } from "./pages/CardDetailView";
-import MagicSetList, { loader as setsLoader } from "./pages/MagicSetList";
 import MoxfieldDeckDetailView, {
   loader as moxfieldDeckDetailLoader,
 } from "./pages/MoxfieldDeckDetailView";
@@ -18,18 +15,19 @@ import MoxfieldDeckOverview, {
 import MyDeckDetailView, {
   loader as myDeckViewLoader,
 } from "./pages/MyDeckDetailView";
+import SetList, { loader as setsLoader } from "./pages/SetList";
 
 // Pages
 import DraftView, { loader as draftViewLoader } from "./pages/DraftList";
 import Home from "./pages/Home";
-import SearchView, {
-  loader as searchCardLoader,
-} from "./pages/SearchView";
-import Matches, {loader as matchesLoader} from "./pages/Matches";
+import Matches, { loader as matchesLoader } from "./pages/Matches";
 import MyDecksList, { loader as myDecksListLoader } from "./pages/MyDecksList";
-import PlaytestHistory, {loader as playtestHistoryLoader} from "./pages/PlaytestHistory";
+import PlaytestHistory, {
+  loader as playtestHistoryLoader,
+} from "./pages/PlaytestHistory";
 import Profile from "./pages/Profile";
 import RootLayout from "./pages/RootLayout";
+import SearchView, { loader as searchCardLoader } from "./pages/SearchView";
 import Settings from "./pages/Settings";
 import Users, { loader as usersLoader } from "./pages/Users";
 
@@ -49,7 +47,7 @@ const router = createBrowserRouter([
         element: <CardDetailView />,
         loader: cardDetailLoader,
       },
-      { path: "/sets", element: <MagicSetList />, loader: setsLoader },
+      { path: "/sets", element: <SetList />, loader: setsLoader },
       {
         path: "/decks/moxfield",
         element: <MoxfieldDeckOverview />,
@@ -75,7 +73,11 @@ const router = createBrowserRouter([
       { path: "/users", element: <Users />, loader: usersLoader },
       { path: "/matches", element: <Matches />, loader: matchesLoader },
       { path: "/profile", element: <Profile /> },
-      { path: "/profile/playtests", element: <PlaytestHistory />, loader: playtestHistoryLoader },
+      {
+        path: "/profile/playtests",
+        element: <PlaytestHistory />,
+        loader: playtestHistoryLoader,
+      },
       { path: "/settings", element: <Settings /> },
     ],
     // errorElement: <ErrorPage />,

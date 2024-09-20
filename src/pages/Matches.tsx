@@ -8,7 +8,6 @@ import MatchRow from "../components/Matches/MatchRow";
 import SelectDeckDialog from "../components/Matches/SelectDeckDialog";
 import TitleView from "../components/TitleView";
 import { Deck, Match, User } from "../models/dtos";
-import "./Matches.css";
 
 const matchService = MatchService.shared;
 const deckService = DeckService.shared;

@@ -52,7 +52,7 @@ const DeckDetailsGridView: React.FC<{
   const canEdit = addToDeck && updateCardAmount && openPrintSelection;
 
   return (
-    <div className="select-none max-h-[75vh] overflow-y-scroll">
+    <div className="select-none overflow-y-scroll h-full w-full">
       {Object.keys(structure).map(
         (key, index) =>
           structure[key].length > 0 && (
@@ -60,7 +60,7 @@ const DeckDetailsGridView: React.FC<{
               {key !== "Hide" && (
                 <>
                   <h3>{formatTitle(key, structure[key])}</h3>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-3 w-full">
                     {structure[key].map((card: DeckCard) => (
                       <div className="relative cursor-pointer" key={card.card.scryfallId}>
                         <MagicCardView

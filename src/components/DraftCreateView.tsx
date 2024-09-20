@@ -70,7 +70,6 @@ const DraftCreateView: React.FC<{
                   ))}
                 </select>
                 <Button
-                  className="tb-button"
                   onClick={() => {
                     removeBooster(index);
                   }}

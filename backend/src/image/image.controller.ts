@@ -21,6 +21,7 @@ export class ImageController {
   async getCardImage(
     @Param("type") type: "normal" | "art_crop",
     @Param("scryfallId") scryfallId: string,
+    @Param("force") force: string,
     @Query("faceSide") faceSide: string,
     @Res() res: Response,
   ) {
@@ -43,7 +44,7 @@ export class ImageController {
 
     const localPath = this.imageService.getLocalPath(url, card, scryfallId);
 
-    if (!(await this.imageService.fileExists(localPath))) {
+    if (!(await this.imageService.fileExists(localPath)) || force === "true") {
       await this.imageService.downloadImage(url, localPath);
     }
 

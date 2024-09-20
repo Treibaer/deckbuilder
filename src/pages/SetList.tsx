@@ -1,11 +1,10 @@
 import { Link, useLoaderData } from "react-router-dom";
 import CardService from "../Services/CardService";
 import MagicHelper from "../Services/MagicHelper";
-import "./MagicSetList.css";
 import { CardSet } from "../models/dtos";
 const cardService = CardService.shared;
 
-const MagicSetList = () => {
+const SetList = () => {
   let sets = useLoaderData() as CardSet[];
 
   // sort sets by release date
@@ -14,7 +13,7 @@ const MagicSetList = () => {
   });
   
   return (
-    <div >
+    <>
       <h1>Magic Card Sets</h1>
       <div className="flex flex-wrap mt-4">
         {sets.map((set, index) => (
@@ -36,11 +35,11 @@ const MagicSetList = () => {
           </Link>
         ))}
       </div>
-    </div>
+    </>
   );
 }
 
-export default MagicSetList;
+export default SetList;
 
 export const loader = async () => {
   return await cardService.getSets();

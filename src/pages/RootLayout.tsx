@@ -4,6 +4,7 @@ import LoadingSpinner from "../components/Common/LoadingSpinner";
 import MainNavigation from "../components/Navigation/MainNavigation";
 import Constants from "../Services/Constants";
 import LoginView from "../components/LoginView";
+import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 
 const RootLayout = () => {
   const navigation = useNavigation();
@@ -69,7 +70,7 @@ function DelayedLoadingView() {
     return <></>;
   }
 
-  return <LoadingSpinner />;
+  return <FullscreenLoadingSpinner />;
 }
 
 export default RootLayout;

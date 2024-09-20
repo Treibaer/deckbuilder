@@ -7,7 +7,6 @@ import TitleView from "../components/TitleView";
 import { Deck } from "../models/dtos";
 import DeckService from "../Services/DeckService";
 import MagicHelper from "../Services/MagicHelper";
-import "./MyDecksList.css";
 
 const deckService = DeckService.shared;
 
@@ -79,6 +78,7 @@ const MyDecksList = () => {
         >
           <label htmlFor="name">Name</label>
           <input
+          autoComplete="off"
             ref={inputRef}
             className="tb-input mb-10"
             type="text"

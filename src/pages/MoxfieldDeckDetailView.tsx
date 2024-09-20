@@ -4,16 +4,14 @@ import Constants from "../Services/Constants";
 import MagicHelper from "../Services/MagicHelper";
 import MoxfieldService from "../Services/MoxfieldService";
 import PlaytestService from "../Services/PlaytestService";
-import cardStackImage from "../assets/cardstack.svg";
-import chevronLeftImage from "../assets/chevron-left.svg";
-import playgameImage from "../assets/playgame.svg";
+import Button from "../components/Button";
 import CardPeekView from "../components/CardPeekView";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
-import "./MoxfieldDeckDetailView.css";
 import { Deck, MagicCard } from "../models/dtos";
-import Button from "../components/Button";
+import "./MoxfieldDeckDetailView.css";
+import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;
@@ -79,7 +77,7 @@ const MoxfieldDeckDetailView = () => {
 
   return (
     <div id="magic-deck-view">
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <FullscreenLoadingSpinner />}
 
       {cardPreview && (
         <CardPeekView
@@ -88,7 +86,7 @@ const MoxfieldDeckDetailView = () => {
         />
       )}
       <div className="deck-details-header">
-        <div className="tb-button-group">
+        <div className="flex gap-2">
           <Button
             title="Back"
             onClick={() => {
@@ -101,7 +99,7 @@ const MoxfieldDeckDetailView = () => {
           )}
         </div>
         <h2>{deck.name}</h2>
-        <div className="tb-button-group">
+        <div className="flex gap-2">
           {viewStyles.map((s) => (
             <Button
               active={viewStyle === s}

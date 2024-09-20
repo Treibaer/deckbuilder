@@ -7,7 +7,6 @@ import {
 import MagicHelper from "../Services/MagicHelper";
 import MoxfieldService from "../Services/MoxfieldService";
 import DeckList from "../components/Decks/DecksList";
-import "./MoxfieldDecksList.css";
 import { Deck } from "../models/dtos";
 import Button from "../components/Button";
 
@@ -57,8 +56,8 @@ const MoxfieldDecksList = () => {
   }
 
   return (
-    <div>
-      <div className="headline gap-4">
+    <>
+      <div className="flex justify-between items-center">
         {!data.referenceCard && <h1>Moxfield Decks</h1>}
         {data.referenceCard && (
           <h1>
@@ -107,7 +106,7 @@ const MoxfieldDecksList = () => {
         </div>
       </div>
       {data.totalPages > 1 && (
-        <div className="pagination">
+        <div className="flex gap-2 my-2 justify-center">
           {Array.from({ length: Math.min(20, data.totalPages) }, (_, i) => (
             <NavLink to={`?id=${id}&format=${format}&page=${i + 1}`} key={i}>
               <Button active={selectedPage === i} title={`${i + 1}`} />
@@ -117,7 +116,7 @@ const MoxfieldDecksList = () => {
       )}
 
       <DeckList decks={mappedDecks} />
-    </div>
+    </>
   );
 };
 

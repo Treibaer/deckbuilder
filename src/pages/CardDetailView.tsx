@@ -9,7 +9,7 @@ import Button from "../components/Button";
 import { CardSize } from "../models/structure";
 import MagicCardView from "../components/MagicCardView";
 import { CardDetailWithPrintings } from "../models/dtos";
-import "./CardDetailView.css";
+import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 
 const CardDetailView: React.FC<{}> = () => {
   const cardDetails = useLoaderData() as CardDetailWithPrintings;
@@ -25,7 +25,7 @@ const CardDetailView: React.FC<{}> = () => {
 
   return (
     <>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && <FullscreenLoadingSpinner />}
       {showAddToDeck && (
         <AddToDeckDialog
           onClose={() => setShowAddToDeck(false)}

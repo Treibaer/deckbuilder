@@ -1,13 +1,14 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Link,
   LoaderFunction,
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
+import Button from "../components/Button";
 import CardPeekView from "../components/CardPeekView";
 import Confirmation from "../components/Common/Confirmation";
-import Button from "../components/Button";
+import LoadingSpinner from "../components/Common/LoadingSpinner";
 import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
 import MyDeckPrintSelectionOverlay from "../components/Decks/MyDeckPrintSelectionOverlay";
@@ -41,6 +42,7 @@ const MyDeckDetailView = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResultCards, setSearchResultCards] = useState([]);
   const [deck, setDeck] = useState(initialDeck);
+  const [isLoading, setIsLoading] = useState(false);
   const [showDeletionConfirmation, setShowDeletionConfirmation] =
     useState(false);
 
@@ -90,8 +92,12 @@ const MyDeckDetailView = () => {
     }
     let url = `https://api.scryfall.com/cards/search?q=${term}`;
 
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 200));
     const response = await fetch(url);
     const resData = await response.json();
+
+    setIsLoading(false);
     if (!response.ok) {
       console.log("Error loading cards");
       return;
@@ -184,8 +190,9 @@ const MyDeckDetailView = () => {
       ?.focus();
   }
 
+  const showResults = searchResultCards.length > 0;
   return (
-    <div id="magic-deck-view">
+    <div id="magic-deck-view" className="h-[400px]">
       {cardPreview && (
         <CardPeekView card={cardPreview} onClose={() => setCardPreview(null)} />
       )}
@@ -205,8 +212,8 @@ const MyDeckDetailView = () => {
           setPrint={setPrint}
         />
       )}
-      <div className="deck-details-header">
-        <div className="tb-button-group">
+      <div className="deck-details-header mb-4">
+        <div className="flex gap-2">
           <Link to=".." relative="path">
             <Button title="Back" />
           </Link>
@@ -218,17 +225,18 @@ const MyDeckDetailView = () => {
             <Button onClick={didTapPlay} title="Play" />
           )}
         </div>
-        <div>
+        <div className="flex gap-4">
           <input
             className="tb-input"
             type="text"
             value={searchTerm}
             onChange={handleChange}
           />
+          <div className="w-10">{isLoading && <LoadingSpinner inline />}</div>
         </div>
         <div className="title">{deck.name}</div>
 
-        <div className="tb-button-group">
+        <div className="flex gap-2">
           {viewStyles.map((s) => (
             <Button
               active={viewStyle === s}
@@ -241,48 +249,37 @@ const MyDeckDetailView = () => {
           ))}
         </div>
       </div>
-
-      <div>Results</div>
-
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "10px",
-          padding: "10px",
-          border: "1px solid black",
-          height: "100px",
-          overflowY: "scroll",
-          marginTop: "10px",
-          marginBottom: "40px",
-        }}
-      >
-        {searchResultCards.map((card: any) => {
-          return (
-            <div key={card.scryfallId}>
-              <img
-                onMouseEnter={() => {
-                  setHovered({
-                    isPreviewCardFromDeck: false,
-                    scryfallId: card.scryfallId,
-                    faceSide: 0,
-                  });
-                }}
-                onClick={() => {
-                  addToDeck(card, "mainboard");
-                }}
-                style={{
-                  width: "120px",
-                  borderRadius: "12px",
-                  height: "167px",
-                }}
-                src={MagicHelper.getImageUrl(card.scryfallId, "normal")}
-                alt=" "
-              />
-            </div>
-          );
-        })}
-      </div>
+      {showResults && (
+        <div
+          className={`flex flex-wrap gap-4 p-4 border border-black h-[400px] overflow-y-scroll`}
+        >
+          {searchResultCards.map((card: any) => {
+            return (
+              <div key={card.scryfallId}>
+                <img
+                  onMouseEnter={() => {
+                    setHovered({
+                      isPreviewCardFromDeck: false,
+                      scryfallId: card.scryfallId,
+                      faceSide: 0,
+                    });
+                  }}
+                  onClick={() => {
+                    addToDeck(card, "mainboard");
+                  }}
+                  style={{
+                    width: "120px",
+                    borderRadius: "12px",
+                    height: "167px",
+                  }}
+                  src={MagicHelper.getImageUrl(card.scryfallId, "normal")}
+                  alt=" "
+                />
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       <div id="deck-detail">
         <div className="image-stats">
@@ -313,15 +310,17 @@ const MyDeckDetailView = () => {
           />
         )}
         {viewStyle === "grid" && (
-          <DeckDetailsGridView
-            structure={structure}
-            setPreviewImage={setPreviewImage}
-            addToDeck={addToDeck}
-            updateCardAmount={updateCardAmount}
-            openPrintSelection={showDetailOverlay}
-            showCardPreview={showCardPreview}
-            moveZone={moveZone}
-          />
+          <div className={`w-full ${showResults ? "max-h-[55vh]" : "max-h-[85vh]"}`}>
+            <DeckDetailsGridView
+              structure={structure}
+              setPreviewImage={setPreviewImage}
+              addToDeck={addToDeck}
+              updateCardAmount={updateCardAmount}
+              openPrintSelection={showDetailOverlay}
+              showCardPreview={showCardPreview}
+              moveZone={moveZone}
+            />
+          </div>
         )}
       </div>
     </div>

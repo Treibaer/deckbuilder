@@ -4,7 +4,7 @@ import "./LoadingSpinner.css";
 export default function FullscreenLoadingSpinner() {
   return (
     <div className="fullscreenBlurWithLoading">
-      <LoadingSpinner />
+        <LoadingSpinner />
     </div>
   );
 }
