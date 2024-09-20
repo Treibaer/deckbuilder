@@ -18,7 +18,7 @@ const MagicCardView: React.FC<{
 }> = ({
   card,
   onTap = () => {},
-  onMouseOver = (faceSide) => {},
+  onMouseOver = (_) => {},
   size = "normal",
 }) => {
   // be compatible with scryfall api

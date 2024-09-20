@@ -6,12 +6,11 @@ import MoxfieldService from "../Services/MoxfieldService";
 import PlaytestService from "../Services/PlaytestService";
 import Button from "../components/Button";
 import CardPeekView from "../components/CardPeekView";
-import LoadingSpinner from "../components/Common/LoadingSpinner";
+import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
 import { Deck, MagicCard } from "../models/dtos";
 import "./MoxfieldDeckDetailView.css";
-import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;

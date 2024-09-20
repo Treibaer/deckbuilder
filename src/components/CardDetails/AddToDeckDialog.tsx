@@ -27,7 +27,7 @@ const AddToDeckDialog: React.FC<{
   async function loadDecks() {
     const currentDecks = await deckService.getAll();
     setSelectedDeckId(currentDecks[0]?.id);
-    setMyDecks((decks) => currentDecks);
+    setMyDecks((_) => currentDecks);
   }
 
   useEffect(() => {

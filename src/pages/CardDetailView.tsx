@@ -2,14 +2,13 @@ import { useState } from "react";
 import { Link, LoaderFunction, useLoaderData } from "react-router-dom";
 import CardService from "../Services/CardService";
 import Helper from "../Services/Helper";
+import Button from "../components/Button";
 import AddToDeckDialog from "../components/CardDetails/AddToDeckDialog";
 import CardDetailPrintings from "../components/CardDetails/CardDetailPrintings";
-import LoadingSpinner from "../components/Common/LoadingSpinner";
-import Button from "../components/Button";
-import { CardSize } from "../models/structure";
+import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 import MagicCardView from "../components/MagicCardView";
 import { CardDetailWithPrintings } from "../models/dtos";
-import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
+import { CardSize } from "../models/structure";
 
 const CardDetailView: React.FC<{}> = () => {
   const cardDetails = useLoaderData() as CardDetailWithPrintings;

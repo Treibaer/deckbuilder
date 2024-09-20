@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Outlet, useNavigation } from "react-router-dom";
-import LoadingSpinner from "../components/Common/LoadingSpinner";
+import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
+import LoginView from "../components/LoginView";
 import MainNavigation from "../components/Navigation/MainNavigation";
 import Constants from "../Services/Constants";
-import LoginView from "../components/LoginView";
-import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 
 const RootLayout = () => {
   const navigation = useNavigation();
