@@ -1,9 +1,8 @@
 import { useState } from "react";
 import Helper from "../Services/Helper";
 import CardPeekView from "./CardPeekView";
-import "./MagicCardList.css";
 import MagicCardView from "./MagicCardView";
-import Button from "./Decks/Button";
+import Button from "./Button";
 import { CardSize, CardStyle } from "../models/structure";
 
 const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
@@ -20,16 +19,15 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
         />
       )}
       <div className="styleSelection flex gap-24 items-center mt-2">
-        <div className="w-64">
+        <div className="w-64 flex gap-2">
           {style === CardStyle.cards &&
             [CardSize.small, CardSize.normal, CardSize.large].map((s) => (
-              <button
-                className={size === s ? "active tb-button" : "tb-button"}
+              <Button
+                active={size === s}
                 key={s}
                 onClick={() => setSize(s)}
-              >
-                {s}
-              </button>
+                title={s}
+              />
             ))}
         </div>
 
@@ -68,14 +66,19 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
         </div>
       )}
       {style === CardStyle.list && (
-        <div id="card-list-container">
+        <div className="w-full select-none">
           {cards.map((card, index) => (
-            <div key={index}>
-              <div>{card.name}</div>
-              <div>{card.rarity}</div>
-              <div>{Helper.convertCostsToImgArray(card.mana_cost)}</div>
-              <div>{card.type_line}</div>
-              <div>
+            <div
+              className="grid grid-cols-5 items-center gap-4 w-full py-2"
+              key={index}
+            >
+              <div className="text-start col-span-1">{card.name}</div>
+              <div className="col-span-1">{card.rarity}</div>
+              <div className="col-span-1 flex">
+                {Helper.convertCostsToImgArray(card.mana_cost)}
+              </div>
+              <div className="col-span-1">{card.type_line}</div>
+              <div className="col-span-1 flex">
                 {card.colors &&
                   card.colors.map((color: string) =>
                     Helper.replaceColorSymbolsByImage(color)

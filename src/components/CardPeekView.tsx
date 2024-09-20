@@ -4,6 +4,7 @@ import rotateImage from "../assets/rotate.svg";
 import MagicHelper from "../Services/MagicHelper";
 import "./CardPeekView.css";
 import { MagicCard } from "../models/dtos";
+import Button from "./Button";
 
 const CardPeekView: React.FC<{
   card: MagicCard;
@@ -30,7 +31,7 @@ const CardPeekView: React.FC<{
   return (
     <div id="peekCardView">
       <Link to={"/cards/" + card.scryfallId} target="_blank">
-        <button className="tb-button">Card details</button>
+        <Button title="Card details" />
       </Link>
       <div className="background" onClick={onClose}></div>
       <div className="relative-wrapper">

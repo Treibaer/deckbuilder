@@ -22,9 +22,9 @@ import MyDeckDetailView, {
 // Pages
 import DraftView, { loader as draftViewLoader } from "./pages/DraftList";
 import Home from "./pages/Home";
-import MagicCardSearch, {
+import SearchView, {
   loader as searchCardLoader,
-} from "./pages/MagicCardSearch";
+} from "./pages/SearchView";
 import Matches, {loader as matchesLoader} from "./pages/Matches";
 import MyDecksList, { loader as myDecksListLoader } from "./pages/MyDecksList";
 import PlaytestHistory, {loader as playtestHistoryLoader} from "./pages/PlaytestHistory";
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       {
         path: "/search",
-        element: <MagicCardSearch />,
+        element: <SearchView />,
         loader: searchCardLoader,
       },
       {

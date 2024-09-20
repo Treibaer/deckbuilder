@@ -32,7 +32,7 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
+  /* display: flex; */
   place-items: center;
   min-width: 320px;
   /* min-height: 100vh; */
@@ -43,21 +43,66 @@ h1 {
   line-height: 1.1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  /* background-color: #1a1a1a; */
-  background-color: #626262;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover, button.selected {
+
+button:not([disabled]):hover, button.selected {
   border-color: #646cff;
 }
+
+.tb-input {
+  @apply bg-transparent p-2 rounded w-full border border-lightBlue outline-none resize-none
+}
+
+.tb-select {
+  @apply p-2 rounded border border-lightBlue outline-none
+}
+
+.filterView {
+  opacity: 0;
+  visibility: hidden;
+  transition: visibility 0s 0.3s, opacity 0.3s linear;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transition: visibility 0s, opacity 0.3s linear;
+  }
+}
+
+.list a {
+  text-decoration: none;
+  color: var(--color-primary-400);
+}
+
+.list a:hover,
+.list a.active {
+  color: var(--color-primary-800);
+  text-decoration: underline;
+}
+
+
+
+.blurredBackground {
+  position: fixed;
+  /* background-color: rgba(240, 240, 240, 0.1); */
+  backdrop-filter: blur(6px) saturate(150%) contrast(100%) brightness(80%);
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+}
+
+.filterView {
+  visibility: hidden;
+  transition: visibility 0s 0.3s, opacity 0.3s linear;
+
+  &.active {
+    opacity: 1;
+    visibility: visible;
+    transition: visibility 0s, opacity 0.3s linear;
+  }
+}
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -75,6 +120,7 @@ button:focus-visible {
     background-color: #f9f9f9;
   }
 }
+
 ul {
   list-style: none;
   margin: 0;

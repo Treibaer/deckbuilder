@@ -5,7 +5,7 @@ import Helper from "../Services/Helper";
 import AddToDeckDialog from "../components/CardDetails/AddToDeckDialog";
 import CardDetailPrintings from "../components/CardDetails/CardDetailPrintings";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
-import Button from "../components/Decks/Button";
+import Button from "../components/Button";
 import { CardSize } from "../models/structure";
 import MagicCardView from "../components/MagicCardView";
 import { CardDetailWithPrintings } from "../models/dtos";
@@ -33,18 +33,22 @@ const CardDetailView: React.FC<{}> = () => {
           setIsLoading={setIsLoading}
         />
       )}
-      <h1> {card.name}</h1>
-      <div className="card-content">
-        <MagicCardView key={card.scryfallId} card={card} size={CardSize.large} />
-        <div className="card-details">
-          <div className="card-headline">
+      <h1>{card.name}</h1>
+      <div className="flex gap-4 justify-between mt-8 w-full">
+        <MagicCardView
+          key={card.scryfallId}
+          card={card}
+          size={CardSize.large}
+        />
+        <div className="flex flex-col gap-4 flex-grow">
+          <div>
             <div>{Helper.convertCostsToImgArray(card.manaCost)}</div>
           </div>
           <div>{card.typeLine}</div>
           <div>{card.oracleText}</div>
           {printings && <CardDetailPrintings cardDetails={cardDetails} />}
         </div>
-        <div className="actionButtons">
+        <div className="flex flex-col gap-2">
           <Button title="Add to deck" onClick={openAddToCartDialog} />
           {card.mapping && (
             <Link to={"/decks/moxfield?id=" + card.mapping}>

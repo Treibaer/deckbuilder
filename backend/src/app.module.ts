@@ -15,6 +15,7 @@ import { ImageModule } from "./image/image.module";
 import { AuthModule } from "./auth/auth.module";
 import { UsersModule } from "./users/users.module";
 import { AccessToken } from "./auth/entities/access-token";
+import { Playtest } from "./decks/entities/playtest.entity";
 
 @Module({
   imports: [
@@ -32,7 +33,7 @@ import { AccessToken } from "./auth/entities/access-token";
       username: "root",
       password: "",
       database: "magic_dev",
-      models: [Deck, User, DeckCard, Card, AccessToken],
+      models: [Deck, User, DeckCard, Card, AccessToken, Playtest],
       autoLoadModels: true,
       logging: false,
     }),

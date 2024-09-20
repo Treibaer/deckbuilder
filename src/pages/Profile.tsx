@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import Constants from "../Services/Constants";
-import Button from "../components/Decks/Button";
+import Button from "../components/Button";
 
 const Profile = () => {
   return (
-    <div>
-      <h1>Profile</h1>
+    <div className="mx-auto">
+      <h1 className="mb-8">Profile</h1>
       {Constants.playModeEnabled && (
         <Link to="/profile/playtests">
           <Button title="Playtest History" />

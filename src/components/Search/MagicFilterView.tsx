@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Helper from "../../Services/Helper";
 import MagicHelper from "../../Services/MagicHelper";
-import "./MagicFilterView.css";
 import { CardSet } from "../../models/dtos";
-import Button from "../Decks/Button";
+import Button from "../Button";
 
 const formats = [
   "",
@@ -62,18 +61,23 @@ const MagicFilterView: React.FC<{
   }
 
   return (
-    <div className={`filterBlurBackground ${showFilter ? "active" : ""}`}>
-      <div className={`filter `}>
-        <div className="titleBar">
-          <h2>Filter</h2>
-          <button className="tb-button" onClick={() => setShowFilter(false)}>
-            X
-          </button>
+    <div
+      className={`blurredBackground filterView ${showFilter ? "active" : ""}`}
+      onClick={() => setShowFilter(false)}
+    >
+      <div
+        className={`backdrop-blur-xl bg-[rgba(32,33,46,0.8)] w-[calc(100vw-16px)] border border-lightBlue max-w-[80%] max-h-[80%] overflow-y-scroll sm:max-w-[500px] md:max-w-[600px] p-2 rounded shadow-lg absolute top-1/2 sm:top-96 left-1/2 transform -translate-x-1/2 -translate-y-1/2 `}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex justify-between">
+          <div className="text-xl">Filter</div>
+          <Button onClick={() => setShowFilter(false)} title="X" />
         </div>
-        <div className="filterList">
-          <div className="inputGroup">
+        <div className="flex flex-col gap-2 mt-4">
+          <div className="flex items-center gap-2">
             <label htmlFor="name">Name</label>
             <input
+              className="tb-input"
               type="text"
               name="name"
               placeholder="Name"
@@ -84,9 +88,10 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="type">Type</label>
             <input
+              className="tb-input"
               type="text"
               name="type"
               key={`type_${key}`}
@@ -97,9 +102,10 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="manaValue">Mana Value</label>
             <input
+              className="tb-input"
               type="number"
               name="manaValue"
               key={`manaValue_${key}`}
@@ -109,9 +115,10 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="power">Power</label>
             <input
+              className="tb-input"
               type="number"
               name="power"
               key={`power_${key}`}
@@ -121,9 +128,10 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="toughness">Toughness</label>
             <input
+              className="tb-input"
               type="number"
               name="toughness"
               key={`toughness_${key}`}
@@ -133,9 +141,10 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="rarity">Rarity</label>
             <select
+              className="tb-select bg-mediumBlue w-full"
               name="rarity"
               defaultValue={filter.rarity}
               onChange={(event) => {
@@ -151,9 +160,10 @@ const MagicFilterView: React.FC<{
               })}
             </select>
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="set">Set</label>
             <select
+              className="tb-select bg-mediumBlue w-full"
               name="set"
               key={`set_${key}`}
               defaultValue={filter.set}
@@ -171,9 +181,10 @@ const MagicFilterView: React.FC<{
               })}
             </select>
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="format">Format</label>
             <select
+              className="tb-select bg-mediumBlue w-full"
               name="format"
               onChange={(event) => {
                 setFilter({ ...filter, format: event.target.value });
@@ -182,19 +193,17 @@ const MagicFilterView: React.FC<{
             >
               {formats.map((format) => {
                 return (
-                  <option
-                    value={format}
-                    key={format}
-                  >
+                  <option value={format} key={format}>
                     {format}
                   </option>
                 );
               })}
             </select>
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="oracle">Text</label>
             <textarea
+              className="tb-input"
               name="oracle"
               key={`oracle_${key}`}
               defaultValue={filter.oracle}
@@ -203,9 +212,9 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="colors">Colors</label>
-            <div className="colorSection">
+            <div className="flex gap-2">
               <div className="radioGroup">
                 <input
                   type="radio"
@@ -223,7 +232,7 @@ const MagicFilterView: React.FC<{
                 />
               </div>
               <label htmlFor="colorsAnd">And</label>
-              <div className="colors">
+              <div className="flex">
                 {colors.map((symbol) => {
                   return (
                     <div
@@ -242,7 +251,7 @@ const MagicFilterView: React.FC<{
               </div>
             </div>
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="unique">All prints</label>
             <input
               type="checkbox"
@@ -257,7 +266,7 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <div className="inputGroup">
+          <div className="flex items-center gap-2">
             <label htmlFor="unique">Fullart</label>
             <input
               type="checkbox"

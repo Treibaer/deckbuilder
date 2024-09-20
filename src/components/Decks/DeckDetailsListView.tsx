@@ -1,6 +1,6 @@
 import { DeckCard, MagicCard } from "../../models/dtos";
-import "./DeckDetailsListView.css";
 import { DeckStructure } from "../../models/structure";
+import Button from "../Button";
 
 const DeckDetailsListView: React.FC<{
   structure: DeckStructure;
@@ -43,21 +43,25 @@ const DeckDetailsListView: React.FC<{
   const canEdit = addToDeck && updateCardAmount && openPrintSelection;
 
   return (
-    <div id="deck-list-view">
+    <div className="flex flex-wrap select-none">
       {Object.keys(structure).map((key, index) => {
         return (
           structure[key].length > 0 && (
-            <div key={index + 200}>
+            <div
+              key={index + 200}
+              className="flex flex-col gap-1 w-[48%] mx-auto"
+            >
               {key !== "Hide" && (
                 <>
-                  <h3>{key}</h3>
-                  <div className="deck-list-view-section">
+                  <div className="text-lg">{key}</div>
+                  <div className="flex flex-col gap-2 ">
                     {structure[key].map((card: DeckCard) => (
                       <div
                         key={card.card.scryfallId}
                         onMouseOver={() => {
                           setPreviewImage(card.card);
                         }}
+                        className="flex justify-between"
                       >
                         <div
                           onClick={() =>
@@ -71,38 +75,37 @@ const DeckDetailsListView: React.FC<{
                             card.card.manaCost ?? card.card.mana_cost
                           )} */}
                           {canEdit && (
-                            <span className="actions">
-                              <span
+                            <div className="flex gap-1">
+                              <Button
+                                className="w-10"
                                 onClick={() => {
                                   handleAddToDeck(card, key);
                                 }}
-                              >
-                                ➕
-                              </span>
-                              <span
+                                title="+"
+                              />
+                              <Button
+                                className="w-10"
                                 onClick={() => handleRemoveFromDeck(card, key)}
-                              >
-                                ➖
-                              </span>
+                                title="-"
+                              />
                               {card.card.reprint && (
-                                <span
+                                <Button
+                                  className="w-10"
                                   onClick={() => openPrintSelection(card.card)}
-                                >
-                                  ...
-                                </span>
+                                  title="..."
+                                />
                               )}
                               {card.card.typeLine.includes("Legendary") &&
                                 moveZone && (
-                                  <span
-                                    className="action"
+                                  <Button
+                                    className="w-10"
                                     onClick={() => {
                                       handleMoveZone(card.card, key);
                                     }}
-                                  >
-                                    C
-                                  </span>
+                                    title="C"
+                                  />
                                 )}
-                            </span>
+                            </div>
                           )}
                         </div>
                       </div>

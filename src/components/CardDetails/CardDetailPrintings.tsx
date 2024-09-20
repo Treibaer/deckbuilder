@@ -13,24 +13,23 @@ const CardDetailPrintings: React.FC<{
       <h2>Printings</h2>
       {previewImage && mousePosition.x && mousePosition.y && (
         <div
-          className="printingsPreview"
+          className="w-[250px] h-[350px] absolute"
           style={{
-            position: "absolute",
             top: mousePosition.y + 10,
             left: mousePosition.x + 10,
           }}
         >
-          <img src={previewImage} alt="preview" />
+          <img src={previewImage} className="rounded-xl" alt="preview" />
         </div>
       )}
 
-      <ul className="printings">
+      <ul className="max-h-[300px] overflow-y-scroll flex flex-col gap-1">
         {cardDetails.printings.map((print: any, index: number) => {
           const isSelected = cardDetails.card.scryfallId === print.scryfallId;
           return (
-            <li key={index} className={isSelected ? "selected" : undefined}>
+            <li key={index} className="">
               {isSelected && (
-                <div key={print.id} className="print">
+                <div key={print.id} className="py-2 bg-lightBlue select-none px-2 rounded">
                   <div title={print.setName}>{print.setName}</div>
                 </div>
               )}
@@ -42,7 +41,7 @@ const CardDetailPrintings: React.FC<{
                   onMouseLeave={() => setPreviewImage(null)}
                   onClick={() => setPreviewImage(null)}
                 >
-                  <div className="print">
+                  <div className="py-2 bg-mediumBlue px-2 rounded">
                     <div title={print.setName}>{print.setName}</div>
                   </div>
                 </Link>

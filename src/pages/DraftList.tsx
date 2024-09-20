@@ -3,6 +3,8 @@ import { useLoaderData } from "react-router-dom";
 import DraftCreateView from "../components/DraftCreateView";
 import CardService from "../Services/CardService";
 import { CardSet } from "../models/dtos";
+import Button from "../components/Button";
+import TitleView from "../components/TitleView";
 
 const cardService = CardService.shared;
 
@@ -16,17 +18,7 @@ const DraftView = () => {
   }
   return (
     <div>
-      <div className="headline">
-        <h1>Drafts</h1>
-        <button
-          className="tb-button"
-          onClick={() => {
-            setIsCreatingDraft(true);
-          }}
-        >
-          Create
-        </button>
-      </div>
+      <TitleView title="Drafts" openDialog={() => setIsCreatingDraft(true)} />
 
       {isCreatingDraft && (
         <DraftCreateView closeDialog={closeDialog} sets={sets} />
@@ -37,7 +29,7 @@ const DraftView = () => {
           <li key={index}>
             <div>
               {draft.id}
-              <button className="tb-button">Join</button>
+              <Button title="Join" />
             </div>
           </li>
         ))}

@@ -1,6 +1,6 @@
 import { useState } from "react";
+import Button from "./Button";
 import Dialog from "./Common/Dialog";
-import "./DraftCreateView.css";
 
 const DraftCreateView: React.FC<{
   closeDialog: () => void;
@@ -19,27 +19,24 @@ const DraftCreateView: React.FC<{
   function selectBooster(index: number, value: any) {
     const newBooster: any = [...booster];
     newBooster[index] = value;
-    setBooster((oldValue: any) => newBooster);
+    setBooster((_: any) => newBooster);
   }
 
   function removeBooster(index: number) {
     const newBooster = [...booster];
     newBooster.splice(index, 1);
-    setBooster((oldValue: any) => newBooster);
+    setBooster((_: any) => newBooster);
     // force re-render
     setKey(Math.floor(Math.random() * 1000000));
   }
 
   return (
-    <Dialog
-      title="Create Draft"
-      onClose={closeDialog}
-      onSubmit={() => {}}
-    >
+    <Dialog title="Create Draft" onClose={closeDialog} onSubmit={() => {}}>
       <label htmlFor="name">Name</label>
-      <input type="text" name="name" />
+      <input type="text" name="name" className="tb-input" />
       <label htmlFor="players">Players</label>
       <input
+        className="tb-input"
         type="number"
         name="players"
         defaultValue={players}
@@ -47,16 +44,18 @@ const DraftCreateView: React.FC<{
           setPlayers(parseInt(event.target.value));
         }}
       />
-      <div className="draft-content">
-        Booster
-        <button className="tb-button" onClick={addBooster}>
-          Add
-        </button>
-        <ul key={key}>
+      <div className="select-none">
+        <div className="flex gap-2 items-center mb-2">
+          <div>Booster</div>
+          <Button onClick={addBooster} title="Add" />
+        </div>
+        <ul key={key} className="mb-10">
           {booster.map((_: any, index: number) => (
             <li key={index}>
-              <div className="booster-row">
+              <div className="flex gap-4 items-center">
                 <select
+                  // className="bg-mediumBlue border border-lightBlue text-white rounded-md p-2"
+                  className="tb-select w-full bg-transparent"
                   name="booster"
                   defaultValue={booster[index]}
                   onChange={(event) => {
@@ -70,14 +69,13 @@ const DraftCreateView: React.FC<{
                     </option>
                   ))}
                 </select>
-                <button
+                <Button
                   className="tb-button"
                   onClick={() => {
                     removeBooster(index);
                   }}
-                >
-                  Remove
-                </button>
+                  title="Remove"
+                />
               </div>
             </li>
           ))}

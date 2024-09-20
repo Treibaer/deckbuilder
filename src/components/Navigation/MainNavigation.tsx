@@ -1,18 +1,17 @@
 import Constants from "../../Services/Constants";
-import classes from "./MainNavigation.module.css";
 import NavigationLink from "./NavigationLink";
 
 const MainNavigation = () => {
   return (
-    <header className={classes.header}>
+    <header className="select-none p-8 justify-center flex">
       <nav>
-        <ul className={classes.list}>
+        <ul className="flex gap-4 list">
           <NavigationLink to="/" title="Home" />
           <NavigationLink to="/search" title="Search" />
           <NavigationLink to="/sets" title="Sets" />
           <NavigationLink to="/decks/moxfield" title="Moxfield Decks" />
           <NavigationLink to="/decks/my" title="My Decks" />
-          <NavigationLink to="/drafts" title="Drafter" />
+          {/* <NavigationLink to="/drafts" title="Drafter" /> */}
 
           {Constants.beta && <NavigationLink to="/users" title="Users" />}
           {Constants.playModeEnabled && (
@@ -24,6 +23,6 @@ const MainNavigation = () => {
       </nav>
     </header>
   );
-}
+};
 
 export default MainNavigation;

@@ -1,7 +1,6 @@
 import { DeckCard, MagicCard } from "../../models/dtos";
 import MagicCardView from "../MagicCardView";
-import Button from "./Button";
-import "./DeckDetailsGridView.css";
+import Button from "../Button";
 import { CardSize, DeckStructure } from "../../models/structure";
 
 const DeckDetailsGridView: React.FC<{
@@ -53,7 +52,7 @@ const DeckDetailsGridView: React.FC<{
   const canEdit = addToDeck && updateCardAmount && openPrintSelection;
 
   return (
-    <div id="deck-grid-view">
+    <div className="select-none max-h-[75vh] overflow-y-scroll">
       {Object.keys(structure).map(
         (key, index) =>
           structure[key].length > 0 && (
@@ -61,9 +60,9 @@ const DeckDetailsGridView: React.FC<{
               {key !== "Hide" && (
                 <>
                   <h3>{formatTitle(key, structure[key])}</h3>
-                  <div className="deck-grid-view-section">
+                  <div className="flex flex-wrap gap-3">
                     {structure[key].map((card: DeckCard) => (
-                      <div className="cardWrapper" key={card.card.scryfallId}>
+                      <div className="relative cursor-pointer" key={card.card.scryfallId}>
                         <MagicCardView
                           card={card.card}
                           onTap={() => showCardPreview(card.card)}
@@ -73,29 +72,31 @@ const DeckDetailsGridView: React.FC<{
                           size={CardSize.small}
                         />
                         {card.quantity > 1 && (
-                          <div className="amountOverlay">x{card.quantity}</div>
+                          <div className="absolute cursor-default top-6 right-3 bg-mediumBlue py-2 px-3 rounded-md">x{card.quantity}</div>
                         )}
 
                         {canEdit && (
-                          <div className="actionButtons">
-                            <div
-                              className="action"
-                              onClick={() => handleAddToDeck(card, key)}
-                            >
-                              +
-                            </div>
+                          <div className="flex flex-col gap-1 absolute bottom-2 right-2">
                             <Button
+                              className="w-10"
+                              onClick={() => handleAddToDeck(card, key)}
+                              title="+"
+                            />
+                            <Button
+                              className="w-10"
                               title="-"
                               onClick={() => handleRemoveFromDeck(card, key)}
                             />
                             {card.card.reprint && (
                               <Button
+                              className="w-10"
                                 title="..."
                                 onClick={() => openPrintSelection(card.card)}
                               />
                             )}
                             {card.card.typeLine.includes("Legendary") && (
                               <Button
+                              className="w-10 h-10"
                                 title="C"
                                 onClick={() => handleMoveZone(card.card, key)}
                               />

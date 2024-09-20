@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
+import { LoaderFunction, useLoaderData } from "react-router-dom";
+import DeckService from "../Services/DeckService";
 import MatchService from "../Services/MatchService";
-import LoadingSpinner from "../components/Common/LoadingSpinner";
+import DelayedLoadingSpinner from "../components/Common/DelayedLoadingSpinner";
 import CreateMatchDialog from "../components/Matches/CreateMatchDialog";
 import MatchRow from "../components/Matches/MatchRow";
 import SelectDeckDialog from "../components/Matches/SelectDeckDialog";
-import "./Matches.css";
-import DeckService from "../Services/DeckService";
+import TitleView from "../components/TitleView";
 import { Deck, Match, User } from "../models/dtos";
-import { LoaderFunction, useLoaderData } from "react-router-dom";
-import Button from "../components/Decks/Button";
+import "./Matches.css";
 
 const matchService = MatchService.shared;
 const deckService = DeckService.shared;
@@ -94,8 +94,8 @@ const Matches = () => {
   }
 
   return (
-    <div>
-      {isLoading && <LoadingSpinner />}
+    <div className="w-full mb-8">
+      {isLoading && <DelayedLoadingSpinner />}
       {isCreatingMatch && (
         <CreateMatchDialog
           users={users}
@@ -112,13 +112,11 @@ const Matches = () => {
           setSelectedDeckId={setSelectedDeckId}
         />
       )}
-      <div className="header">
-        <div className="title">Matches</div>
-        <Button title="Create" onClick={openCreateMatchForm} />
-      </div>
-      <div className="matches">
+      <TitleView title="Matches" openDialog={openCreateMatchForm} />
+      <div className="flex flex-col gap-4 w-full mt-4">
         {matches.map((match, _) => (
           <MatchRow
+            key={match.id}
             match={match}
             openMatch={openMatch}
             onSelectDeck={openDeckSelection}
@@ -131,8 +129,6 @@ const Matches = () => {
 
 export default Matches;
 
-export const loader: LoaderFunction<{ cardId: string }> = async ({
-  params,
-}) => {
+export const loader: LoaderFunction = async () => {
   return await matchService.getAll();
 };

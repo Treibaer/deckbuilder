@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import classes from "./MainNavigation.module.css";
 
 const NavigationLink: React.FC<{
   to: string;
@@ -9,7 +8,7 @@ const NavigationLink: React.FC<{
     <li>
       <NavLink
         to={to}
-        className={({ isActive }) => (isActive ? classes.active : undefined)}
+        className={({ isActive }) => (isActive ? "active" : undefined)}
         end
       >
         {title}

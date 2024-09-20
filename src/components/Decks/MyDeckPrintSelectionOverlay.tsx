@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import MagicCardView from "../MagicCardView";
 import { CardSize } from "../../models/structure";
 import { MagicCard } from "../../models/dtos";
-import Button from "./Button";
+import Button from "../Button";
 
 const MyDeckPrintSelectionOverlay: React.FC<{
   closeOverlay: () => void;

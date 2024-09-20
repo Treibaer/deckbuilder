@@ -19,6 +19,7 @@ const SelectDeckDialog: React.FC<{
       </div>
       <div className="formRow">
         <select
+          className="tb-select bg-transparent w-full mb-10"
           name="deck"
           onChange={(event) => setSelectedDeckId(Number(event.target.value))}
         >

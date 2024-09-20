@@ -13,6 +13,7 @@ import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
 import "./MoxfieldDeckDetailView.css";
 import { Deck, MagicCard } from "../models/dtos";
+import Button from "../components/Button";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;
@@ -68,7 +69,9 @@ const MoxfieldDeckDetailView = () => {
 
   async function didTapPlay() {
     // TODO: deck.id is string instead of number for moxfield decks
-    const response = await PlaytestService.shared.createFromMoxfieldDeck(deck.id);
+    const response = await PlaytestService.shared.createFromMoxfieldDeck(
+      deck.id
+    );
     window
       .open("/magic-web-js/play.html?mId=" + response.id, "_blank")
       ?.focus();
@@ -86,38 +89,28 @@ const MoxfieldDeckDetailView = () => {
       )}
       <div className="deck-details-header">
         <div className="tb-button-group">
-          <button
-            className="tb-button"
+          <Button
+            title="Back"
             onClick={() => {
               navigator(-1);
             }}
-          >
-            <img src={chevronLeftImage} className="icon" alt=" " />
-            Back
-          </button>
-          <button className="tb-button" onClick={clone}>
-            <img src={cardStackImage} className="icon" alt=" " />
-            Clone
-          </button>
+          />
+          <Button onClick={clone} title="Clone" />
           {Constants.playModeEnabled && (
-            <button className="tb-button" onClick={didTapPlay}>
-              <img src={playgameImage} className="icon" alt=" " />
-              Play
-            </button>
+            <Button title="Play" onClick={didTapPlay} />
           )}
         </div>
         <h2>{deck.name}</h2>
         <div className="tb-button-group">
           {viewStyles.map((s) => (
-            <button
-              className={viewStyle === s ? "active tb-button" : "tb-button"}
+            <Button
+              active={viewStyle === s}
               key={s}
               onClick={() => {
                 setViewStyle(s);
               }}
-            >
-              {s}
-            </button>
+              title={s}
+            />
           ))}
         </div>
       </div>

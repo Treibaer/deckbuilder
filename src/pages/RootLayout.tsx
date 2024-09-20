@@ -42,12 +42,12 @@ const RootLayout = () => {
     <>
       {navigation.state === "loading" && <DelayedLoadingView />}
       {isLoggedIn && (
-        <>
+        <main className="flex flex-col">
           <MainNavigation />
-          <main className="container">
+          <div className="flex flex-col">
             <Outlet />
-          </main>
-        </>
+          </div>
+        </main>
       )}
       {!isLoggedIn && !checkingLogin && (
         <LoginView setIsLoggedIn={setIsLoggedIn} />

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Button from "../Decks/Button";
+import Button from "../Button";
 
 const SearchPagination: React.FC<{
   pages: number;
@@ -19,7 +19,7 @@ const SearchPagination: React.FC<{
                 navigate(url);
               }}
               title={`${i + 1}`}
-              className={selectedPage === i ? "active" : ""}
+              active={selectedPage === i}
             />
           ))}
         </div>

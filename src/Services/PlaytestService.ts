@@ -21,6 +21,6 @@ export default class PlaytestService {
   }
 
   async getAll() {
-    return this.client.get<Playtest[]>("/playtests");
+    return this.client.get<Playtest[]>("/playtests", true);
   }
 }

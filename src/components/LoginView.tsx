@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Constants from "../Services/Constants";
-import Button from "./Decks/Button";
+import Button from "./Button";
 
 const LoginView: React.FC<{
   setIsLoggedIn: (isLoggedIn: boolean) => void;

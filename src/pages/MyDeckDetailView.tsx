@@ -5,11 +5,9 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom";
-import chevronLeftImage from "../assets/chevron-left.svg";
-import deleteImage from "../assets/delete.svg";
-import playgameImage from "../assets/playgame.svg";
 import CardPeekView from "../components/CardPeekView";
 import Confirmation from "../components/Common/Confirmation";
+import Button from "../components/Button";
 import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
 import MyDeckPrintSelectionOverlay from "../components/Decks/MyDeckPrintSelectionOverlay";
@@ -210,39 +208,36 @@ const MyDeckDetailView = () => {
       <div className="deck-details-header">
         <div className="tb-button-group">
           <Link to=".." relative="path">
-            <button className="tb-button">
-              <img src={chevronLeftImage} className="icon" alt=" " />
-              Back
-            </button>
+            <Button title="Back" />
           </Link>
-          <button
-            className="tb-button"
+          <Button
             onClick={setShowDeletionConfirmation.bind(null, true)}
-          >
-            <img src={deleteImage} className="icon" alt=" " />
-            Delete
-          </button>
+            title="Delete"
+          />
           {Constants.playModeEnabled && (
-            <button className="tb-button" onClick={didTapPlay}>
-              <img src={playgameImage} className="icon" alt=" " />
-              Play
-            </button>
+            <Button onClick={didTapPlay} title="Play" />
           )}
         </div>
-        <input type="text" value={searchTerm} onChange={handleChange} />
+        <div>
+          <input
+            className="tb-input"
+            type="text"
+            value={searchTerm}
+            onChange={handleChange}
+          />
+        </div>
         <div className="title">{deck.name}</div>
 
         <div className="tb-button-group">
           {viewStyles.map((s) => (
-            <button
-              className={viewStyle === s ? "active tb-button" : "tb-button"}
+            <Button
+              active={viewStyle === s}
               key={s}
               onClick={() => {
                 setViewStyle(s);
               }}
-            >
-              {s}
-            </button>
+              title={s}
+            />
           ))}
         </div>
       </div>
@@ -296,14 +291,12 @@ const MyDeckDetailView = () => {
           <div>Cards: {deck.cardCount}</div>
           <p>Valid: {DeckService.shared.isValid(deck) ? "yes" : "no"}</p>
           {deck.promoId !== previewId && hovered.isPreviewCardFromDeck && (
-            <button
-              className="tb-button"
+            <Button
               onClick={() => {
                 setPromoId(previewId);
               }}
-            >
-              Set Promo
-            </button>
+              title="Set Promo"
+            />
           )}
         </div>
 

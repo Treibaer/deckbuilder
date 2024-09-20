@@ -2,13 +2,14 @@ import {
   NavLink,
   useLoaderData,
   useNavigate,
-  useSearchParams
+  useSearchParams,
 } from "react-router-dom";
 import MagicHelper from "../Services/MagicHelper";
 import MoxfieldService from "../Services/MoxfieldService";
 import DeckList from "../components/Decks/DecksList";
 import "./MoxfieldDecksList.css";
 import { Deck } from "../models/dtos";
+import Button from "../components/Button";
 
 const moxfieldService = MoxfieldService.shared;
 
@@ -57,7 +58,7 @@ const MoxfieldDecksList = () => {
 
   return (
     <div>
-      <div className="headline">
+      <div className="headline gap-4">
         {!data.referenceCard && <h1>Moxfield Decks</h1>}
         {data.referenceCard && (
           <h1>
@@ -68,6 +69,7 @@ const MoxfieldDecksList = () => {
           </h1>
         )}
         <select
+          className="tb-select bg-mediumBlue"
           defaultValue={format}
           onChange={(event) => {
             switchFormat(event.target.value);
@@ -85,6 +87,7 @@ const MoxfieldDecksList = () => {
         </select>
         {data.referenceCard && (
           <select
+            className="tb-select bg-mediumBlue"
             defaultValue={format}
             onChange={(event) => {
               switchZone(event.target.value);
@@ -107,13 +110,7 @@ const MoxfieldDecksList = () => {
         <div className="pagination">
           {Array.from({ length: Math.min(20, data.totalPages) }, (_, i) => (
             <NavLink to={`?id=${id}&format=${format}&page=${i + 1}`} key={i}>
-              <button
-                className={
-                  selectedPage === i ? "active tb-button" : "tb-button"
-                }
-              >
-                {i + 1}
-              </button>
+              <Button active={selectedPage === i} title={`${i + 1}`} />
             </NavLink>
           ))}
         </div>

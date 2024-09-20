@@ -14,7 +14,7 @@ const MagicSetList = () => {
   });
   
   return (
-    <div>
+    <div >
       <h1>Magic Card Sets</h1>
       <div className="flex flex-wrap mt-4">
         {sets.map((set, index) => (

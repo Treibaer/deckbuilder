@@ -11,8 +11,8 @@ const Users = () => {
       <div className="text-4xl">Users</div>
       <div className="flex gap-2 my-2">
         {users.map((user) => (
-          <div className="user-card cursor-pointer">
-            <div key={user.id} className="user-info">
+          <div  key={user.id} className="user-card cursor-pointer">
+            <div className="user-info">
               <h2>{user.username}</h2>
             </div>
           </div>

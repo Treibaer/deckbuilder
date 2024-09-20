@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import Button from "../Decks/Button";
+import Button from "../Button";
 import { Match } from "../../models/dtos";
 
 const MatchRow: React.FC<{
@@ -8,9 +8,9 @@ const MatchRow: React.FC<{
   openMatch: (matchId: number) => void;
 }> = ({ match, onSelectDeck, openMatch }) => {
   return (
-    <div className="matchRow">
+    <div className="flex gap-8 w-full justify-between">
       <div>{match.id}</div>
-      <div>
+      <div className="flex gap-2 flex-1 justify-start items-center">
         <Link to={`/users/${match.player0.id}`}>{match.player0.name}</Link>
         {match.player0.canSelectDeck && (
           <Button title="Select Deck" onClick={() => onSelectDeck(match, 0)} />
@@ -19,7 +19,7 @@ const MatchRow: React.FC<{
           <Button title="Select Deck" disabled={true} />
         )}
       </div>
-      <div>
+      <div className="flex gap-2 flex-1 items-center">
         <Link to={`/users/${match.player1.id}`}>{match.player1.name}</Link>
         {match.player1.canSelectDeck && (
           <Button title="Select Deck" onClick={() => onSelectDeck(match, 1)} />
@@ -28,7 +28,7 @@ const MatchRow: React.FC<{
           <Button title="Select Deck" disabled={true} />
         )}
       </div>
-      <div>
+      <div className="flex-1 flex justify-center">
         <Button
           title="Play"
           onClick={() => openMatch(match.id)}

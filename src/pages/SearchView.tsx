@@ -8,7 +8,7 @@ import CardService from "../Services/CardService";
 
 const cardService = CardService.shared;
 
-const MagicCardSearch: React.FC = () => {
+const SearchView: React.FC = () => {
   /*
     useEffect(() => {
     const handleKeyDown = (event) => {
@@ -38,6 +38,8 @@ const MagicCardSearch: React.FC = () => {
 
   const [showFilter, setShowFilter] = useState(false);
 
+
+
   let pages = Math.ceil(data.amount / cards.length);
 
   if (!data.hasMore) {
@@ -59,7 +61,7 @@ const MagicCardSearch: React.FC = () => {
   }
 
   return (
-    <>
+    <div className="w-full">
       {data.data.length === 0 && (
         <div className="cursor-default text-3xl font-semibold text-center ">
           Search
@@ -85,7 +87,7 @@ const MagicCardSearch: React.FC = () => {
         {data.amount === 0 && <p>No cards found</p>}
         {cards.length > 0 && <MagicCardList cards={cards} />}
       </div>
-    </>
+    </div>
   );
 };
 
@@ -123,4 +125,4 @@ export const loader = async ({ request }: any) => {
   };
 };
 
-export default MagicCardSearch;
+export default SearchView;
