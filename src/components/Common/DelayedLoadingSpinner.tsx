@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import "./LoadingSpinner.css";
 import FullscreenLoadingSpinner from "./FullscreenLoadingSpinner";
 
 export const DelayedLoadingSpinner = () => {

@@ -6,11 +6,16 @@ const Profile = () => {
   return (
     <div className="mx-auto">
       <h1 className="mb-8">Profile</h1>
-      {Constants.playModeEnabled && (
-        <Link to="/profile/playtests">
-          <Button title="Playtest History" />
+      <div className="flex gap-4">
+        {Constants.playModeEnabled && (
+          <Link to="/profile/playtests">
+            <Button title="Playtest History" />
+          </Link>
+        )}
+        <Link to="/logout">
+          <Button title="Logout" />
         </Link>
-      )}
+      </div>
     </div>
   );
 };

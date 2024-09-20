@@ -1,5 +1,4 @@
 import LoadingSpinner from "./LoadingSpinner";
-import "./LoadingSpinner.css";
 
 export default function FullscreenLoadingSpinner() {
   return (

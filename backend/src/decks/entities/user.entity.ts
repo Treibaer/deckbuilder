@@ -1,8 +1,9 @@
-import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AutoIncrement, Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 @Table({ tableName: "user", timestamps: false })
 export class User extends Model {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: number;
 
@@ -14,4 +15,7 @@ export class User extends Model {
 
   @Column
   password: string;
+
+  @Column({defaultValue: "[]"})
+  roles: string;
 }

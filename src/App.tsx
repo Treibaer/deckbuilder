@@ -30,6 +30,8 @@ import RootLayout from "./pages/RootLayout";
 import SearchView, { loader as searchCardLoader } from "./pages/SearchView";
 import Settings from "./pages/Settings";
 import Users, { loader as usersLoader } from "./pages/Users";
+import Logout from "./pages/Logout";
+import Register from "./pages/Register";
 
 const router = createBrowserRouter([
   {
@@ -81,6 +83,14 @@ const router = createBrowserRouter([
       { path: "/settings", element: <Settings /> },
     ],
     // errorElement: <ErrorPage />,
+  },
+  {
+    path: "/logout",
+    element: <Logout />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
   },
 ]);
 
