@@ -7,7 +7,7 @@ export default class CardService {
   private constructor() {}
 
   async getSets() {
-    return this.client.get<CardSet[]>("/sets");
+    return this.client.get<CardSet[]>("/sets", true);
   }
 
   async getWithPrintings(scryfallId: string) {

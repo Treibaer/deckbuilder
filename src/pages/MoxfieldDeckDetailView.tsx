@@ -38,7 +38,7 @@ const MoxfieldDeckDetailView = () => {
   const previewId = hovered.scryfallId ?? deck.promoId;
 
   const image = previewId
-    ? MagicHelper.getImageUrl(previewId, "normal", hovered.faceSide ?? 0)
+    ? MagicHelper.getImageUrl(previewId, { faceSide: hovered.faceSide ?? 0 })
     : backside;
   const structure = MagicHelper.getDeckStructureFromCards(deck.mainboard);
 
@@ -125,11 +125,13 @@ const MoxfieldDeckDetailView = () => {
           />
         )}
         {viewStyle === "grid" && (
-          <DeckDetailsGridView
-            structure={structure}
-            setPreviewImage={setPreviewImage}
-            showCardPreview={showCardPreview}
-          />
+          <div className={`w-full max-h-[85vh]`}>
+            <DeckDetailsGridView
+              structure={structure}
+              setPreviewImage={setPreviewImage}
+              showCardPreview={showCardPreview}
+            />
+          </div>
         )}
       </div>
     </div>

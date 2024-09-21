@@ -1,4 +1,3 @@
-import { MagicCardDto } from "./card.dto";
 import { DeckCardDto } from "./deck-card.dto";
 
 export class DeckDto {
@@ -13,5 +12,4 @@ export class DeckDto {
   commanders: DeckCardDto[];
   mainboard: DeckCardDto[];
   sideboard: DeckCardDto[];
-
 }

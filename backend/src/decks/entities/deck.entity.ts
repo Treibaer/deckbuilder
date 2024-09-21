@@ -1,4 +1,5 @@
 import {
+  AutoIncrement,
   BelongsTo,
   Column,
   HasMany,
@@ -12,6 +13,7 @@ import { DeckCard } from "./deck-card.entity";
 @Table({ tableName: "deck", timestamps: false })
 export class Deck extends Model {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: number;
 

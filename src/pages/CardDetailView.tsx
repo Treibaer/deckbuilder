@@ -40,8 +40,8 @@ const CardDetailView: React.FC<{}> = () => {
           size={CardSize.large}
         />
         <div className="flex flex-col gap-4 flex-grow">
-          <div>
-            <div>{Helper.convertCostsToImgArray(card.manaCost)}</div>
+          <div className="flex">
+            {Helper.convertCostsToImgArray(card.manaCost)}
           </div>
           <div>{card.typeLine}</div>
           <div>{card.oracleText}</div>

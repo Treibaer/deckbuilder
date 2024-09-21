@@ -47,26 +47,12 @@ export class ImageService {
     return Card.findByPk(scryfallId);
   }
 
-  getCardImageUrl(card: Card, type: "normal" | "art_crop"): string {
-    switch (type) {
-      case "normal":
-        return card.image;
-      case "art_crop":
-        return card.imageArtCrop;
-      default:
-        throw new NotFoundException("Invalid type");
-    }
-  }
-
   getLocalPath(url: string, card: any, scryfallId: string): string {
     const cacheExtract = url
-      .replace("https://", "")
-      .replace("cards.scryfall.io", "")
+      .replace("https://cards.scryfall.io", "")
       .split("/");
     const localPath = join(__dirname, "..", "..", "cache", ...cacheExtract);
-    return card
-      ? localPath
-      : join(__dirname, "..", "..", "cache", "notfound", ...cacheExtract);
+    return localPath;
   }
 
   async fileExists(filePath: string): Promise<boolean> {

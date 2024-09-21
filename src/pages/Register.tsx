@@ -5,7 +5,12 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 
 const Register: React.FC = () => {
-  const [user, setUser] = useState({ username: "", email: "", password: "", confirmPassword: "" });
+  const [user, setUser] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -69,6 +74,7 @@ const Register: React.FC = () => {
           className="tb-input"
           type="text"
           placeholder="Email"
+          autoComplete="new-password"
           ref={inputRef}
           onChange={(event) =>
             setUser((prevUser) => ({ ...prevUser, email: event.target.value }))
@@ -79,27 +85,39 @@ const Register: React.FC = () => {
           className="tb-input"
           type="text"
           placeholder="Username"
-          onChange={(event) => (
-            setUser((prevUser) => ({ ...prevUser, username: event.target.value }))
-          )}
+          autoComplete="new-password"
+          onChange={(event) =>
+            setUser((prevUser) => ({
+              ...prevUser,
+              username: event.target.value,
+            }))
+          }
           onKeyDown={handleKeyDown}
         />
         <input
           className="tb-input"
           type="password"
           placeholder="Password"
-          onChange={(event) => (
-            setUser((prevUser) => ({ ...prevUser, password: event.target.value }))
-          )}
+          autoComplete="new-password"
+          onChange={(event) =>
+            setUser((prevUser) => ({
+              ...prevUser,
+              password: event.target.value,
+            }))
+          }
           onKeyDown={handleKeyDown}
         />
         <input
           className="tb-input mb-10"
           type="password"
           placeholder="Confirm Password"
-          onChange={(event) => (
-            setUser((prevUser) => ({ ...prevUser, confirmPassword: event.target.value }))
-          )}
+          autoComplete="new-password"
+          onChange={(event) =>
+            setUser((prevUser) => ({
+              ...prevUser,
+              confirmPassword: event.target.value,
+            }))
+          }
           onKeyDown={handleKeyDown}
         />
         <Button title="Register" onClick={handleLogin} />

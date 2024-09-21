@@ -1,9 +1,10 @@
-import { BelongsTo, Column, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AutoIncrement, BelongsTo, Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { User } from "./user.entity";
 
 @Table({ tableName: "playtest", timestamps: false })
 export class Playtest extends Model {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: number;
   

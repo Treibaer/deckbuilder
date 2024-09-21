@@ -7,7 +7,7 @@ export default class MatchService {
   private constructor() {}
 
   async getAll() {
-    return this.client.get<Match[]>("/matches");
+    return this.client.get<Match[]>("/matches", true);
   }
 
   async getUsers() {
@@ -15,7 +15,7 @@ export default class MatchService {
   }
 
   async create(enemyId: number) {
-    return this.client.post("/matches", { enemyId: enemyId });
+    return this.client.post("/matches", { enemyId: enemyId }, true);
   }
 
   async selectDeck(
@@ -28,6 +28,6 @@ export default class MatchService {
       deckId: selectedDeckId,
       playerIndex: selectedPlayerPosition,
     };
-    await this.client.post(path, data);
+    await this.client.post(path, data, true);
   }
 }

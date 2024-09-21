@@ -57,7 +57,7 @@ const MyDeckDetailView = () => {
 
   const previewId = hovered?.scryfallId ?? deck.promoId;
   const image = previewId
-    ? MagicHelper.getImageUrl(previewId, "normal", hovered?.faceSide ?? 0)
+    ? MagicHelper.getImageUrl(previewId, { faceSide: hovered.faceSide ?? 0 })
     : backside;
 
   let structure = MagicHelper.getDeckStructureFromCards(cards);
@@ -272,7 +272,7 @@ const MyDeckDetailView = () => {
                     borderRadius: "12px",
                     height: "167px",
                   }}
-                  src={MagicHelper.getImageUrl(card.scryfallId, "normal")}
+                  src={MagicHelper.getImageUrl(card.scryfallId)}
                   alt=" "
                 />
               </div>

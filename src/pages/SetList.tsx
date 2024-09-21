@@ -16,14 +16,14 @@ const SetList = () => {
     <>
       <h1>Magic Card Sets</h1>
       <div className="flex flex-wrap mt-4">
-        {sets.map((set, index) => (
+        {sets.map((set) => (
           <Link
             to={MagicHelper.createUrlFromFilter({
               set: set.code,
               order: "set",
               colors: [],
             })}
-            key={index}
+            key={set.code}
             className="w-48 border border-lightBlue m-2 p-2 rounded-lg bg-mediumBlue text-center flex flex-col hover:bg-lightBlue"
           >
             <div className="flex-1">{set.name}</div>

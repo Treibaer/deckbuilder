@@ -9,7 +9,7 @@ export default class PlaytestService {
   async create(deckId: number) {
     return this.client.post<{ id: number }>("/playtests", {
       deckId: deckId,
-    });
+    }, true);
   }
 
   async createFromMoxfieldDeck(moxFieldDeckId: number) {
@@ -17,7 +17,7 @@ export default class PlaytestService {
     const data = {
       moxFieldDeckId: moxFieldDeckId,
     };
-    return this.client.post<{ id: number }>(path, data);
+    return this.client.post<{ id: number }>(path, data, true);
   }
 
   async getAll() {

@@ -142,6 +142,7 @@ export class DecksService {
       throw new UnauthorizedException();
     }
 
+    await DeckCard.destroy({ where: { deck_id: id } });
     await deck?.destroy();
   }
 

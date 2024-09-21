@@ -1,13 +1,14 @@
-import { Column, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AutoIncrement, Column, Model, PrimaryKey, Table } from "sequelize-typescript";
 
 @Table({ tableName: "moxfield_mapping", timestamps: false })
 export class MoxFieldMapping extends Model {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: number;
 
   @Column({ field: "moxfield_id" })
-  moxFieldId: string;
+  moxfieldId: string;
 
   @Column({ field: "scryfall_id" })
   scryfallId: string;

@@ -21,7 +21,7 @@ const PlaytestHistory = () => {
           <div>Date</div>
           <div>Actions</div>
         </div>
-        {playtestHistory.reverse().map((pt) => (
+        {playtestHistory.map((pt) => (
           <div
             key={pt.id}
             className="flex justify-between border-b border-b-slate-600 items-center h-12"

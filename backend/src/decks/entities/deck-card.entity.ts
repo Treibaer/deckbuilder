@@ -1,9 +1,10 @@
-import { BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
+import { AutoIncrement, BelongsTo, Column, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { Card } from "./card.entity";
 
 @Table({ tableName: "deck_card", timestamps: false })
 export class DeckCard extends Model {
   @PrimaryKey
+  @AutoIncrement
   @Column
   id: number;
 

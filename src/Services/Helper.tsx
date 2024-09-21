@@ -4,7 +4,7 @@ import R from "../assets/card-symbols/R.svg";
 import U from "../assets/card-symbols/U.svg";
 import W from "../assets/card-symbols/W.svg";
 import C from "../assets/card-symbols/C.svg";
-import symbolMap from "../assets/symbolmap";
+import symbolMap from "../assets/symbolmap.json";
 
 export default class Helper {
   static replaceColorSymbolsByImage(symbol: string) {

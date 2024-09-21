@@ -20,7 +20,11 @@ export default class MagicHelper {
       .filter((card) => card.card.typeLine.includes("Instant"))
       .sort((a, b) => a.card.name.localeCompare(b.card.name));
     let artifacts = cards
-      .filter((card) => card.card.typeLine.includes("Artifact") && !card.card.typeLine.includes("Creature"))
+      .filter(
+        (card) =>
+          card.card.typeLine.includes("Artifact") &&
+          !card.card.typeLine.includes("Creature")
+      )
       .sort((a, b) => a.card.name.localeCompare(b.card.name));
     let enchantments = cards
       .filter((card) => card.card.typeLine.includes("Enchantment"))
@@ -53,11 +57,6 @@ export default class MagicHelper {
     };
   }
 
-  static determineImageUrl(card: MagicCard, faceId = 0) {
-    // proxying is allowed per api guidelines
-    return `${Constants.newBackendUrl}/image/card/normal/${card.scryfallId}?faceSide=${faceId}`;
-  }
-
   static determineCardType(card: MagicCard) {
     if (!card.typeLine) {
       return "Unknown";
@@ -83,12 +82,21 @@ export default class MagicHelper {
     }
   }
 
-  static artCropUrl(scryfallId: string) {
-    return `${Constants.newBackendUrl}/image/card/art_crop/${scryfallId}`;
+  static determineImageUrl(card: MagicCard, faceId = 0) {
+    return this.getImageUrl(card.scryfallId, { faceSide: faceId });
   }
 
-  static getImageUrl(scryfallId: string, type = "normal", faceSide = 0) {
+  static artCropUrl(scryfallId: string) {
+    return this.getImageUrl(scryfallId, { type: "art_crop" });
+  }
+
+  static getImageUrl(
+    scryfallId: string,
+    config?: { type?: string; faceSide?: number }
+  ) {
     // proxying is allowed per api guidelines
+    const type = config?.type ?? "normal";
+    const faceSide = config?.faceSide ?? 0;
     return `${Constants.newBackendUrl}/image/card/${type}/${scryfallId}${
       faceSide > 0 ? "?faceSide=1" : ""
     }`;

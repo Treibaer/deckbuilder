@@ -39,6 +39,7 @@ export class DeckTransformer {
         }
         cardCount += card.quantity;
         return {
+          id: 0,
           card: {
             scryfallId: card.card.scryfallId,
             name: card.card.name,
@@ -64,6 +65,7 @@ export class DeckTransformer {
         }
         cardCount += card.quantity;
         return {
+          id: 0,
           card: {
             scryfallId: card.card.scryfallId,
             name: card.card.name,
@@ -89,6 +91,7 @@ export class DeckTransformer {
         }
         cardCount += card.quantity;
         return {
+          id: 0,
           card: {
             scryfallId: card.card.scryfallId,
             name: card.card.name,

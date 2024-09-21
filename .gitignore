@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 public/magic-*
 backend2
+tsconfig.*.tsbuildinfo

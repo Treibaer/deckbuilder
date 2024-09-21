@@ -37,7 +37,7 @@ const Test = () => {
 
   // const [decks, setDecks] = useState([]); // [deck1, deck2, deck3, ...
 
-  const [loaded, setLoaded] = useState(false);
+  const [_loaded, setLoaded] = useState(false);
 
   function loadDecks() {
     console.log("loadDecks");

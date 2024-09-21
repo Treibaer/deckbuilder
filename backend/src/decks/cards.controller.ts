@@ -11,7 +11,7 @@ import { DeckDto } from "./dto/deck.dto";
 import { Card } from "./entities/card.entity";
 import { CardDetailDto } from "./dto/card-detail.dto";
 import { UrlService } from "src/utils/urlservice";
-import { MoxFieldMapping } from "./entities/moxfield.entity";
+import { MoxFieldMapping } from "./entities/moxfield-mapping.entity";
 import { Sequelize } from "sequelize-typescript";
 import { MagicCardDto } from "./dto/card.dto";
 
@@ -92,7 +92,7 @@ export class CardController {
       colors: card.colors,
       rarity: card.rarity,
       cardFaces: cardFaces,
-      mapping: moxFieldMapping?.moxFieldId ?? "",
+      mapping: moxFieldMapping?.moxfieldId ?? "",
     };
   }
 
