@@ -1,34 +1,54 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Deck } from "../../models/dtos";
 import MoxfieldService from "../../Services/MoxfieldService";
 import Button from "../Button";
 import Dialog from "../Common/Dialog";
 import LoadingSpinner from "../Common/LoadingSpinner";
 import SelectDeckDialogDeckPreview from "./SelectDeckDialogDeckPreview";
+import Client from "../../Services/Client";
 
-type Tab = "myDeck" | "moxfieldDeck";
+type Tab = "myDeck" | "moxfield" | "favorites";
 
 const SelectDeckDialog: React.FC<{
   onSubmit: (deckId?: number, moxfieldId?: string) => void;
   onClose: () => void;
   decks: Deck[];
 }> = ({ onSubmit, onClose, decks }) => {
-  const [tab, setTab] = useState<Tab>("myDeck");
-  const [selectedDeck, setSelectedDeck] = useState<Deck | null>(null);
-  const [selectedMoxfieldDeck, setSelectedMoxfieldDeck] = useState<Deck | null>(
-    null
-  );
+  const [tab, setTab] = useState<Tab>("moxfield");
+  const [deck, setDeck] = useState<Deck | null>(null);
+  const [favoriteDeck, setFavoriteDeck] = useState<Deck | null>(null);
+  const [moxfieldDeck, setMoxfieldDeck] = useState<Deck | null>(null);
   const [moxfieldInput, setMoxfieldInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const moxfieldInputRef = useRef<HTMLInputElement>(null);
+
+  const [favoriteDecks, setFavoriteDecks] = useState<Deck[]>([]);
+
+  useEffect(() => {
+    async function loadFavorites() {
+      const favorites = await Client.shared.get<Deck[]>("/favorites", true);
+      setFavoriteDecks(favorites);
+    }
+    loadFavorites();
+  }, [tab]);
+
+  useEffect(() => {
+    if (tab === "moxfield") {
+      setTimeout(() => {
+        moxfieldInputRef.current?.focus();
+      }, 100);
+    }
+  }, []);
 
   const searchTimer = useRef<any>();
 
   function applyDeck() {
-    if (tab === "myDeck" && selectedDeck) {
-      onSubmit(selectedDeck.id);
+    if (tab === "myDeck" && deck) {
+      onSubmit(deck.id);
     }
-    if (tab === "moxfieldDeck" && selectedMoxfieldDeck) {
-      onSubmit(undefined, "" + selectedMoxfieldDeck.id);
+    if (tab === "moxfield" && moxfieldDeck) {
+      onSubmit(undefined, "" + moxfieldDeck.id);
     }
   }
 
@@ -44,10 +64,10 @@ const SelectDeckDialog: React.FC<{
     }
 
     setIsLoading(true);
-    setSelectedMoxfieldDeck(null);
+    setMoxfieldDeck(null);
     try {
       const deck = await MoxfieldService.shared.getDeck(id);
-      setSelectedMoxfieldDeck(deck);
+      setMoxfieldDeck(deck);
     } catch (e) {
       // console.error(e);
     }
@@ -72,20 +92,30 @@ const SelectDeckDialog: React.FC<{
       submitTitle="Select"
       disabledButton={
         isLoading ||
-        (tab === "myDeck" && !selectedDeck) ||
-        (tab === "moxfieldDeck" && !selectedMoxfieldDeck)
+        (tab === "myDeck" && !deck) ||
+        (tab === "moxfield" && !moxfieldDeck)
       }
     >
       <div className="flex gap-2">
         <Button
+          title="Moxfield"
+          active={tab === "moxfield"}
+          onClick={() => {
+            setTab("moxfield");
+            setTimeout(() => {
+              moxfieldInputRef.current?.focus();
+            }, 100);
+          }}
+        />
+        <Button
+          title="Favorites"
+          active={tab === "favorites"}
+          onClick={() => setTab("favorites")}
+        />
+        <Button
           title="My Decks"
           active={tab === "myDeck"}
           onClick={() => setTab("myDeck")}
-        />
-        <Button
-          title="Moxfield Decks"
-          active={tab === "moxfieldDeck"}
-          onClick={() => setTab("moxfieldDeck")}
         />
       </div>
       <div className="h-24">
@@ -94,9 +124,9 @@ const SelectDeckDialog: React.FC<{
             <select
               className="tb-select bg-transparent w-full"
               name="deck"
-              defaultValue={selectedDeck?.id ?? 0}
+              defaultValue={deck?.id ?? 0}
               onChange={(event) =>
-                setSelectedDeck(
+                setDeck(
                   decks.find((deck) => deck.id === +event.target.value) ?? null
                 )
               }
@@ -110,20 +140,49 @@ const SelectDeckDialog: React.FC<{
             </select>
 
             <div className="w-full select-none">
-              {selectedDeck && (
+              {deck && (
+                <SelectDeckDialogDeckPreview deck={deck} type="myDeck" />
+              )}
+            </div>
+          </div>
+        )}
+        {tab === "favorites" && (
+          <div className="flex gap-2 flex-col items-center">
+            <select
+              className="tb-select bg-transparent w-full"
+              defaultValue={favoriteDeck?.id ?? ""}
+              onChange={(event) =>
+                setFavoriteDeck(
+                  favoriteDecks.find(
+                    (deck) => `${deck.id}` === event.target.value
+                  ) ?? null
+                )
+              }
+            >
+              <option value={0}>Select Deck</option>
+              {favoriteDecks.map((deck, index) => (
+                <option key={index} value={deck.id}>
+                  [{deck.format}] - [{deck.colors.join(", ")}]: {deck.name}
+                </option>
+              ))}
+            </select>
+
+            <div className="w-full select-none">
+              {favoriteDeck && (
                 <SelectDeckDialogDeckPreview
-                  deck={selectedDeck}
-                  type="myDeck"
+                  deck={favoriteDeck}
+                  type="favorites"
                 />
               )}
             </div>
           </div>
         )}
-        {tab === "moxfieldDeck" && (
+        {tab === "moxfield" && (
           <div className="flex gap-2 flex-col items-center">
             <div className="flex gap-2 items-center w-full">
               <input
                 type="text"
+                ref={moxfieldInputRef}
                 placeholder="Moxfield URL or ID"
                 className="tb-input w-full"
                 defaultValue={moxfieldInput}
@@ -134,10 +193,10 @@ const SelectDeckDialog: React.FC<{
               </div>
             </div>
             <div className="w-full select-none">
-              {selectedMoxfieldDeck && (
+              {moxfieldDeck && (
                 <SelectDeckDialogDeckPreview
-                  deck={selectedMoxfieldDeck}
-                  type="moxfieldDeck"
+                  deck={moxfieldDeck}
+                  type="moxfield"
                 />
               )}
             </div>

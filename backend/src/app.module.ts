@@ -26,6 +26,8 @@ import { ImportService } from "./import/import.service";
 import { ImportController } from "./import/import.controller";
 import { Settings } from "./decks/entities/settings.entity";
 import { FavoriteDeck } from "./decks/entities/favorite-deck";
+import { FavoritesController } from './favorites/favorites.controller';
+import { Sequelize } from "sequelize";
 
 @Module({
   imports: [
@@ -84,6 +86,7 @@ import { FavoriteDeck } from "./decks/entities/favorite-deck";
     MoxfieldController,
     MatchesController,
     ImportController,
+    FavoritesController,
   ],
   providers: [
     AppService,
@@ -100,6 +103,6 @@ export class AppModule implements NestModule {
 
     // Settings.sync({ alter: true });
     FavoriteDeck.sync({ alter: true });
-
+    
   }
 }

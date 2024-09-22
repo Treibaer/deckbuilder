@@ -9,6 +9,7 @@ import { DeckDto } from "src/decks/dto/deck.dto";
 import { Card } from "src/decks/entities/card.entity";
 import { DeckCard } from "src/decks/entities/deck-card.entity";
 import { Deck } from "src/decks/entities/deck.entity";
+import { FavoriteDeck } from "src/decks/entities/favorite-deck";
 import { MoxFieldMapping } from "src/decks/entities/moxfield-mapping.entity";
 import { UsersService } from "src/users/users.service";
 
@@ -72,11 +73,7 @@ export class MoxfieldService {
     const params = `?pageNumber=${page}&pageSize=${pageSize}&sortType=${sortType}&sortDirection=Descending${midfix}${fmt}`;
     const decksUrl = `https://api2.moxfield.com/v2/decks/search${params}`;
 
-    const content = await this.loadAndCache(
-      folder,
-      localName,
-      decksUrl,
-    );
+    const content = await this.loadAndCache(folder, localName, decksUrl);
 
     const data = JSON.parse(content);
     const decks = data.data;
@@ -226,6 +223,10 @@ export class MoxfieldService {
       },
     );
 
+    const favorite = await FavoriteDeck.findOne({
+      where: { moxfieldId: deck.publicId },
+    });
+
     const deckResponse: DeckDto = {
       id: deck.publicId,
       name: deck.name,
@@ -234,10 +235,11 @@ export class MoxfieldService {
       format: deck.format,
       cardCount,
       viewCount: deck.viewCount,
-      colors: [],
+      colors: deck.main.colors ?? [],
       commanders,
       mainboard,
       sideboard: [],
+      isFavorite: favorite !== null,
     };
 
     return deckResponse;

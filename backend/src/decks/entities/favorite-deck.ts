@@ -2,6 +2,7 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  ForeignKey,
   Model,
   PrimaryKey,
   Table,
@@ -12,15 +13,19 @@ import { User } from "./user.entity";
 export class FavoriteDeck extends Model {
   @PrimaryKey
   @AutoIncrement
-  @Column
+  @Column({ allowNull: false })
   id: number;
 
-  @Column
+  @Column({ allowNull: false })
   moxfieldId: string;
 
-  @BelongsTo(() => User, "creator_id")
+  @ForeignKey(() => User)
+  @Column({ allowNull: false })
+  creatorId: number;
+
+  @BelongsTo(() => User)
   creator: User;
 
-  @Column({ field: "created_at" })
+  @Column({ field: "created_at", allowNull: false })
   createdAt: number;
 }

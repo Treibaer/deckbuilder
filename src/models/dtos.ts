@@ -32,6 +32,7 @@ export type Deck = {
   commanders: DeckCard[];
   mainboard: DeckCard[];
   sideboard: DeckCard[];
+  isFavorite?: boolean;
 };
 
 export type DeckCard = {

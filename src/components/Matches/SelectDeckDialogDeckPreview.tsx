@@ -6,10 +6,10 @@ import { ButtonIcon } from "../ButtonIcon";
 
 const SelectDeckDialogDeckPreview: React.FC<{
   deck: Deck;
-  type: "myDeck" | "moxfieldDeck";
+  type: "myDeck" | "moxfield" | "favorites";
 }> = ({ deck, type }) => {
   const link =
-    type === "moxfieldDeck"
+    type !== "myDeck"
       ? `/decks/moxfield/${deck.id}`
       : `/decks/my/${deck.id}`;
   return (

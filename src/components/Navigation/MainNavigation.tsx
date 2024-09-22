@@ -11,6 +11,7 @@ const MainNavigation = () => {
           <NavigationLink to="/sets" title="Sets" />
           <NavigationLink to="/decks/moxfield" title="Moxfield Decks" />
           <NavigationLink to="/decks/my" title="My Decks" />
+          <NavigationLink to="/decks/favorites" title="My Favorites" />
           {/* <NavigationLink to="/drafts" title="Drafter" /> */}
 
           {/* {Constants.beta && <NavigationLink to="/users" title="Users" />} */}

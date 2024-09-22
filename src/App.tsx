@@ -19,20 +19,21 @@ import SetList, { loader as setsLoader } from "./pages/SetList";
 
 // Pages
 import DraftView, { loader as draftViewLoader } from "./pages/DraftList";
+import Favorites, { loader as favoritesLoader } from "./pages/Favorites";
 import Home from "./pages/Home";
+import Imports, { loader as importLoader } from "./pages/Imports";
+import Logout from "./pages/Logout";
 import Matches, { loader as matchesLoader } from "./pages/Matches";
 import MyDecksList, { loader as myDecksListLoader } from "./pages/MyDecksList";
 import PlaytestHistory, {
   loader as playtestHistoryLoader,
 } from "./pages/PlaytestHistory";
 import Profile from "./pages/Profile";
+import Register from "./pages/Register";
 import RootLayout from "./pages/RootLayout";
 import SearchView, { loader as searchCardLoader } from "./pages/SearchView";
-import Settings from "./pages/Settings";
 import Users, { loader as usersLoader } from "./pages/Users";
-import Logout from "./pages/Logout";
-import Register from "./pages/Register";
-import Imports, {loader as importLoader} from "./pages/Imports";
+import Settings from "./pages/Settings";
 
 const router = createBrowserRouter([
   {
@@ -83,6 +84,7 @@ const router = createBrowserRouter([
         loader: playtestHistoryLoader,
       },
       { path: "/settings", element: <Settings /> },
+      { path: "/decks/favorites", element: <Favorites />, loader: favoritesLoader },
     ],
     // errorElement: <ErrorPage />,
   },

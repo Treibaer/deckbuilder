@@ -28,4 +28,9 @@ export default class MoxfieldService {
     const path = `/moxfield/decks/${moxfieldId}/clone`;
     return this.client.post<Deck>(path, {}, true);
   }
+
+  async setFavorite(deckId: number, favorite: boolean) {
+    const path = `/favorites`;
+    return this.client.post(path, { favorite, moxfieldId: deckId }, true);
+  }
 }

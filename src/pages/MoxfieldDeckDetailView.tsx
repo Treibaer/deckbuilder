@@ -11,6 +11,9 @@ import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
 import { Deck, MagicCard } from "../models/dtos";
 import "./MoxfieldDeckDetailView.css";
+import { HeartIcon } from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/outline";
+import { ButtonIcon } from "../components/ButtonIcon";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;
@@ -24,7 +27,8 @@ type HoveredType = {
 
 const MoxfieldDeckDetailView = () => {
   const navigator = useNavigate();
-  const deck = useLoaderData() as Deck;
+  const data = useLoaderData() as Deck;
+  const [deck, setDeck] = useState(data);
   const [isLoading, setIsLoading] = useState(false);
 
   const [cardPreview, setCardPreview] = useState<MagicCard | null>(null);
@@ -74,6 +78,13 @@ const MoxfieldDeckDetailView = () => {
       ?.focus();
   }
 
+  async function setAsFavorite() {
+    await moxfieldService.setFavorite(deck.id, deck.isFavorite === true);
+    // reload deck
+    const newDeck = await moxfieldService.getDeck("" + deck.id);
+    setDeck(newDeck);
+  }
+
   return (
     <div id="magic-deck-view">
       {isLoading && <FullscreenLoadingSpinner />}
@@ -84,8 +95,8 @@ const MoxfieldDeckDetailView = () => {
           onClose={setCardPreview.bind(null, null)}
         />
       )}
-      <div className="deck-details-header">
-        <div className="flex gap-2">
+      <div className="deck-details-header mb-2">
+        <div className="flex gap-2 items-center">
           <Button
             title="Back"
             onClick={() => {
@@ -96,6 +107,13 @@ const MoxfieldDeckDetailView = () => {
           {Constants.playModeEnabled && (
             <Button title="Play" onClick={didTapPlay} />
           )}
+          <ButtonIcon onClick={setAsFavorite}>
+            {deck.isFavorite ? (
+              <HeartIcon className="h-6 w-6 text-brightBlue" />
+            ) : (
+              <HeartIcon2 className="h-6 w-6 text-brightBlue" />
+            )}
+          </ButtonIcon>
         </div>
         <h2>{deck.name}</h2>
         <div className="flex gap-2">

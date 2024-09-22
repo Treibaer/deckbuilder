@@ -12,4 +12,5 @@ export class DeckDto {
   commanders: DeckCardDto[];
   mainboard: DeckCardDto[];
   sideboard: DeckCardDto[];
+  isFavorite?: boolean;
 }
