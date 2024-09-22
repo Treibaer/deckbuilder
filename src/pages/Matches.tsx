@@ -24,7 +24,6 @@ const Matches = () => {
   // vars for deck selection
   const [selectedPlayerPosition, setSelectedPlayerPosition] = useState(0);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
-  const [selectedDeckId, setSelectedDeckId] = useState(0);
 
   async function loadMatches() {
     const matches = await matchService.getAll();
@@ -63,16 +62,13 @@ const Matches = () => {
     setSelectedPlayerPosition(playerIndex);
     setSelectedMatch(match);
     const decks = await deckService.getAll();
-    if (decks.length > 0) {
-      setSelectedDeckId(decks[0].id);
-    }
     setDecks(decks);
 
     setIsSelectingDeck(true);
     setIsLoading(false);
   }
 
-  async function selectDeck() {
+  async function selectDeck(deckId?: number, moxfieldId?: string) {
     if (selectedMatch == null) {
       return;
     }
@@ -81,7 +77,8 @@ const Matches = () => {
     await matchService.selectDeck(
       selectedMatch,
       selectedPlayerPosition,
-      selectedDeckId
+      deckId?.toString(),
+      moxfieldId
     );
     await loadMatches();
     setIsLoading(false);
@@ -108,7 +105,6 @@ const Matches = () => {
           decks={decks}
           onClose={close}
           onSubmit={selectDeck}
-          setSelectedDeckId={setSelectedDeckId}
         />
       )}
       <TitleView title="Matches" openDialog={openCreateMatchForm} />

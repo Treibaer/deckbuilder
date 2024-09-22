@@ -17,12 +17,16 @@ export class MoxfieldService {
   private cachePath = path.join(__dirname, "../../cache/moxfield");
   constructor(private readonly userService: UsersService) {}
 
-  async loadDecks(
-    format: string,
-    page: number,
-    moxfieldId?: string,
-    commander?: boolean,
-  ) {
+  async loadDecks(config: {
+    format: string;
+    page: number;
+    sortType?: string;
+    commander?: boolean;
+    moxfieldId?: string;
+  }) {
+    const { page, commander, moxfieldId } = config;
+    let { format, sortType } = config;
+
     const allowedFormats = [
       "modern",
       "commander",
@@ -37,6 +41,11 @@ export class MoxfieldService {
     } else {
       format = "all";
     }
+    // recently created, most views, recently updated
+    const sortTypes = ["views", "created", "updated"];
+    if (!sortTypes.includes(sortType ?? "")) {
+      sortType = "views";
+    }
     let midfix = "";
     let folder: string;
     let localName: string;
@@ -50,7 +59,7 @@ export class MoxfieldService {
       }
       midfix += `&board=mainboard`;
       folder = "decks-by-card-id";
-      localName = `${moxfieldId}-${format}-${commander ? 1 : 0}-${page}`;
+      localName = `${moxfieldId}-${format}-${sortType}-${commander ? 1 : 0}-${page}`;
 
       const scryfallId = await this.getMapping(moxfieldId);
       if (scryfallId) {
@@ -58,15 +67,14 @@ export class MoxfieldService {
       }
     } else {
       folder = "";
-      localName = `all-filtered-by-views-${format}-${page}`;
+      localName = `all-filtered-by-${sortType}-${format}-${page}`;
     }
-    const params = `?pageNumber=${page}&pageSize=${pageSize}&sortType=views&sortDirection=Descending${midfix}${fmt}`;
+    const params = `?pageNumber=${page}&pageSize=${pageSize}&sortType=${sortType}&sortDirection=Descending${midfix}${fmt}`;
     const decksUrl = `https://api2.moxfield.com/v2/decks/search${params}`;
 
     const content = await this.loadAndCache(
       folder,
       localName,
-
       decksUrl,
     );
 
@@ -99,7 +107,7 @@ export class MoxfieldService {
       };
     });
     return {
-      referenceCard: null,
+      referenceCard: referenceCard,
       decks: allDecks,
       totalResults: data.totalResults,
       totalPages: data.totalPages,
@@ -196,7 +204,7 @@ export class MoxfieldService {
     );
 
     const mainboard: DeckCardDto[] = Object.entries(deck.mainboard).map(
-      ([key, card]: [string, any]) => {
+      ([_key, card]: [string, any]) => {
         cardId++;
         cardCount += card.quantity;
         return {
@@ -207,8 +215,8 @@ export class MoxfieldService {
       },
     );
 
-    const sideboard: DeckCardDto[] = Object.entries(deck.sideboard).map(
-      ([key, card]: [string, any]) => {
+    const _sideBoard: DeckCardDto[] = Object.entries(deck.sideboard).map(
+      ([_key, card]: [string, any]) => {
         cardId++;
         return {
           id: cardId,
@@ -229,7 +237,7 @@ export class MoxfieldService {
       colors: [],
       commanders,
       mainboard,
-      sideboard,
+      sideboard: [],
     };
 
     return deckResponse;

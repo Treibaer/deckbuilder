@@ -134,9 +134,10 @@ export class MatchesController {
   async selectDeck(
     @Param("id") id: string,
     @Body()
-    body: { deckId?: number; playerIndex: number; moxFieldDeckId?: string },
+    body: { deckId?: number; playerIndex: number; moxfieldId?: string },
   ) {
-    if (!body.moxFieldDeckId && !body.deckId) {
+    console.log(body);
+    if (!body.moxfieldId && !body.deckId) {
       throw new BadRequestException("id not provided");
     }
 
@@ -163,9 +164,9 @@ export class MatchesController {
         throw new NotFoundException("Deck not found");
       }
       gameState = this.playtestService.createGameFromDeck(deck);
-    } else if (body.moxFieldDeckId) {
+    } else if (body.moxfieldId) {
       const moxFieldDeck = await this.moxfieldService.loadDeckById(
-        body.moxFieldDeckId,
+        body.moxfieldId,
       );
       gameState = this.playtestService.createGameFromDeckDTO(moxFieldDeck);
     } else {

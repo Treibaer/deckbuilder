@@ -54,7 +54,7 @@ const MoxfieldDeckDetailView = () => {
 
   async function clone() {
     setIsLoading(true);
-    const newDeck = await moxfieldService.clone(deck.id);
+    const newDeck = await moxfieldService.clone("" + deck.id);
     // wait 1 seconds for the deck to be created, otherwise, it's too fast and you don't see that a deck is created
     await new Promise((resolve) => setTimeout(resolve, 1000));
     navigator("/decks/my/" + newDeck.id);

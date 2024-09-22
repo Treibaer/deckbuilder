@@ -18,4 +18,7 @@ export class User extends Model {
 
   @Column({defaultValue: "[]"})
   roles: string;
+
+  // @Column({defaultValue: "{}"})
+  // settings: string;
 }

@@ -21,11 +21,13 @@ export default class MatchService {
   async selectDeck(
     selectedMatch: Match,
     selectedPlayerPosition: number,
-    selectedDeckId: number
+    selectedDeckId?: string,
+    selectedMoxfieldId?: string
   ) {
     const path = `/matches/${selectedMatch.id}/selectDeck`;
     const data = {
       deckId: selectedDeckId,
+      moxfieldId: selectedMoxfieldId,
       playerIndex: selectedPlayerPosition,
     };
     await this.client.post(path, data, true);

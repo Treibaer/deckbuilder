@@ -19,9 +19,10 @@ const MoxfieldDecksList = () => {
   const [searchParams] = useSearchParams();
   // const q = searchParams.get("q");
   const format = searchParams.get("format") ?? "";
+  const sortType = searchParams.get("sortType") ?? "";
   const page = Number(searchParams.get("page") ?? "1");
   const id = searchParams.get("id") ?? "";
-  const zone = searchParams.get("zone") ?? "";
+  const zone = searchParams.get("zone") ?? "mainboard";
   // todo: check if this is needed
   const selectedPage = page ? page - 1 : 0;
 
@@ -40,67 +41,79 @@ const MoxfieldDecksList = () => {
 
   function switchFormat(newFormat: string) {
     newFormat = newFormat === "All" ? "" : newFormat;
-    let url = `?id=${id}&format=${newFormat}&page=1`;
-    if (zone === "commander") {
-      url += "&commander";
-    }
+    let url = `?id=${id}&format=${newFormat}&page=1&sortType=${sortType}&zone=${zone}`;
+    navigate(url);
+  }
+
+  function switchSortType(newSortType: string) {
+    let url = `?id=${id}&format=${format}&page=1&sortType=${newSortType}&zone=${zone}`;
     navigate(url);
   }
 
   function switchZone(newZone: string) {
-    let url = `?id=${id}&format=${format}&page=1`;
-    if (newZone === "commander") {
-      url += "&commander";
-    }
+    let url = `?id=${id}&format=${format}&page=1&sortType=${sortType}&zone=${newZone}`;
     navigate(url);
   }
 
   return (
     <>
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center gap-2 select-none">
         {!data.referenceCard && <h1>Moxfield Decks</h1>}
         {data.referenceCard && (
-          <h1>
+          <div className="text-xl">
             Moxfield Decks for{" "}
             <NavLink to={"/cards/" + data.referenceCard.scryfallId}>
-              {data.referenceCard?.name}
+              <div className="text-brightBlue">{data.referenceCard?.name}</div>
             </NavLink>
-          </h1>
+          </div>
         )}
-        <select
-          className="tb-select bg-mediumBlue"
-          defaultValue={format}
-          onChange={(event) => {
-            switchFormat(event.target.value);
-          }}
-        >
-          {["All", "modern", "commander", "commanderPrecons", "standard"].map(
-            (format) => {
-              return (
-                <option value={format} key={format}>
-                  {format}
-                </option>
-              );
-            }
-          )}
-        </select>
-        {data.referenceCard && (
+        <div className="flex gap-2">
           <select
             className="tb-select bg-mediumBlue"
             defaultValue={format}
             onChange={(event) => {
-              switchZone(event.target.value);
+              switchFormat(event.target.value);
             }}
           >
-            {["mainboard", "commander"].map((zone) => {
-              return (
-                <option value={zone} key={zone}>
-                  {zone}
-                </option>
-              );
-            })}
+            {["All", "modern", "commander", "commanderPrecons", "standard"].map(
+              (format) => {
+                return (
+                  <option value={format} key={format}>
+                    {format}
+                  </option>
+                );
+              }
+            )}
           </select>
-        )}
+          <select
+            className="tb-select bg-mediumBlue"
+            defaultValue={sortType}
+            onChange={(event) => {
+              switchSortType(event.target.value);
+            }}
+          >
+            <option value="views">Most Views</option>
+            <option value="created">Recently Created</option>
+            <option value="updated">Recently Updated</option>
+          </select>
+          {data.referenceCard && (
+            <select
+              className="tb-select bg-mediumBlue"
+              defaultValue={zone}
+              onChange={(event) => {
+                switchZone(event.target.value);
+              }}
+            >
+              {["mainboard", "commander"].map((zone) => {
+                return (
+                  <option value={zone} key={zone}>
+                    {zone}
+                  </option>
+                );
+              })}
+            </select>
+          )}
+        </div>
         <div>
           Showing {data.decks.length} of {data.totalResults} decks{" "}
         </div>
@@ -108,7 +121,12 @@ const MoxfieldDecksList = () => {
       {data.totalPages > 1 && (
         <div className="flex gap-2 my-2 justify-center">
           {Array.from({ length: Math.min(20, data.totalPages) }, (_, i) => (
-            <NavLink to={`?id=${id}&format=${format}&page=${i + 1}`} key={i}>
+            <NavLink
+              to={`?id=${id}&format=${format}&page=${
+                i + 1
+              }&sortType=${sortType}`}
+              key={i}
+            >
               <Button active={selectedPage === i} title={`${i + 1}`} />
             </NavLink>
           ))}
@@ -127,15 +145,22 @@ export const loader = async ({ request }: any) => {
   let id = queryParameters.get("id") ?? "";
   let page = Number(queryParameters.get("page") ?? "1");
   const format = queryParameters.get("format") ?? "";
-  const commander = queryParameters.get("commander");
+  const zone = queryParameters.get("zone");
+  const sortType = queryParameters.get("sortType") ?? "";
 
   if (id) {
     return await moxfieldService.getDecksByCardId(
       id,
       format,
       page,
-      commander !== null
+      zone === "commander",
+      sortType
     );
   }
-  return await moxfieldService.getDecks(format, page, commander !== null);
+  return await moxfieldService.getDecks(
+    format,
+    page,
+    zone === "commander",
+    sortType
+  );
 };

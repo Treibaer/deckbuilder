@@ -8,6 +8,7 @@ import axios from "axios";
 import * as fs from "fs";
 import * as path from "path";
 import { Sequelize } from "sequelize-typescript";
+import { CardSet } from "src/decks/entities/card-set.entity";
 import { Card } from "src/decks/entities/card.entity";
 
 @Injectable()
@@ -46,6 +47,7 @@ export class ImportService {
       content = JSON.stringify(content);
       fs.writeFileSync(cacheName, content);
     } else {
+      throw new PreconditionFailedException("file already exists");
       content = fs.readFileSync(cacheName, "utf8");
     }
 
@@ -112,26 +114,97 @@ export class ImportService {
       }
 
       const scryfallId = card.id;
-      const cardFaces: any = [];
+      let cardFaces: any = [];
       if (card.card_faces) {
-        
+        cardFaces = card.card_faces.map((face: any) => ({
+          name: face.name,
+        }));
       }
 
       // create card entity
       await Card.create({
-        scryfallId: card.id,
+        scryfallId: scryfallId,
+        oracleId: card.oracle_id,
         name: card.name,
-        typeLine: card.type_line,
-        oracleText: card.oracle_text,
+        releasedAt: card.released_at,
         manaCost: card.mana_cost,
-        cmc: card.cmc,
-        colors: card.colors,
-        colorIdentity: card.color_identity,
-        set: card.set,
+        cmc: card.cmc ?? 0,
+        setCode: card.set,
+        setId: card.set_id,
+        setName: card.set_name,
+        typeLine: card.type_line,
+        oracleText: card.oracle_text ?? "",
+        power: card.power ?? 0,
+        toughness: card.toughness ?? 0,
+        colors: card.colors.join("_"),
         rarity: card.rarity,
-        imageUris: card.image_uris,
-        prices: card.prices,
+        reprint: card.reprint ?? false,
+        printsSearchUri: card.prints_search_uri ?? "",
+        cardFacesNames: cardFaces.join("###"),
+        image: "",
+        imageArtCrop: "",
       });
+    }
+  }
+
+  async importSymbols() {
+    const cacheFolder = path.join(this.cachePath, "card-symbols");
+    if (!fs.existsSync(cacheFolder)) {
+      fs.mkdirSync(cacheFolder, { recursive: true });
+    }
+
+    const response = await axios.get("https://api.scryfall.com/symbology");
+
+    const symbols = response.data.data;
+
+    for (const symbol of symbols) {
+      const fileName = symbol.svg_uri.split("/").pop();
+      const cacheName = path.join(cacheFolder, fileName);
+
+      let content: string;
+      if (!fs.existsSync(cacheName)) {
+        const response = await axios.get(symbol.svg_uri);
+        content = response.data;
+        content = JSON.stringify(content);
+        fs.writeFileSync(cacheName, content);
+      } else {
+        content = fs.readFileSync(cacheName, "utf8");
+      }
+    }
+  }
+
+  async importSets() {
+    const cacheFolder = path.join(this.cachePath, "sets");
+    if (!fs.existsSync(cacheFolder)) {
+      fs.mkdirSync(cacheFolder, { recursive: true });
+    }
+
+    const response = await axios.get("https://api.scryfall.com/sets");
+
+    const sets = response.data.data;
+
+    for (const set of sets) {
+      const scryfallId = set.id;
+      const cardSet = await CardSet.findOne({ where: { scryfallId: scryfallId } });
+      if (cardSet) {
+        cardSet.name = set.name;
+        cardSet.code = set.code;
+        cardSet.setType = set.set_type;
+        cardSet.releasedAt = set.released_at;
+        cardSet.cardCount = set.card_count;
+        cardSet.iconSvgUri = set.icon_svg_uri;
+        await cardSet.save();
+      } else {
+        await CardSet.create({
+          scryfallId: set.id,
+          name: set.name,
+          code: set.code,
+          setType: set.set_type,
+          releasedAt: set.released_at,
+          cardCount: set.card_count,
+          iconSvgUri: set.icon_svg_uri,
+        });
+      }
     }
   }
 }

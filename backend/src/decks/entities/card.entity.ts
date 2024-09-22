@@ -49,6 +49,21 @@ export class Card extends Model {
 
   @Column
   rarity: string;
+
+  @Column
+  cmc: string;
+
+  @Column
+  power: string;
+
+  @Column
+  toughness: string;
+
+  @Column({ field: "set_id" })
+  setId: string;
+
+  @Column
+  reprint: boolean;
   
   @Column({ field: "image_art_crop" })
   imageArtCrop: string;

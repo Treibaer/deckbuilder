@@ -32,6 +32,7 @@ import Settings from "./pages/Settings";
 import Users, { loader as usersLoader } from "./pages/Users";
 import Logout from "./pages/Logout";
 import Register from "./pages/Register";
+import Imports, {loader as importLoader} from "./pages/Imports";
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,7 @@ const router = createBrowserRouter([
       { path: "/users", element: <Users />, loader: usersLoader },
       { path: "/matches", element: <Matches />, loader: matchesLoader },
       { path: "/profile", element: <Profile /> },
+      { path: "/imports", element: <Imports />, loader: importLoader },
       {
         path: "/profile/playtests",
         element: <PlaytestHistory />,

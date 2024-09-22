@@ -29,6 +29,7 @@ export class PlaytestsService {
       settings: {
         libraryRevealTopCard: false,
         libraryRevealTopCardForMe: false,
+        backgroundImage: "",
       },
     };
   }
@@ -173,4 +174,5 @@ class PlayerCounters {
 class PlayerSettings {
   libraryRevealTopCard: boolean;
   libraryRevealTopCardForMe: boolean;
+  backgroundImage: string;
 }

@@ -1,5 +1,26 @@
+import { Link } from "react-router-dom";
+import Constants from "../Services/Constants";
+import Button from "../components/Button";
+
 const Settings = () => {
-  return <h1 className="mx-auto">Settings</h1>;
+  return (
+    <div className="mx-auto">
+      <h1 className="mb-8">Settings</h1>
+      <div className="flex gap-4">
+        {Constants.playModeEnabled && (
+          <Link to="/profile/playtests">
+            <Button title="Playtest History" />
+          </Link>
+        )}
+        <Link to="/imports">
+          <Button title="Imports" />
+        </Link>
+        <Link to="/logout">
+          <Button title="Logout" />
+        </Link>
+      </div>
+    </div>
+  );
 };
 
 export default Settings;

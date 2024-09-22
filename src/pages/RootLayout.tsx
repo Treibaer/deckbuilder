@@ -9,6 +9,7 @@ const RootLayout = () => {
   const navigation = useNavigation();
   const [checkingLogin, setCheckingLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [lastImportCards, setLastImportCards] = useState<number | null>(null);
 
   useEffect(() => {
     async function checkLogin() {
@@ -18,7 +19,7 @@ const RootLayout = () => {
         return;
       }
 
-      const result = await fetch(`${Constants.backendUrl}/api/v1/app`, {
+      const result = await fetch(`${Constants.newBackendUrl}/api/v1/app`, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
@@ -31,6 +32,7 @@ const RootLayout = () => {
         setCheckingLogin(false);
       } else {
         const data = await result.json();
+        setLastImportCards(data.lastImportCards);
         setIsLoggedIn(data.allowed);
         setCheckingLogin(false);
       }
@@ -38,11 +40,28 @@ const RootLayout = () => {
     checkLogin();
   }, []);
 
+  // check how many seconds ago the last import was
+  const lastImportSecondsAgo = lastImportCards
+    ? Math.floor(Date.now() / 1000) - lastImportCards
+    : null;
+
+  const shouldImport =
+    lastImportSecondsAgo === null || lastImportSecondsAgo > 60 * 60 * 24 * 3;
+
   return (
     <>
       {navigation.state === "loading" && <DelayedLoadingView />}
       {isLoggedIn && (
-        <main className="flex flex-col">
+        <main className="flex flex-col relative">
+          {shouldImport && (
+            <div className="absolute right-2 top-2 text-red-400">
+              {lastImportSecondsAgo === null
+                ? "Never imported"
+                : `Last import: ${Math.floor(
+                    lastImportSecondsAgo / 60 / 60 / 24
+                  )} days ago`}
+            </div>
+          )}
           <MainNavigation />
           <div className="flex flex-col">
             <Outlet />

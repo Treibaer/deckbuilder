@@ -99,12 +99,14 @@ button.selected {
 
 .list a {
   text-decoration: none;
-  color: var(--color-primary-400);
+  /* color: var(--color-primary-400); */
+  color: rgb(153,156,174);
 }
 
 .list a:hover,
 .list a.active {
-  color: var(--color-primary-800);
+  /* color: var(--color-primary-800); */
+  color: #646cff;
   text-decoration: underline;
 }
 

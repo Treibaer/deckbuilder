@@ -16,14 +16,16 @@ import { User } from "./decks/entities/user.entity";
 import { ImageModule } from "./image/image.module";
 import { UsersModule } from "./users/users.module";
 import { logger } from "./utils/logger.middleware";
-import { MoxfieldService } from './moxfield/moxfield.service';
-import { MoxfieldController } from './moxfield/moxfield.controller';
-import { MatchesController } from './matches/matches.controller';
-import { MatchesService } from './matches/matches.service';
+import { MoxfieldService } from "./moxfield/moxfield.service";
+import { MoxfieldController } from "./moxfield/moxfield.controller";
+import { MatchesController } from "./matches/matches.controller";
+import { MatchesService } from "./matches/matches.service";
 import { Game } from "./decks/entities/game.entity";
 import { PlaytestsService } from "./decks/playtests.service";
-import { ImportService } from './import/import.service';
-import { ImportController } from './import/import.controller';
+import { ImportService } from "./import/import.service";
+import { ImportController } from "./import/import.controller";
+import { Settings } from "./decks/entities/settings.entity";
+import { FavoriteDeck } from "./decks/entities/favorite-deck";
 
 @Module({
   imports: [
@@ -49,7 +51,6 @@ import { ImportController } from './import/import.controller';
     //   }),
     // }),
 
-    
     SequelizeModule.forRoot({
       dialect: "mariadb",
       host: "localhost",
@@ -57,7 +58,18 @@ import { ImportController } from './import/import.controller';
       username: "root",
       password: "",
       database: "magic_dev",
-      models: [Deck, User, DeckCard, Card, AccessToken, Playtest, CardSet, Game],
+      models: [
+        Deck,
+        User,
+        DeckCard,
+        Card,
+        AccessToken,
+        Playtest,
+        CardSet,
+        Game,
+        Settings,
+        FavoriteDeck,
+      ],
       autoLoadModels: true,
       logging: false,
     }),
@@ -67,11 +79,27 @@ import { ImportController } from './import/import.controller';
     UsersModule,
     // SequelizeModule.forFeature([Card, Deck, DeckCard, User, AccessToken, Playtest, CardSet, Game]),
   ],
-  controllers: [AppController, MoxfieldController, MatchesController, ImportController],
-  providers: [AppService, ConfigService, MoxfieldService, MatchesService, PlaytestsService, ImportService],
+  controllers: [
+    AppController,
+    MoxfieldController,
+    MatchesController,
+    ImportController,
+  ],
+  providers: [
+    AppService,
+    ConfigService,
+    MoxfieldService,
+    MatchesService,
+    PlaytestsService,
+    ImportService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer.apply(logger).forRoutes(DecksController);
+
+    // Settings.sync({ alter: true });
+    FavoriteDeck.sync({ alter: true });
+
   }
 }

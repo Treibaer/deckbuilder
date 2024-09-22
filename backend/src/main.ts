@@ -10,6 +10,7 @@ async function bootstrap() {
   const httpAdapter = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
   console.log("Listening on port 3055");
+
   await app.listen(3055);
 }
 bootstrap();
