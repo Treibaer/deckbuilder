@@ -1,9 +1,10 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { ConflictException, Injectable, UnauthorizedException } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { User } from "src/decks/entities/user.entity";
 import { UsersService } from "src/users/users.service";
 import { AccessToken } from "./entities/access-token";
+import { AuthDto } from "./dto/auth.dto";
 
 @Injectable()
 export class AuthService {
@@ -12,11 +13,7 @@ export class AuthService {
     private readonly userService: UsersService,
   ) {}
 
-  async signIn(
-    username: string,
-    password: string,
-    client: string,
-  ) {
+  async signIn({ username, password, client }: AuthDto) {
     const user = await this.userService.findOne(username);
 
     if (!user) {
@@ -31,10 +28,10 @@ export class AuthService {
     return await this.createToken(user, client);
   }
 
-  async register(username: string, password: string, client: string) {
+  async register({ username, password, client }: AuthDto) {
     const user = await this.userService.findOne(username);
     if (user) {
-      throw new UnauthorizedException("User already exists");
+      throw new ConflictException("Username already exists");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
@@ -56,7 +53,6 @@ export class AuthService {
       lastUsed: Math.floor(Date.now() / 1000),
       createdAt: Math.floor(Date.now() / 1000),
     });
-
     return { accessToken };
   }
 }

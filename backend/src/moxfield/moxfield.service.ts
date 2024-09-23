@@ -1,67 +1,49 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
-
 import axios from "axios";
 import * as fs from "fs";
 import * as path from "path";
 import { MagicCardDto } from "src/decks/dto/card.dto";
 import { DeckCardDto } from "src/decks/dto/deck-card.dto";
 import { DeckDto } from "src/decks/dto/deck.dto";
-import { Card } from "src/decks/entities/card.entity";
-import { DeckCard } from "src/decks/entities/deck-card.entity";
 import { Deck } from "src/decks/entities/deck.entity";
 import { FavoriteDeck } from "src/decks/entities/favorite-deck";
 import { MoxFieldMapping } from "src/decks/entities/moxfield-mapping.entity";
 import { UsersService } from "src/users/users.service";
+import { Card } from "../decks/entities/card.entity";
+import { DeckCard } from "../decks/entities/deck-card.entity";
+
+const formats = ["modern", "commander", "commanderPrecons", "standard"];
+const sortTypes = ["views", "created", "updated"];
+
+class ConfigDto {
+  format: string;
+  page: number;
+  sortType: string = "views";
+  commander?: boolean;
+  moxfieldId?: string;
+}
 
 @Injectable()
 export class MoxfieldService {
   private cachePath = path.join(__dirname, "../../cache/moxfield");
+
   constructor(private readonly userService: UsersService) {}
 
-  async loadDecks(config: {
-    format: string;
-    page: number;
-    sortType?: string;
-    commander?: boolean;
-    moxfieldId?: string;
-  }) {
-    const { page, commander, moxfieldId } = config;
-    let { format, sortType } = config;
+  async fetchDecksFromApi(config: ConfigDto) {
+    config.format = formats.includes(config.format) ? config.sortType : "all";
+    config.sortType = sortTypes.includes(config.sortType)
+      ? config.sortType
+      : "views";
 
-    const allowedFormats = [
-      "modern",
-      "commander",
-      "commanderPrecons",
-      "standard",
-    ];
-    const pageSize = 100;
+    const { page, commander, moxfieldId, format, sortType } = config;
 
-    let fmt = "";
-    if (allowedFormats.includes(format)) {
-      fmt = `&fmt=${format}`;
-    } else {
-      format = "all";
-    }
-    // recently created, most views, recently updated
-    const sortTypes = ["views", "created", "updated"];
-    if (!sortTypes.includes(sortType ?? "")) {
-      sortType = "views";
-    }
-    let midfix = "";
     let folder: string;
     let localName: string;
     let referenceCard: Card | null = null;
 
     if (moxfieldId) {
-      if (commander) {
-        midfix = `&commanderCardId=${moxfieldId}`;
-      } else {
-        midfix = `&cardId=${moxfieldId}`;
-      }
-      midfix += `&board=mainboard`;
       folder = "decks-by-card-id";
       localName = `${moxfieldId}-${format}-${sortType}-${commander ? 1 : 0}-${page}`;
-
       const scryfallId = await this.getMapping(moxfieldId);
       if (scryfallId) {
         referenceCard = await Card.findByPk(scryfallId);
@@ -70,25 +52,53 @@ export class MoxfieldService {
       folder = "";
       localName = `all-filtered-by-${sortType}-${format}-${page}`;
     }
-    const params = `?pageNumber=${page}&pageSize=${pageSize}&sortType=${sortType}&sortDirection=Descending${midfix}${fmt}`;
-    const decksUrl = `https://api2.moxfield.com/v2/decks/search${params}`;
 
-    const content = await this.loadAndCache(folder, localName, decksUrl);
+    const url = this.constructUrl(config);
+
+    const content = await this.loadAndCache(folder, localName, url);
 
     const data = JSON.parse(content);
-    const decks = data.data;
 
-    for (const deck of decks) {
-      if (!deck.mainCardId) {
-        continue;
-      }
-      const mapping = await this.getMapping(deck.mainCardId);
-      if (mapping) {
-        deck.mainScryfallId = mapping;
+    const allDecks = await this.processDeckData(data.data);
+
+    const { totalResults, totalPages, pageSize } = data;
+
+    return {
+      referenceCard: referenceCard,
+      decks: allDecks,
+      totalResults,
+      totalPages,
+      pageSize,
+    };
+  }
+
+  private constructUrl(config: ConfigDto) {
+    let url = `https://api2.moxfield.com/v2/decks/search?`;
+    url += `pageNumber=${config.page}&pageSize=100&sortType=${config.sortType}&sortDirection=Descending`;
+    if (config.format !== "all") {
+      url += `&fmt=${config.format}`;
+    }
+    if (config.moxfieldId) {
+      url += `&board=mainboard`;
+      if (config.commander) {
+        url += `&commanderCardId=${config.moxfieldId}`;
+      } else {
+        url += `&cardId=${config.moxfieldId}`;
       }
     }
+    return url;
+  }
 
-    const allDecks = decks.map((deck: any) => {
+  private async processDeckData(decks: any[]) {
+    await Promise.all(
+      decks.map(
+        async (deck) =>
+          deck.mainCardId &&
+          (deck.mainScryfallId = await this.getMapping(deck.mainCardId)),
+      ),
+    );
+
+    const allDecks: DeckDto[] = decks.map((deck: any) => {
       return {
         id: deck.publicId,
         name: deck.name,
@@ -103,19 +113,13 @@ export class MoxfieldService {
         sideboard: [],
       };
     });
-    return {
-      referenceCard: referenceCard,
-      decks: allDecks,
-      totalResults: data.totalResults,
-      totalPages: data.totalPages,
-      pageSize: data.pageSize,
-    };
+    return allDecks;
   }
 
   async cloneDeckById(id: string) {
     const deck = await this.loadDeckById(id);
 
-    const deckResponse = await Deck.create({
+    const newDeck = await Deck.create({
       name: deck.name,
       description: deck.description,
       promoId: deck.promoId,
@@ -124,46 +128,35 @@ export class MoxfieldService {
       creator_id: this.userService.user.id,
     });
 
-    for (const [key, card] of Object.entries(deck.commanders)) {
-      const existingCard = await Card.findByPk(card.card.scryfallId);
-      if (!existingCard) {
-        throw new NotFoundException("Card not found");
-      }
-      await DeckCard.create({
-        deck_id: deckResponse.id,
-        scryfall_id: card.card.scryfallId,
-        quantity: card.quantity,
-        zone: "commandZone",
-      });
-    }
+    await Promise.all([
+      ...deck.commanders.map((card) =>
+        this.createDeckCard(card, newDeck.id, "commandZone"),
+      ),
+      ...deck.mainboard.map((card) =>
+        this.createDeckCard(card, newDeck.id, "mainboard"),
+      ),
+      // currently not supported
+      // ...deck.sideboard.map(card => this.createDeckCard(card, newDeck.id, "sideboard")),
+    ]);
+    return newDeck;
+  }
 
-    for (const [key, card] of Object.entries(deck.mainboard)) {
-      const existingCard = await Card.findByPk(card.card.scryfallId);
-      if (!existingCard) {
-        throw new NotFoundException("Card not found");
-      }
-      await DeckCard.create({
-        deck_id: deckResponse.id,
-        scryfall_id: card.card.scryfallId,
-        quantity: card.quantity,
-        zone: "mainboard",
-      });
+  private async createDeckCard(
+    card: any,
+    deckId: number,
+    zone: "mainboard" | "sideboard" | "commandZone",
+  ) {
+    const scryfallId = card.card.scryfallId;
+    const existingCard = await Card.findByPk(scryfallId);
+    if (!existingCard) {
+      throw new NotFoundException("Card not found");
     }
-
-    for (const [key, card] of Object.entries(deck.sideboard)) {
-      const existingCard = await Card.findByPk(card.card.scryfallId);
-      if (!existingCard) {
-        throw new NotFoundException("Card not found");
-      }
-      await DeckCard.create({
-        deck_id: deckResponse.id,
-        scryfall_id: card.card.scryfallId,
-        quantity: card.quantity,
-        zone: "sideboard",
-      });
-    }
-
-    return deckResponse;
+    await DeckCard.create({
+      deck_id: deckId,
+      scryfall_id: scryfallId,
+      quantity: card.quantity,
+      zone: zone,
+    });
   }
 
   async loadDeckById(id: string) {
@@ -189,7 +182,7 @@ export class MoxfieldService {
     let cardCount = 0;
 
     const commanders: DeckCardDto[] = Object.entries(deck.commanders).map(
-      ([_key, card]: [string, any]) => {
+      ([_, card]: [string, any]) => {
         cardId++;
         cardCount += card.quantity;
         return {
@@ -201,7 +194,7 @@ export class MoxfieldService {
     );
 
     const mainboard: DeckCardDto[] = Object.entries(deck.mainboard).map(
-      ([_key, card]: [string, any]) => {
+      ([_, card]: [string, any]) => {
         cardId++;
         cardCount += card.quantity;
         return {
@@ -213,7 +206,7 @@ export class MoxfieldService {
     );
 
     const _sideBoard: DeckCardDto[] = Object.entries(deck.sideboard).map(
-      ([_key, card]: [string, any]) => {
+      ([_, card]: [string, any]) => {
         cardId++;
         return {
           id: cardId,
@@ -241,7 +234,6 @@ export class MoxfieldService {
       sideboard: [],
       isFavorite: favorite !== null,
     };
-
     return deckResponse;
   }
 
@@ -278,7 +270,6 @@ export class MoxfieldService {
     } else {
       content = fs.readFileSync(cacheName, "utf8");
     }
-
     return content;
   }
 
@@ -317,14 +308,10 @@ export class MoxfieldService {
   }
 
   async importSets() {
-    const data = await this.loadAndCache(
-      "sets",
-      "all",
-      "https://api2.moxfield.com/sets",
-    );
+    const url = "https://api2.moxfield.com/sets";
+    const data = await this.loadAndCache("sets", "all", url);
     const sets = JSON.parse(data);
     for (const set of sets) {
-      // console.log(set);
       await this.importSet(set);
     }
   }
@@ -338,12 +325,9 @@ export class MoxfieldService {
     const releasedAt = new Date(set.releasedAt);
     const isFutureRelease = releasedAt > new Date();
 
-    const data = await this.loadAndCache(
-      "sets",
-      set.id,
-      `https://api2.moxfield.com/sets/${set.id}`,
-      isFutureRelease,
-    );
+    const url = `https://api2.moxfield.com/sets/${set.id}`;
+
+    const data = await this.loadAndCache("sets", set.id, url, isFutureRelease);
     const setData = JSON.parse(data);
     const cards = setData.cards;
     for (const card of cards) {

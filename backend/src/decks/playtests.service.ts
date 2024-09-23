@@ -120,7 +120,6 @@ export class PlaytestsService {
         index++;
       }
     }
-
     return game;
   }
 }

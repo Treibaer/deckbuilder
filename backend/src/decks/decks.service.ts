@@ -16,17 +16,18 @@ import { User } from "./entities/user.entity";
 
 @Injectable()
 export class DecksService {
-  get userId() {
-    if (!this.userService.user) {
-      throw new UnauthorizedException();
-    }
-    return this.userService.user.id;
-  }
   constructor(
     @InjectModel(Deck) private deckModel: typeof Deck,
     private readonly userService: UsersService,
     // private readonly sequelize: Sequelize,
   ) {}
+
+  private get userId() {
+    if (!this.userService.user) {
+      throw new UnauthorizedException();
+    }
+    return this.userService.user.id;
+  }
 
   async create(createDeckDto: DeckDto) {
     try {
@@ -38,9 +39,9 @@ export class DecksService {
         description: "",
       });
       return createDeckDto;
-    } catch (e) {
-      console.log(e);
-      throw e;
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Failed to create deck");
     }
   }
 
@@ -52,7 +53,7 @@ export class DecksService {
   }
 
   async findOne(id: number) {
-    return await this.deckModel.findByPk(id, {
+    const deck = await this.deckModel.findByPk(id, {
       include: [
         User,
         {
@@ -61,17 +62,17 @@ export class DecksService {
         },
       ],
     });
+    if (!deck) {
+      throw new NotFoundException("Deck not found");
+    }
+    return deck;
   }
 
   async updatePut(id: number, patchDeckDto: PatchDeckDto) {
     const deck = await this.findOne(id);
 
-    if (deck && deck.creator.id !== this.userId) {
+    if (deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
-    }
-
-    if (!deck) {
-      throw new NotFoundException("Deck not found");
     }
     if (
       patchDeckDto.action === "moveZone" &&
@@ -96,7 +97,6 @@ export class DecksService {
           card.zone === destinationZone,
       );
       if (existingCardInDestinationZone) {
-        // update quantity
         existingCardInDestinationZone.quantity += oldDeckCard.quantity;
         await existingCardInDestinationZone.save();
         await oldDeckCard.destroy();
@@ -138,23 +138,18 @@ export class DecksService {
   async remove(id: number) {
     const deck = await this.findOne(id);
 
-    if (deck && deck.creator.id !== this.userId) {
+    if (deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
     }
-
     await DeckCard.destroy({ where: { deck_id: id } });
-    await deck?.destroy();
+    await deck.destroy();
   }
 
   async update(id: number, deckDto: DeckDto) {
     const deck = await this.findOne(id);
 
-    if (deck && deck.creator.id !== this.userId) {
+    if (deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
-    }
-
-    if (!deck) {
-      throw new NotFoundException("Deck not found");
     }
 
     if (deckDto.promoId !== undefined) {
@@ -176,12 +171,8 @@ export class DecksService {
     const deck = await this.findOne(id);
     const zone = cardDto.zone || "mainboard";
 
-    if (deck && deck.creator.id !== this.userId) {
+    if (deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
-    }
-
-    if (!deck) {
-      throw new NotFoundException("Deck not found");
     }
 
     const card = await Card.findByPk(cardDto.scryfallId);

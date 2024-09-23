@@ -7,9 +7,11 @@ import {
   HttpStatus,
   Post,
   UseGuards,
+  ValidationPipe,
 } from "@nestjs/common";
 import { AuthGuard, Public } from "./auth.guard";
 import { AuthService } from "./auth.service";
+import { AuthDto } from "./dto/auth.dto";
 
 @Controller("api/v1")
 export class AuthController {
@@ -18,35 +20,18 @@ export class AuthController {
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post("login")
-  signIn(@Body() signInDto: Record<string, any>) {
-    return this.authService.signIn(
-      signInDto.username,
-      signInDto.password,
-      signInDto.client,
-    );
+  signIn(@Body() auth: AuthDto) {
+    return this.authService.signIn(auth);
   }
 
   @Public()
   @HttpCode(HttpStatus.OK)
   @Post("register")
-  register(@Body() registerDto: Record<string, any>) {
-    if (!registerDto.username || !registerDto.password) {
-      throw new BadRequestException("Missing required fields");
-    }
-    if (registerDto.password !== registerDto.confirmPassword) {
+  register(@Body(new ValidationPipe()) auth: AuthDto) {
+    if (auth.password !== auth.confirmPassword) {
       throw new BadRequestException("Passwords do not match");
     }
-    if (registerDto.password.length < 6) {
-      throw new BadRequestException(
-        "Password must be at least 6 characters long",
-      );
-    }
-
-    return this.authService.register(
-      registerDto.username,
-      registerDto.password,
-      registerDto.client,
-    );
+    return this.authService.register(auth);
   }
 
   @UseGuards(AuthGuard)

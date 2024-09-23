@@ -38,7 +38,7 @@ const RootLayout = () => {
       }
     }
     checkLogin();
-  }, []);
+  }, [isLoggedIn]);
 
   // check how many seconds ago the last import was
   const lastImportSecondsAgo = lastImportCards

@@ -4,7 +4,7 @@ import { SequelizeModule } from "@nestjs/sequelize";
 import { UsersModule } from "src/users/users.module";
 import { UsersService } from "src/users/users.service";
 import { UrlService } from "src/utils/urlservice";
-import { CardController } from "./cards.controller";
+import { CardController } from "../cards/cards.controller";
 import { DeckTransformer } from "./deck.transformer";
 import { DecksController } from "./decks.controller";
 import { DecksService } from "./decks.service";
@@ -20,7 +20,7 @@ import { PlaytestsService } from "./playtests.service";
 
 @Module({
   imports: [SequelizeModule.forFeature([Deck, User, DeckCard, Card, MoxFieldMapping]), UsersModule],
-  controllers: [DecksController, CardController, PlayTestsContoller, SetsController],
+  controllers: [DecksController, PlayTestsContoller, SetsController],
   providers: [DecksService, DeckTransformer, ConfigService, UrlService, UsersService, MoxfieldService, PlaytestsService],
   exports: [
     SequelizeModule,

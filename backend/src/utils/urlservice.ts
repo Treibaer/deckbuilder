@@ -10,10 +10,9 @@ export class UrlService {
   }
 
   getBackendUrl(): string {
-    const host = this.configService.get<string>('HOST') || 'localhost';
+    const host = this.configService.get<string>('_HOST') || 'localhost';
     const port = this.configService.get<string>('PORT') || '3000';
     const scheme = this.configService.get<string>('HTTPS') === 'true' ? 'https' : 'http';
-    // return "https://magic.treibaer.de"
     return `${scheme}://${host}:${port}`;
   }
 }

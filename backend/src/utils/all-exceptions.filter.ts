@@ -16,6 +16,8 @@ export class AllExceptionsFilter implements ExceptionFilter {
     // in certain situations, httpAdapter may be undefined
     const { httpAdapter } = this.httpAdapterHost;
 
+    const isProduction = process.env.NODE_ENV === "production";
+
     const ctx = host.switchToHttp();
 
     const httpStatus =
@@ -23,14 +25,23 @@ export class AllExceptionsFilter implements ExceptionFilter {
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
+    let message = "Internal server error";
+    if (exception.message.length < 50) {
+      message = exception.message;
+    }
+    if (exception.response && Array.isArray(exception.response.message)) {
+      if (isProduction) {
+        message = exception.response.message[0];
+      } else {
+        message = exception.response.message.join(", ");
+      }
+    }
+
     const responseBody = {
       statusCode: httpStatus,
       timestamp: new Date().toISOString(),
       path: httpAdapter.getRequestUrl(ctx.getRequest()),
-      message:
-        exception.message.length < 50
-          ? exception.message
-          : "Internal server error",
+      message,
     };
 
     httpAdapter.reply(ctx.getResponse(), responseBody, httpStatus);

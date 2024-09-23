@@ -1,6 +1,7 @@
 import { Test, TestingModule } from "@nestjs/testing";
 import { DecksService } from "./decks.service";
 import { DeckTransformer } from "./deck.transformer";
+import { UsersService } from "../users/users.service";
 
 describe("DecksService", () => {
   let service: DecksService;
@@ -10,6 +11,7 @@ describe("DecksService", () => {
       providers: [
         DecksService,
         DeckTransformer,
+        UsersService,
         {
           provide: "DeckRepository", // Mocking DeckRepository
           useValue: {

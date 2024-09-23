@@ -1,44 +1,28 @@
 import {
   Controller,
   Get,
-  NotFoundException,
   Param,
   Query,
-  UseFilters,
+  UseFilters
 } from "@nestjs/common";
-import { Op } from "sequelize";
 import { UrlService } from "src/utils/urlservice";
+import { CardDetailDto } from "../decks/dto/card-detail.dto";
+import { Card } from "../decks/entities/card.entity";
+import { MoxFieldMapping } from "../decks/entities/moxfield-mapping.entity";
 import { HttpExceptionFilter } from "../utils/http-exception.filter";
-import { DecksService } from "./decks.service";
-import { CardDetailDto } from "./dto/card-detail.dto";
-import { Card } from "./entities/card.entity";
-import { MoxFieldMapping } from "./entities/moxfield-mapping.entity";
+import { CardsService } from "./cards.service";
 
 @Controller("api/v1/cards")
 @UseFilters(HttpExceptionFilter)
 export class CardController {
   constructor(
-    private readonly decksService: DecksService,
+    private readonly cardService: CardsService,
     private readonly urlService: UrlService,
   ) {}
 
   @Get("random")
   async random(): Promise<any> {
-    // First, get the count of all records
-    const count = await Card.count();
-
-    // Generate a random number for the offset
-    const randomIndex = Math.floor(Math.random() * count);
-
-    // Retrieve the random card using the offset
-    const randomCard = await Card.findOne({
-      offset: randomIndex,
-    });
-
-    if (!randomCard) {
-      throw new NotFoundException("Card not found");
-    }
-
+    const randomCard = await this.cardService.random();
     return {
       scryfallId: randomCard.scryfallId,
       name: randomCard.name,
@@ -46,18 +30,9 @@ export class CardController {
     };
   }
 
-
   @Get()
   async getByTerm(@Query("term") term: string): Promise<any> {
-    const cards = await Card.findAll({
-      where: {
-        name: {
-          [Op.like]: `%${term}%`, // The % symbol is a wildcard that matches any sequence of characters
-        },
-      },
-      group: ["oracleId"],
-      limit: 10,
-    });
+    const cards = await this.cardService.getByTerm(term);
     return {
       cards: cards.map((card) => {
         return {
@@ -76,14 +51,9 @@ export class CardController {
   async getWithPrintings(
     @Param("scryfallId") scryfallId: string,
   ): Promise<{ card: CardDetailDto; printings: CardDetailDto[] }> {
-    const card = await Card.findByPk(scryfallId);
-    if (!card) {
-      throw new NotFoundException("Card not found");
-    }
-    const printings = await Card.findAll({
-      where: { oracleId: card.oracleId },
-      order: [["releasedAt", "DESC"]],
-    });
+    const { card, printings } =
+      await this.cardService.getWithPrintings(scryfallId);
+
     const transformedCard = await this.mapCard(card);
     const transformedPrintings = await Promise.all(
       printings.map((printing) => this.mapCard(printing)),
@@ -91,7 +61,7 @@ export class CardController {
     return { card: transformedCard, printings: transformedPrintings };
   }
 
-  async mapCard(card: Card): Promise<CardDetailDto> {
+  private async mapCard(card: Card): Promise<CardDetailDto> {
     const cardFacesNames = card.cardFacesNames.split("###");
     let cardFaces: any = [];
     if (cardFacesNames.length > 1) {

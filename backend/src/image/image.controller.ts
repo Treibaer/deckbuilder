@@ -47,7 +47,7 @@ export class ImageController {
 
     if (!(await this.imageService.fileExists(localPath)) || force === "true") {
       await this.imageService.downloadImage(url, localPath);
-      console.log("Downloaded image");
+      // console.log("Downloaded image");
     }
 
     const paths = localPath.split(".");

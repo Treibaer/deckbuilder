@@ -51,6 +51,7 @@ export class DeckTransformer {
           quantity: card.quantity,
         };
       });
+
     const mainboard = deck.cards
       .filter((card) => card.zone === "mainboard")
       .map((card) => {
@@ -77,6 +78,7 @@ export class DeckTransformer {
           quantity: card.quantity,
         };
       });
+
     const sideboard = deck.cards
       .filter((card) => card.zone === "sideboard")
       .map((card) => {

@@ -24,7 +24,6 @@ export class MatchesController {
   constructor(
     private readonly userService: UsersService,
     private readonly playtestService: PlaytestsService,
-
     private readonly moxfieldService: MoxfieldService,
   ) {}
 

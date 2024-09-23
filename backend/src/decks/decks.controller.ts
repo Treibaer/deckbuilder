@@ -6,6 +6,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
@@ -32,7 +33,6 @@ export class DecksController {
   }
 
   @Get()
-  // async findAll(@Res() res: Response) {
   async findAll(): Promise<DeckDto[]> {
     const decks = await this.decksService.findAll();
     const transformedDecks = decks.map((deck) => {
@@ -57,12 +57,9 @@ export class DecksController {
   }
 
   @Get(":id")
-  async findOne(@Param("id") id: string): Promise<DeckDto> {
-    const deck = await this.decksService.findOne(+id);
-    if (deck) {
-      return this.deckTransformer.transformDeck(deck);
-    }
-    throw new HttpException("Deck not found", HttpStatus.NOT_FOUND);
+  async findOne(@Param("id", ParseIntPipe) id: number): Promise<DeckDto> {
+    const deck = await this.decksService.findOne(id);
+    return this.deckTransformer.transformDeck(deck);
   }
 
   @Put(":id")
