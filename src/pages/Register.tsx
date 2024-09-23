@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 const Register: React.FC = () => {
   const [user, setUser] = useState({
     username: "",
-    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -29,7 +28,6 @@ const Register: React.FC = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: user.email,
         username: user.username,
         password: user.password,
         confirmPassword: user.confirmPassword,
@@ -70,17 +68,6 @@ const Register: React.FC = () => {
             </div>
           )}
         </div>
-        <input
-          className="tb-input"
-          type="text"
-          placeholder="Email"
-          autoComplete="new-password"
-          ref={inputRef}
-          onChange={(event) =>
-            setUser((prevUser) => ({ ...prevUser, email: event.target.value }))
-          }
-          onKeyDown={handleKeyDown}
-        />
         <input
           className="tb-input"
           type="text"

@@ -13,7 +13,7 @@ const Favorites = () => {
   } );
   return (
     <div className="mx-auto">
-      <h1 className="mb-8">Favorites</h1>
+      <h1 className="flex justify-center mb-8">Favorites</h1>
       <div className="flex gap-4">
         <DecksList decks={data} />
       </div>

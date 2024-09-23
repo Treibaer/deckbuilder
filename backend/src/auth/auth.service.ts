@@ -12,8 +12,12 @@ export class AuthService {
     private readonly userService: UsersService,
   ) {}
 
-  async signIn(email: string, username: string, password: string, client: string) {
-    const user = await this.userService.findOne(email, username);
+  async signIn(
+    username: string,
+    password: string,
+    client: string,
+  ) {
+    const user = await this.userService.findOne(username);
 
     if (!user) {
       throw new UnauthorizedException("Invalid username or password");
@@ -27,15 +31,14 @@ export class AuthService {
     return await this.createToken(user, client);
   }
 
-  async register(username: string, email: string, password: string, client: string) {
-    const user = await this.userService.findOne(email, username);
+  async register(username: string, password: string, client: string) {
+    const user = await this.userService.findOne(username);
     if (user) {
       throw new UnauthorizedException("User already exists");
     }
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = await User.create({
       username,
-      email,
       password: hashedPassword,
     });
     return await this.createToken(newUser, client);

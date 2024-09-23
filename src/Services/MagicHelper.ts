@@ -83,7 +83,7 @@ export default class MagicHelper {
   }
 
   static determineImageUrl(card: MagicCard, faceId = 0) {
-    return this.getImageUrl(card.scryfallId, { faceSide: faceId });
+    return this.getImageUrl(card.scryfallId, { faceSide: faceId, type: "normal" });
   }
 
   static artCropUrl(scryfallId: string) {

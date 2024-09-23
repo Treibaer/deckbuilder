@@ -52,7 +52,7 @@ button.selected {
 }
 
 .tb-input {
-  @apply bg-transparent p-2 rounded w-full border border-lightBlue outline-none resize-none;
+  @apply bg-darkBlue p-2 rounded w-full border border-lightBlue outline-none resize-none;
 }
 
 .tb-select {
@@ -79,8 +79,8 @@ button.selected {
   max-width: 1520px;
   margin: 0 auto;
   min-height: 100vh;
-  padding-left: 2rem;
-  padding-right: 2rem;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .fullscreenBlurWithLoading {

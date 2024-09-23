@@ -212,7 +212,7 @@ const MyDeckDetailView = () => {
           setPrint={setPrint}
         />
       )}
-      <div className="deck-details-header mb-4">
+      <div className="deck-details-header flex flex-col sm:flex-row justify-center sm:justify-between mb-4">
         <div className="flex gap-2">
           <Link to=".." relative="path">
             <Button title="Back" />
@@ -251,7 +251,7 @@ const MyDeckDetailView = () => {
       </div>
       {showResults && (
         <div
-          className={`flex flex-wrap gap-4 p-4 border border-black h-[400px] overflow-y-scroll`}
+          className={`flex flex-wrap gap-1 border border-black h-[200px] sm:h-[400px] overflow-y-scroll`}
         >
           {searchResultCards.map((card: any) => {
             return (
@@ -282,7 +282,7 @@ const MyDeckDetailView = () => {
       )}
 
       <div id="deck-detail">
-        <div className="image-stats">
+        <div className="image-stats hidden sm:block">
           <img className="backside" src={backside} alt=" " />
           <img style={{ zIndex: 1 }} src={image} alt=" " />
           <div>Cards: {deck.cardCount}</div>
@@ -310,7 +310,7 @@ const MyDeckDetailView = () => {
           />
         )}
         {viewStyle === "grid" && (
-          <div className={`w-full ${showResults ? "max-h-[55vh]" : "max-h-[85vh]"}`}>
+          <div className={`w-full ${showResults ? "md:max-h-[55vh]" : "md:max-h-[85vh]"}`}>
             <DeckDetailsGridView
               structure={structure}
               setPreviewImage={setPreviewImage}

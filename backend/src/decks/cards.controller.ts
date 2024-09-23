@@ -3,17 +3,16 @@ import {
   Get,
   NotFoundException,
   Param,
+  Query,
   UseFilters,
 } from "@nestjs/common";
+import { Op } from "sequelize";
+import { UrlService } from "src/utils/urlservice";
 import { HttpExceptionFilter } from "../utils/http-exception.filter";
 import { DecksService } from "./decks.service";
-import { DeckDto } from "./dto/deck.dto";
-import { Card } from "./entities/card.entity";
 import { CardDetailDto } from "./dto/card-detail.dto";
-import { UrlService } from "src/utils/urlservice";
+import { Card } from "./entities/card.entity";
 import { MoxFieldMapping } from "./entities/moxfield-mapping.entity";
-import { Sequelize } from "sequelize-typescript";
-import { MagicCardDto } from "./dto/card.dto";
 
 @Controller("api/v1/cards")
 @UseFilters(HttpExceptionFilter)
@@ -44,6 +43,32 @@ export class CardController {
       scryfallId: randomCard.scryfallId,
       name: randomCard.name,
       image: this.getLocalUrl(randomCard.scryfallId),
+    };
+  }
+
+
+  @Get()
+  async getByTerm(@Query("term") term: string): Promise<any> {
+    const cards = await Card.findAll({
+      where: {
+        name: {
+          [Op.like]: `%${term}%`, // The % symbol is a wildcard that matches any sequence of characters
+        },
+      },
+      group: ["oracleId"],
+      limit: 10,
+    });
+    return {
+      cards: cards.map((card) => {
+        return {
+          scryfallId: card.scryfallId,
+          name: card.name,
+          image: this.getLocalUrl(card.scryfallId),
+          imageSmall: this.getLocalUrl(card.scryfallId, "small"),
+          imageLarge: this.getLocalUrl(card.scryfallId, "large"),
+          imagePng: this.getLocalUrl(card.scryfallId, "png"),
+        };
+      }),
     };
   }
 

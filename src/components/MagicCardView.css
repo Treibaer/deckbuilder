@@ -1,11 +1,25 @@
+
 .magicCard,
 .magicCard > .image-wrapper,
 .magicCard > .image-wrapper > img {
-  width: 245px;
-  height: 341px;
+  width: 180px;
+  height: 251px;
   border-radius: 12px;
   transition: width 0.3s, height 0.4s, transform 0.5s;
 }
+
+@screen md {
+  .magicCard,
+  .magicCard > .image-wrapper,
+  .magicCard > .image-wrapper > img {
+    width: 245px;
+    height: 341px;
+    border-radius: 12px;
+    transition: width 0.3s, height 0.4s, transform 0.5s;
+  }
+}
+
+
 
 .magicCard.small,
 .magicCard.small > .image-wrapper,

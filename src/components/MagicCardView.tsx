@@ -3,9 +3,9 @@ import Constants from "../Services/Constants";
 import MagicHelper from "../Services/MagicHelper";
 import rotateImage from "../assets/rotate.svg";
 import { MagicCard } from "../models/dtos";
+import { CardSize } from "../models/structure";
 import LazyImage from "./Common/LazyImage";
 import "./MagicCardView.css";
-import { CardSize } from "../models/structure";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 
@@ -18,7 +18,7 @@ const MagicCardView: React.FC<{
 }> = ({
   card,
   onTap = () => {},
-  onMouseOver = (_) => {},
+  onMouseOver = (_faceSide) => {},
   size = "normal",
 }) => {
   // be compatible with scryfall api

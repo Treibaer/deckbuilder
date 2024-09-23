@@ -12,10 +12,10 @@ export class UsersService {
     return this.request.user;
   }
 
-  async findOne(email: string, username: string): Promise<any | undefined> {
+  async findOne(username: string): Promise<any | undefined> {
     return await User.findOne({
       where: {
-        [Op.or]: [{ email }, { username }],
+        username,
       },
     });
   }

@@ -4,7 +4,7 @@ const LoadingSpinner: React.FC<{ inline?: boolean }> = ({ inline }) => {
     classes = "border-2 w-8 h-8";
   }
   return (
-    <div>
+    <div className={inline ? "" : "-translate-x-10 -translate-y-10"}>
       <div className={`${classes} rounded-full border-[rgb(53,56,74)] border-b-[#646cff] box-border inline-block animate-spin`}></div>
     </div>
   );

@@ -19,7 +19,7 @@ const SearchBar: React.FC<{
       <input
         type="text"
         ref={inputRef}
-        className="w-full max-w-[500px] p-2 rounded-lg border border-black outline-none"
+        className="tb-input max-w-[500px]"
         value={searchTerm}
         onChange={handleChange}
         onKeyDown={(event) => {

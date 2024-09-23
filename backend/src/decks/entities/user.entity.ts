@@ -10,7 +10,7 @@ export class User extends Model {
   @Column
   username: string;
 
-  @Column
+  @Column({ allowNull: false, defaultValue: "" })
   email: string;
 
   @Column

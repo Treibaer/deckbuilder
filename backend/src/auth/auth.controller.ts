@@ -20,8 +20,7 @@ export class AuthController {
   @Post("login")
   signIn(@Body() signInDto: Record<string, any>) {
     return this.authService.signIn(
-      signInDto.email,
-      signInDto.email,
+      signInDto.username,
       signInDto.password,
       signInDto.client,
     );
@@ -31,25 +30,20 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post("register")
   register(@Body() registerDto: Record<string, any>) {
-    if (!registerDto.username || !registerDto.email || !registerDto.password) {
+    if (!registerDto.username || !registerDto.password) {
       throw new BadRequestException("Missing required fields");
     }
     if (registerDto.password !== registerDto.confirmPassword) {
       throw new BadRequestException("Passwords do not match");
     }
-    // check if email is valid
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerDto.email)) {
-      throw new BadRequestException("Invalid email");
-    }
-    if (registerDto.password.length < 8) {
+    if (registerDto.password.length < 6) {
       throw new BadRequestException(
-        "Password must be at least 8 characters long",
+        "Password must be at least 6 characters long",
       );
     }
 
     return this.authService.register(
       registerDto.username,
-      registerDto.email,
       registerDto.password,
       registerDto.client,
     );

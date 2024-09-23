@@ -103,6 +103,7 @@ export class AppModule implements NestModule {
 
     // Settings.sync({ alter: true });
     FavoriteDeck.sync({ alter: true });
+    User.sync({ alter: true });
     
   }
 }

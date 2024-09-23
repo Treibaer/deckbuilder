@@ -43,18 +43,18 @@ const DeckDetailsListView: React.FC<{
   const canEdit = addToDeck && updateCardAmount && openPrintSelection;
 
   return (
-    <div className="flex flex-wrap select-none">
+    <div className="flex flex-wrap gap-2 select-none">
       {Object.keys(structure).map((key, index) => {
         return (
           structure[key].length > 0 && (
             <div
               key={index + 200}
-              className="flex flex-col gap-1 w-[48%] mx-auto"
+              className="flex flex-col gap-1 sm:w-[48%] mx-auto w-full"
             >
               {key !== "Hide" && (
                 <>
-                  <div className="text-lg">{key}</div>
-                  <div className="flex flex-col gap-2 ">
+                  <div className="text-lg font-semibold text-gray-300">{key}</div>
+                  <div className="flex flex-col gap-1 ">
                     {structure[key].map((card: DeckCard) => (
                       <div
                         key={card.card.scryfallId}

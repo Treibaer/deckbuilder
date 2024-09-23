@@ -95,7 +95,7 @@ const MoxfieldDeckDetailView = () => {
           onClose={setCardPreview.bind(null, null)}
         />
       )}
-      <div className="deck-details-header mb-2">
+      <div className="deck-details-header flex flex-col sm:flex-row justify-center sm:justify-between mb-2">
         <div className="flex gap-2 items-center">
           <Button
             title="Back"
@@ -131,7 +131,7 @@ const MoxfieldDeckDetailView = () => {
       </div>
 
       <div id="deck-detail">
-        <div className="image-stats">
+        <div className="image-stats hidden sm:block">
           <img className="backside" src={backside} alt=" " />
           <img src={image} alt=" " />
           <div>Cards: {deck.cardCount}</div>
@@ -143,7 +143,7 @@ const MoxfieldDeckDetailView = () => {
           />
         )}
         {viewStyle === "grid" && (
-          <div className={`w-full max-h-[85vh]`}>
+          <div className={`w-full md:max-h-[85vh]`}>
             <DeckDetailsGridView
               structure={structure}
               setPreviewImage={setPreviewImage}

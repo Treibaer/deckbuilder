@@ -57,8 +57,8 @@ const MoxfieldDecksList = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center gap-2 select-none">
-        {!data.referenceCard && <h1>Moxfield Decks</h1>}
+      <div className="flex flex-col md:flex-row justify-center items-center gap-4 select-none">
+        {!data.referenceCard && <div className="text-3xl">Moxfield Decks</div>}
         {data.referenceCard && (
           <div className="text-xl">
             Moxfield Decks for{" "}
@@ -119,7 +119,7 @@ const MoxfieldDecksList = () => {
         </div>
       </div>
       {data.totalPages > 1 && (
-        <div className="flex gap-2 my-2 justify-center">
+        <div className="flex flex-wrap justify-center gap-2 my-2">
           {Array.from({ length: Math.min(20, data.totalPages) }, (_, i) => (
             <NavLink
               to={`?id=${id}&format=${format}&page=${

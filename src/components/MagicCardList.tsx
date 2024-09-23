@@ -18,8 +18,8 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
           onClose={() => setSelectedCard(null)}
         />
       )}
-      <div className="styleSelection flex gap-24 items-center mt-2">
-        <div className="w-64 flex gap-2">
+      <div className="styleSelection gap-24 items-center mt-2 flex">
+        <div className="w-64 gap-2 hidden md:flex">
           {style === CardStyle.cards &&
             [CardSize.small, CardSize.normal, CardSize.large].map((s) => (
               <Button
@@ -36,7 +36,7 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
             {cards.length} card{cards.length === 1 ? "" : "s"} found
           </div>
         )}
-        <div className="w-64 flex justify-end">
+        <div className="w-64  hidden md:flex justify-end">
           {style === CardStyle.list && (
             <Button
               title="Card View"
@@ -53,7 +53,7 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
       </div>
 
       {style === CardStyle.cards && (
-        <div id="card-container" className="flex flex-wrap gap-2 mt-4">
+        <div id="card-container" className="flex flex-wrap justify-center gap-2 mt-4">
           {cards.map((card, _) => (
             <MagicCardView
               key={card.scryfallId}

@@ -10,7 +10,7 @@ const CardDetailPrintings: React.FC<{
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   return (
     <>
-      <h2>Printings</h2>
+      <div className="text-xl font-semibold">Printings</div>
       {previewImage && mousePosition.x && mousePosition.y && (
         <div
           className="w-[250px] h-[350px] absolute"

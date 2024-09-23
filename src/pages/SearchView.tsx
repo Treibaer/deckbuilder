@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import MagicCardList from "../components/MagicCardList";
 import MagicFilterView from "../components/Search/MagicFilterView";
-import SearchPagination from "../components/Search/SearchPagination";
 import SearchBar from "../components/Search/SearchBar";
+import SearchPagination from "../components/Search/SearchPagination";
 import CardService from "../Services/CardService";
 
 const cardService = CardService.shared;
@@ -63,7 +63,7 @@ const SearchView: React.FC = () => {
   return (
     <div className="w-full">
       {data.data.length === 0 && (
-        <div className="cursor-default text-3xl font-semibold text-center ">
+        <div className="cursor-default text-3xl font-semibold text-center">
           Search
         </div>
       )}

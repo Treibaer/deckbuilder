@@ -6,7 +6,7 @@ import FullscreenLoadingSpinner from "./Common/FullscreenLoadingSpinner";
 const LoginView: React.FC<{
   setIsLoggedIn: (isLoggedIn: boolean) => void;
 }> = ({ setIsLoggedIn }) => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -25,7 +25,7 @@ const LoginView: React.FC<{
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: email,
+        username: username,
         password: password,
         client: "deckbuilder",
       }),
@@ -69,9 +69,9 @@ const LoginView: React.FC<{
         <input
           className="tb-input"
           type="text"
-          placeholder="Email or username"
+          placeholder="Username"
           ref={inputRef}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(event) => setUsername(event.target.value)}
           onKeyDown={handleKeyDown}
         />
         <input
