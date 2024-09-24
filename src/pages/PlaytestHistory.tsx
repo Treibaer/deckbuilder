@@ -9,7 +9,7 @@ const PlaytestHistory = () => {
   const playtestHistory = useLoaderData() as Playtest[];
 
   function play(id: number) {
-    window.open("/magic-web-js/play.html?mId=" + id, "_blank");
+    window.open("/magic-web-js/play.html?matchId=" + id, "_blank");
   }
 
   return (

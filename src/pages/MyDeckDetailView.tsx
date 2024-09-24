@@ -186,7 +186,7 @@ const MyDeckDetailView = () => {
   async function didTapPlay() {
     const response = await PlaytestService.shared.create(deck.id);
     window
-      .open("/magic-web-js/play.html?mId=" + response.id, "_blank")
+      .open("/magic-web-js/play.html?matchId=" + response.id, "_blank")
       ?.focus();
   }
 

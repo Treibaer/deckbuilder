@@ -28,6 +28,8 @@ import { MoxfieldController } from "./moxfield/moxfield.controller";
 import { MoxfieldService } from "./moxfield/moxfield.service";
 import { UsersModule } from "./users/users.module";
 import { UrlService } from "./utils/urlservice";
+import { EventsModule } from './playtester/playtester.module';
+import { EventsGateway } from "./playtester/playtester.gateway";
 
 @Module({
   imports: [
@@ -51,7 +53,7 @@ import { UrlService } from "./utils/urlservice";
         },
         port: configService.get("DB_PORT"),
         username: configService.get("DB_USER"),
-        password: configService.get("DB_PASSWORD"),
+        password: configService.get("DB_PASS"),
         database: configService.get("DB_NAME"),
         models: [
           Deck,
@@ -72,6 +74,7 @@ import { UrlService } from "./utils/urlservice";
     ImageModule,
     AuthModule,
     UsersModule,
+    EventsModule,
     // SequelizeModule.forFeature([Card, Deck, DeckCard, User, AccessToken, Playtest, CardSet, Game]),
   ],
   controllers: [
@@ -90,7 +93,7 @@ import { UrlService } from "./utils/urlservice";
     PlaytestsService,
     ImportService,
     CardsService,
-    UrlService,
+    UrlService
   ],
 })
 export class AppModule implements NestModule {

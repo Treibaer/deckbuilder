@@ -139,7 +139,7 @@ export class GameState {
   settings: PlayerSettings;
 }
 
-class GameCard {
+export class GameCard {
   id: number;
   card: MagicCard;
   tapped: boolean;
