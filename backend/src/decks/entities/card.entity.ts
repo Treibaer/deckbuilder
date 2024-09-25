@@ -81,6 +81,9 @@ export class Card extends Model {
   @Column({ allowNull: false, field: "image_art_crop" })
   imageArtCrop: string;
 
+  @Column({ allowNull: false, field: "related_scryfall_ids" })
+  relatedScryfallIds: string;
+
   // Define the hasMany association here
   // static associate() {
   //   Card.hasMany(DeckCard, {

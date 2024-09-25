@@ -191,6 +191,9 @@ export class MatchesController {
       throw new BadRequestException("id not provided");
     }
 
+    
+    const relatedCards = await this.playtestService.getRelatedCards(gameState);
+
     const createdPlaytest = await Playtest.create({
       creator_id: this.userService.user.id,
       createdAt: Math.floor(Date.now() / 1000),
@@ -199,6 +202,7 @@ export class MatchesController {
       promoId,
       name,
       moxfieldId,
+      relatedCards: JSON.stringify(relatedCards),
     });
 
     if (body.playerIndex === 0) {

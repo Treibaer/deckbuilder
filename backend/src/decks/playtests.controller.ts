@@ -5,13 +5,14 @@ import {
   Get,
   InternalServerErrorException,
   NotFoundException,
+  Param,
   Post,
 } from "@nestjs/common";
 import { UsersService } from "src/users/users.service";
 import { PlaytestDto } from "./dto/playtest.dto";
 import { Playtest } from "./entities/playtest.entity";
 import { Deck } from "./entities/deck.entity";
-import { MagicCardDto } from "./dto/card.dto";
+import { MagicCardDto } from "./dto/magic-card.dto";
 import { DeckCard } from "./entities/deck-card.entity";
 import { Card } from "./entities/card.entity";
 import { DeckDto } from "./dto/deck.dto";
@@ -39,13 +40,13 @@ export class PlayTestsContoller {
   }
 
   @Get(":id")
-  async findOne(id: number): Promise<PlaytestDto> {
+  async findOne(@Param() body: {id: number}): Promise<PlaytestDto> {
     const playtest = await Playtest.findOne({
       where: {
-        id,
+        id: body.id,
         creator_id: this.userService.user.id,
       },
-      attributes: ["id", "createdAt"],
+      attributes: ["id", "createdAt", "promoId", "name", "moxfieldId", "relatedCards"],
     });
     if (!playtest) {
       throw new NotFoundException("Playtest not found");
@@ -104,6 +105,8 @@ export class PlayTestsContoller {
     // get all scryfall ids from the game
     // const allScryfallIds = this.playtestService.getAllScryfallIds(game);
 
+    const relatedCards = await this.playtestService.getRelatedCards(game);
+
     const playtest = await Playtest.create({
       creator_id: this.userService.user.id,
       deck_id: body.deckId,
@@ -113,6 +116,7 @@ export class PlayTestsContoller {
       promoId,
       name,
       moxfieldId,
+      relatedCards: JSON.stringify(relatedCards),
     });
     return { id: playtest.id };
   }
@@ -128,6 +132,7 @@ export class PlayTestsContoller {
         promoId: playtest.promoId,
         name: playtest.name,
         moxfieldId: playtest.moxfieldId,
+        relatedCards: playtest.relatedCards ? JSON.parse(playtest.relatedCards) : [],
       };
     });
   }

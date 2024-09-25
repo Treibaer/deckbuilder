@@ -35,7 +35,7 @@ import { EventsGateway } from "./playtester/playtester.gateway";
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [".env.local", ".env"],
+      envFilePath: [".env.local", ".env", "/projects/magic/deckbuilder/backend/.env"],
     }),
     DecksModule,
     ImageModule,

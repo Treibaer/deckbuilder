@@ -53,7 +53,9 @@ const Matches = () => {
   }
 
   async function openMatch(matchId: number) {
-    window.open("/magic-web-js/duo3.html?matchId=" + matchId, "_blank")?.focus();
+    window
+      .open("/magic-web-js/duo3.html?matchId=" + matchId, "_blank")
+      ?.focus();
   }
 
   async function openDeckSelection(match: Match, playerIndex: number) {
@@ -90,7 +92,7 @@ const Matches = () => {
   }
 
   return (
-    <div className="w-full mb-8">
+    <div className="mb-8">
       {isLoading && <DelayedLoadingSpinner />}
       {isCreatingMatch && (
         <CreateMatchDialog
@@ -101,23 +103,37 @@ const Matches = () => {
         />
       )}
       {isSelectingDeck && (
-        <SelectDeckDialog
-          decks={decks}
-          onClose={close}
-          onSubmit={selectDeck}
-        />
+        <SelectDeckDialog decks={decks} onClose={close} onSubmit={selectDeck} />
       )}
       <TitleView title="Matches" openDialog={openCreateMatchForm} />
-      <div className="flex flex-col gap-4 w-full mt-4">
-        {matches.map((match, _) => (
-          <MatchRow
-            key={match.id}
-            match={match}
-            openMatch={openMatch}
-            onSelectDeck={openDeckSelection}
-          />
-        ))}
-      </div>
+      <table className="mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 select-none">
+        <thead className="text-xs text-gray-700 uppercase bg-mediumBlue dark:text-gray-400">
+          <tr>
+            <th scope="col" className="px-6 py-3">
+              ID
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Player 0
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Player 1
+            </th>
+            <th scope="col" className="px-6 py-3">
+              Play
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {matches.map((match, _) => (
+            <MatchRow
+              key={match.id}
+              match={match}
+              openMatch={openMatch}
+              onSelectDeck={openDeckSelection}
+            />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };

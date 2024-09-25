@@ -16,7 +16,7 @@ const DeckPreview: React.FC<{
     : undefined;
   return (
     <div className="flex gap-2 items-center w-full pe-24 select-none">
-      <img src={MagicHelper.artCropUrl(promoId)} className="h-12 rounded-xl" />
+      <img src={MagicHelper.artCropUrl(promoId)} className="h-12 w-16 object-cover rounded-xl" />
       <div
         title={name}
         className="text-nowrap text-ellipsis overflow-hidden flex-grow"

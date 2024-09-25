@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from "@nestjs/common";
 import axios from "axios";
 import * as fs from "fs";
 import * as path from "path";
-import { MagicCardDto } from "src/decks/dto/card.dto";
 import { DeckCardDto } from "src/decks/dto/deck-card.dto";
 import { DeckDto } from "src/decks/dto/deck.dto";
 import { Deck } from "src/decks/entities/deck.entity";
@@ -11,6 +10,7 @@ import { MoxFieldMapping } from "src/decks/entities/moxfield-mapping.entity";
 import { UsersService } from "src/users/users.service";
 import { Card } from "../decks/entities/card.entity";
 import { DeckCard } from "../decks/entities/deck-card.entity";
+import { MagicCardDto } from "src/decks/dto/magic-card.dto";
 
 const formats = ["modern", "commander", "commanderPrecons", "standard"];
 const sortTypes = ["views", "created", "updated"];

@@ -34,7 +34,7 @@ export class CardsService {
         },
       },
       group: ["oracleId"],
-      limit: 10,
+      limit: 100,
     });
 
     return cards;

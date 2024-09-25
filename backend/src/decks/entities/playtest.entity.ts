@@ -46,4 +46,7 @@ export class Playtest extends Model {
   
   @Column({ field: "moxfield_id", allowNull: false })
   moxfieldId: string;
+
+  @Column({ allowNull: false, field: "related_cards", type: DataType.TEXT })
+  relatedCards: string;
 }

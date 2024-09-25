@@ -1,7 +1,7 @@
 import {
   Injectable,
   InternalServerErrorException,
-  PreconditionFailedException
+  PreconditionFailedException,
 } from "@nestjs/common";
 import axios from "axios";
 import * as fs from "fs";
@@ -59,7 +59,7 @@ export class ImportService {
       console.log("Download and write completed successfully.");
       content = fs.readFileSync(cacheName, "utf8");
     } else {
-      throw new PreconditionFailedException("file already exists");
+      // throw new PreconditionFailedException("file already exists");
       content = fs.readFileSync(cacheName, "utf8");
     }
 
@@ -133,6 +133,34 @@ export class ImportService {
         }));
       }
 
+      // check all parts
+      const oracleId = card.oracle_id;
+      const allParts = card.all_parts as {
+        object: string;
+        id: string;
+        component: string;
+        name: string;
+        type_line: string;
+        uri: string;
+      }[];
+      let allPartsAsString = "";
+      if (
+        allParts &&
+        card.layout !== "token" &&
+        card.set_type !== "token" &&
+        !card.type_line.includes("Token") &&
+        !card.type_line.includes("Emblem") &&
+        !card.type_line.includes("Card")
+      ) {
+        allPartsAsString = allParts
+          .filter((part) => part.id !== scryfallId 
+          && part.name !== card.name
+          && part.component !== "combo_piece"
+        )
+          .map((part) => part.id)
+          .join("###");
+      }
+
       // create card entity
       await Card.create({
         scryfallId: scryfallId,
@@ -155,6 +183,7 @@ export class ImportService {
         cardFacesNames: cardFaces.join("###"),
         image: "",
         imageArtCrop: "",
+        relatedScryfallIds: allPartsAsString,
       });
     }
   }

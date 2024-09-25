@@ -1,12 +1,13 @@
-import { Injectable } from '@nestjs/common';
-import { DeckCard } from './entities/deck-card.entity';
-import { MagicCardDto } from './dto/card.dto';
-import { Deck } from './entities/deck.entity';
-import { DeckDto } from './dto/deck.dto';
+import { Injectable } from "@nestjs/common";
+import { DeckCard } from "./entities/deck-card.entity";
+import { MagicCardDto } from "./dto/magic-card.dto";
+import { Deck } from "./entities/deck.entity";
+import { DeckDto } from "./dto/deck.dto";
+import { RelatedCardDto } from "./dto/related-card.dto";
+import { Card } from "./entities/card.entity";
 
 @Injectable()
 export class PlaytestsService {
-
   private createNewGame(): GameState {
     return {
       hand: [],
@@ -62,7 +63,6 @@ export class PlaytestsService {
     const commandZoneCards = deck.cards.filter(
       (card) => card.zone === "commandZone",
     );
-
     let index = 1;
     for (const card of commandZoneCards) {
       const dto: MagicCardDto = this.createMagicCardDto(card);
@@ -73,7 +73,6 @@ export class PlaytestsService {
         index++;
       }
     }
-
     for (const card of mainBoardCards) {
       const dto: MagicCardDto = this.createMagicCardDto(card);
       const magicCard: MagicCard = this.createMagicCard(dto);
@@ -84,6 +83,57 @@ export class PlaytestsService {
     }
 
     return game;
+  }
+
+  createGameFromDeckDTO(deckDto: DeckDto): GameState {
+    const game: GameState = this.createNewGame();
+    let index = 1;
+
+    for (const card of deckDto.commanders) {
+      const mCard = this.createMagicCard(card.card);
+      for (let i = 0; i < card.quantity; i++) {
+        game.commandZone.push(this.createGameCard(index, mCard));
+        index++;
+      }
+    }
+    for (const card of deckDto.mainboard) {
+      const mCard = this.createMagicCard(card.card);
+      for (let i = 0; i < card.quantity; i++) {
+        game.library.push(this.createGameCard(index, mCard));
+        index++;
+      }
+    }
+    return game;
+  }
+
+  async getRelatedCards(game: GameState): Promise<RelatedCardDto[]> {
+    const allScryfallIds = this.getAllScryfallIds(game);
+    const relatedCards = new Set<string>();
+    for (const scryfallId of allScryfallIds) {
+      const card = await Card.findByPk(scryfallId);
+      if (!card) {
+        continue;
+      }
+      const relCards = card.relatedScryfallIds.split("###");
+      for (const rel of relCards) {
+        relatedCards.add(rel);
+      }
+    }
+    const result: RelatedCardDto[] = [];
+    // iterate over related cards and get the card
+    const relatedCardsArray = Array.from(relatedCards);
+    for (const scryfallId of relatedCardsArray) {
+      const card = await Card.findByPk(scryfallId);
+      if (!card) {
+        continue;
+      }
+      result.push({
+        name: card.name,
+        scryfallId: card.scryfallId,
+      });
+    }
+
+    return result;
   }
 
   private createGameCard(index: number, card: MagicCard): GameCard {
@@ -97,30 +147,6 @@ export class PlaytestsService {
       faceDown: false,
       flipped: false,
     };
-  }
-
-
-  createGameFromDeckDTO(deckDto: DeckDto): GameState {
-    const game: GameState = this.createNewGame();
-
-    let index = 1;
-
-    for (const card of deckDto.commanders) {
-      const mCard = this.createMagicCard(card.card);
-      for (let i = 0; i < card.quantity; i++) {
-        game.commandZone.push(this.createGameCard(index, mCard));
-        index++;
-      }
-    }
-
-    for (const card of deckDto.mainboard) {
-      const mCard = this.createMagicCard(card.card);
-      for (let i = 0; i < card.quantity; i++) {
-        game.library.push(this.createGameCard(index, mCard));
-        index++;
-      }
-    }
-    return game;
   }
 
   getAllScryfallIds(game: GameState): string[] {
@@ -145,9 +171,7 @@ export class PlaytestsService {
     }
     return Array.from(allScryfallIds);
   }
-  
 }
-
 
 export class GameState {
   hand: GameCard[];
