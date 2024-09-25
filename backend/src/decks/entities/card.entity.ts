@@ -78,9 +78,6 @@ export class Card extends Model {
   @Column({ allowNull: false, field: "set_id" })
   setId: string;
 
-  @Column({ allowNull: false })
-  reprint: boolean;
-
   @Column({ allowNull: false, field: "image_art_crop" })
   imageArtCrop: string;
 

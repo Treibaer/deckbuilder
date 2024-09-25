@@ -18,6 +18,14 @@ export class SetsController {
   }
 
   private transformSets(sets: CardSet[]): CardSetDto[] {
+    // filter sets with set name: core, expansion, commander
+    sets = sets.filter((set) => {
+      return (
+        set.setType === "core" ||
+        set.setType === "expansion" ||
+        set.setType === "commander"
+      );
+    });
     return sets.map((set) => {
       return {
         id: set.id,

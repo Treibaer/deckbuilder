@@ -23,6 +23,7 @@ import { Wrapper } from "./models/wrapper";
     credentials: false,
   },
   transports: ["websocket"],
+  path: "/socket.io",
 })
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect

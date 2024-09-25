@@ -63,7 +63,7 @@ const SearchView: React.FC = () => {
   return (
     <div className="w-full">
       {data.data.length === 0 && (
-        <div className="cursor-default text-3xl font-semibold text-center">
+        <div className="cursor-default text-3xl font-semibold m-2 text-center">
           Search
         </div>
       )}

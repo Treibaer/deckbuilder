@@ -1,7 +1,12 @@
-import { Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Post, Query, UseInterceptors } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query
+} from "@nestjs/common";
 import { Settings } from "src/decks/entities/settings.entity";
 import { MoxfieldService } from "./moxfield.service";
-import { LoggingInterceptor } from "src/utils/logger.interceptor";
 
 @Controller("api/v1/moxfield")
 // @UseInterceptors(LoggingInterceptor)
@@ -14,7 +19,12 @@ export class MoxfieldController {
     @Query("page") page: number,
     @Query("sortType") sortType: string,
   ) {
-    return this.moxfieldService.fetchDecksFromApi({ format, page, sortType });
+    try {
+      return this.moxfieldService.fetchDecksFromApi({ format, page, sortType });
+    } catch (e) {
+      console.error(e);
+      return [];
+    }
   }
 
   @Get("decks/:id")

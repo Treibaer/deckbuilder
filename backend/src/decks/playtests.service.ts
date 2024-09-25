@@ -122,6 +122,30 @@ export class PlaytestsService {
     }
     return game;
   }
+
+  getAllScryfallIds(game: GameState): string[] {
+    const allScryfallIds = new Set<string>();
+    for (const card of game.commandZone) {
+      allScryfallIds.add(card.card.scryfallId);
+    }
+    for (const card of game.hand) {
+      allScryfallIds.add(card.card.scryfallId);
+    }
+    for (const card of game.field) {
+      allScryfallIds.add(card.card.scryfallId);
+    }
+    for (const card of game.graveyard) {
+      allScryfallIds.add(card.card.scryfallId);
+    }
+    for (const card of game.library) {
+      allScryfallIds.add(card.card.scryfallId);
+    }
+    for (const card of game.exile) {
+      allScryfallIds.add(card.card.scryfallId);
+    }
+    return Array.from(allScryfallIds);
+  }
+  
 }
 
 

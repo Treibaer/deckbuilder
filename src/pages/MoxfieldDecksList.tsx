@@ -58,7 +58,7 @@ const MoxfieldDecksList = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 select-none">
-        {!data.referenceCard && <div className="text-3xl">Moxfield Decks</div>}
+        {!data.referenceCard && <div className="text-3xl font-semibold">Moxfield Decks</div>}
         {data.referenceCard && (
           <div className="text-xl">
             Moxfield Decks for{" "}

@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  InternalServerErrorException,
   NotFoundException,
   Post,
 } from "@nestjs/common";
@@ -31,7 +32,7 @@ export class PlayTestsContoller {
       where: {
         creator_id: this.userService.user.id,
       },
-      attributes: ["id", "createdAt"],
+      attributes: ["id", "createdAt", "allScryfallIds", "promoId", "name", "moxfieldId"],
       order: [["id", "DESC"]],
     });
     return this.transformPlaytests(playtests);
@@ -65,6 +66,10 @@ export class PlayTestsContoller {
   @Post()
   async create(@Body() body: Record<string, any>): Promise<{ id: number }> {
     let game: GameState | undefined;
+    let promoId = "";
+    let name = "";
+    let moxfieldId = "";
+
     if (body.deckId) {
       const deck = await Deck.findOne({
         where: {
@@ -82,17 +87,32 @@ export class PlayTestsContoller {
         throw new NotFoundException("Deck not found");
       }
       game = this.playtestService.createGameFromDeck(deck);
+      promoId = deck.promoId;
+      name = deck.name;
     } else if (body.moxFieldDeckId) {
       const moxFieldDeck: DeckDto = await this.moxfieldService.loadDeckById(
         body.moxFieldDeckId,
       );
       game = this.playtestService.createGameFromDeckDTO(moxFieldDeck);
+      promoId = moxFieldDeck.promoId;
+      name = moxFieldDeck.name;
+      moxfieldId = body.moxFieldDeckId;
     }
+    if (!game) {
+      throw new InternalServerErrorException("game not created");
+    }
+    // get all scryfall ids from the game
+    // const allScryfallIds = this.playtestService.getAllScryfallIds(game);
+
     const playtest = await Playtest.create({
       creator_id: this.userService.user.id,
       deck_id: body.deckId,
       game: JSON.stringify(game),
       createdAt: Math.floor(Date.now() / 1000),
+      allScryfallIds: "",
+      promoId,
+      name,
+      moxfieldId,
     });
     return { id: playtest.id };
   }
@@ -102,6 +122,12 @@ export class PlayTestsContoller {
       return {
         id: playtest.id,
         createdAt: playtest.createdAt,
+        allScryfallIds: playtest.allScryfallIds
+          ? JSON.parse(playtest.allScryfallIds)
+          : [],
+        promoId: playtest.promoId,
+        name: playtest.name,
+        moxfieldId: playtest.moxfieldId,
       };
     });
   }

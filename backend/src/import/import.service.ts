@@ -1,8 +1,7 @@
 import {
-  Inject,
   Injectable,
   InternalServerErrorException,
-  PreconditionFailedException,
+  PreconditionFailedException
 } from "@nestjs/common";
 import axios from "axios";
 import * as fs from "fs";
@@ -42,10 +41,23 @@ export class ImportService {
 
     let content: string;
     if (!fs.existsSync(cacheName)) {
-      const response = await axios.get(uri);
-      content = response.data;
-      content = JSON.stringify(content);
-      fs.writeFileSync(cacheName, content);
+      const writer = fs.createWriteStream(cacheName);
+      const downloadResponse = await axios({
+        url: uri,
+        method: "GET",
+        responseType: "stream",
+      });
+
+      downloadResponse.data.pipe(writer);
+
+      // Return a promise that resolves when the stream is finished
+      await new Promise((resolve, reject) => {
+        writer.on("finish", resolve);
+        writer.on("error", reject);
+      });
+
+      console.log("Download and write completed successfully.");
+      content = fs.readFileSync(cacheName, "utf8");
     } else {
       throw new PreconditionFailedException("file already exists");
       content = fs.readFileSync(cacheName, "utf8");
@@ -138,7 +150,7 @@ export class ImportService {
         toughness: card.toughness ?? 0,
         colors: card.colors.join("_"),
         rarity: card.rarity,
-        reprint: card.reprint ?? false,
+        isReprint: card.reprint ?? false,
         printsSearchUri: card.prints_search_uri ?? "",
         cardFacesNames: cardFaces.join("###"),
         image: "",
@@ -185,7 +197,9 @@ export class ImportService {
 
     for (const set of sets) {
       const scryfallId = set.id;
-      const cardSet = await CardSet.findOne({ where: { scryfallId: scryfallId } });
+      const cardSet = await CardSet.findOne({
+        where: { scryfallId: scryfallId },
+      });
       if (cardSet) {
         cardSet.name = set.name;
         cardSet.code = set.code;

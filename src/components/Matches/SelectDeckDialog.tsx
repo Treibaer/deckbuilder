@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Deck } from "../../models/dtos";
+import Client from "../../Services/Client";
 import MoxfieldService from "../../Services/MoxfieldService";
 import Button from "../Button";
 import Dialog from "../Common/Dialog";
 import LoadingSpinner from "../Common/LoadingSpinner";
-import SelectDeckDialogDeckPreview from "./SelectDeckDialogDeckPreview";
-import Client from "../../Services/Client";
+import DeckPreview from "./DeckPreview";
 
 type Tab = "myDeck" | "moxfield" | "favorites";
 
@@ -49,6 +49,9 @@ const SelectDeckDialog: React.FC<{
     }
     if (tab === "moxfield" && moxfieldDeck) {
       onSubmit(undefined, "" + moxfieldDeck.id);
+    }
+    if (tab === "favorites" && favoriteDeck) {
+      onSubmit(undefined, "" + favoriteDeck.id);
     }
   }
 
@@ -141,7 +144,11 @@ const SelectDeckDialog: React.FC<{
 
             <div className="w-full select-none">
               {deck && (
-                <SelectDeckDialogDeckPreview deck={deck} type="myDeck" />
+                <DeckPreview
+                  deckId={deck.id}
+                  name={deck.name}
+                  promoId={deck.promoId}
+                />
               )}
             </div>
           </div>
@@ -169,9 +176,10 @@ const SelectDeckDialog: React.FC<{
 
             <div className="w-full select-none">
               {favoriteDeck && (
-                <SelectDeckDialogDeckPreview
-                  deck={favoriteDeck}
-                  type="favorites"
+                <DeckPreview
+                  moxfieldId={"" + favoriteDeck.id}
+                  name={favoriteDeck.name}
+                  promoId={favoriteDeck.promoId}
                 />
               )}
             </div>
@@ -194,9 +202,10 @@ const SelectDeckDialog: React.FC<{
             </div>
             <div className="w-full select-none">
               {moxfieldDeck && (
-                <SelectDeckDialogDeckPreview
-                  deck={moxfieldDeck}
-                  type="moxfield"
+                <DeckPreview
+                  moxfieldId={"" + moxfieldDeck.id}
+                  name={moxfieldDeck.name}
+                  promoId={moxfieldDeck.promoId}
                 />
               )}
             </div>

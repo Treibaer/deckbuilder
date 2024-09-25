@@ -14,7 +14,7 @@ const SetList = () => {
   
   return (
     <>
-      <h1 className="flex justify-center">Magic Card Sets</h1>
+      <div className="flex justify-center text-3xl font-semibold m-2">Magic Card Sets</div>
       <div className="flex flex-wrap mt-4 gap-2 justify-center">
         {sets.map((set) => (
           <Link

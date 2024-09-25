@@ -30,7 +30,7 @@ export class MoxfieldService {
   constructor(private readonly userService: UsersService) {}
 
   async fetchDecksFromApi(config: ConfigDto) {
-    config.format = formats.includes(config.format) ? config.sortType : "all";
+    config.format = formats.includes(config.format) ? config.format : "all";
     config.sortType = sortTypes.includes(config.sortType)
       ? config.sortType
       : "views";

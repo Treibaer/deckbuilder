@@ -44,9 +44,9 @@ const Imports = () => {
     setIsLoading(false);
   }
   return (
-    <div className="mx-auto p-8">
+    <div className="mx-auto">
       {isLoading && <FullscreenLoadingSpinner />}
-      <h1 className="mb-8 text-center text-5xl">Imports</h1>
+      <div className="text-3xl font-semibold m-2 text-center mb-4">Imports</div>
       <div className="grid grid-cols-2 gap-8 border border-lightBlue rounded-lg p-6 shadow-lg">
         {/* Action Column */}
         <div className="flex flex-col gap-4 justify-between h-full">

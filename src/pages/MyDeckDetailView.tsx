@@ -100,6 +100,7 @@ const MyDeckDetailView = () => {
     setIsLoading(false);
     if (!response.ok) {
       console.log("Error loading cards");
+      setSearchResultCards([]);
       return;
     }
     const cards = resData.data.map((card: any) => {

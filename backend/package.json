@@ -28,6 +28,7 @@
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
     "@nestjs/platform-socket.io": "^10.4.4",
+    "@nestjs/platform-ws": "^10.4.4",
     "@nestjs/sequelize": "^10.0.1",
     "@nestjs/websockets": "^10.4.4",
     "axios": "^1.7.7",

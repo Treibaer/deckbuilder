@@ -5,7 +5,7 @@ import Button from "../components/Button";
 const Settings = () => {
   return (
     <div className="mx-auto">
-      <h1 className="mb-8">Settings</h1>
+      <div className="text-3xl font-semibold m-2 text-center mb-4">Settings</div>
       <div className="flex gap-4">
         {Constants.playModeEnabled && (
           <Link to="/profile/playtests">

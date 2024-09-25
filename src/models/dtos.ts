@@ -92,6 +92,14 @@ export type MatchUser = {
   name: string;
   deckSelected: boolean;
   canSelectDeck: boolean;
+  playtest: Playtest;
+};
+
+export type MatchPlayer = {
+  id: number;
+  name: string;
+  promoId: string;
+  moxfieldId: string;
 };
 
 export type User = {
@@ -104,4 +112,8 @@ export type Playtest = {
   createdAt: number;
   createdAtString: string;
   match: Match;
+  promoId: string;
+  name: string;
+  moxfieldId: string;
+  allScryfallIds: string[];
 };

@@ -6,7 +6,7 @@ import {
   Get,
   NotFoundException,
   Param,
-  Post
+  Post,
 } from "@nestjs/common";
 import { Op } from "sequelize";
 import { Card } from "src/decks/entities/card.entity";
@@ -55,6 +55,12 @@ export class MatchesController {
           canSelectDeck:
             game.playtest0 === null &&
             game.player0.id === this.userService.user.id,
+          playtest: {
+            id: game.playtest0?.id,
+            name: game.playtest0?.name,
+            promoId: game.playtest0?.promoId,
+            moxfieldId: game.playtest0?.moxfieldId,
+          },
         },
         player1: {
           id: game.player1.id,
@@ -63,6 +69,12 @@ export class MatchesController {
           canSelectDeck:
             game.playtest1 === null &&
             game.player1.id === this.userService.user.id,
+          playtest: {
+            id: game.playtest1?.id,
+            name: game.playtest1?.name,
+            promoId: game.playtest1?.promoId,
+            moxfieldId: game.playtest1?.moxfieldId,
+          },
         },
         createdAt: game.createdAt,
       };
@@ -135,7 +147,9 @@ export class MatchesController {
     @Body()
     body: { deckId?: number; playerIndex: number; moxfieldId?: string },
   ) {
-    console.log(body);
+    let promoId = "";
+    let name = "";
+    let moxfieldId = "";
     if (!body.moxfieldId && !body.deckId) {
       throw new BadRequestException("id not provided");
     }
@@ -163,11 +177,16 @@ export class MatchesController {
         throw new NotFoundException("Deck not found");
       }
       gameState = this.playtestService.createGameFromDeck(deck);
+      promoId = deck.promoId;
+      name = deck.name;
     } else if (body.moxfieldId) {
       const moxFieldDeck = await this.moxfieldService.loadDeckById(
         body.moxfieldId,
       );
       gameState = this.playtestService.createGameFromDeckDTO(moxFieldDeck);
+      promoId = moxFieldDeck.promoId;
+      name = moxFieldDeck.name;
+      moxfieldId = body.moxfieldId;
     } else {
       throw new BadRequestException("id not provided");
     }
@@ -176,6 +195,10 @@ export class MatchesController {
       creator_id: this.userService.user.id,
       createdAt: Math.floor(Date.now() / 1000),
       game: JSON.stringify(gameState),
+      allScryfallIds: "",
+      promoId,
+      name,
+      moxfieldId,
     });
 
     if (body.playerIndex === 0) {

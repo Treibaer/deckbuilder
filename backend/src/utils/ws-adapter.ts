@@ -1,7 +1,7 @@
 import { INestApplicationContext } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { IoAdapter } from "@nestjs/platform-socket.io";
 import { ServerOptions } from "socket.io";
-import { ConfigService } from "@nestjs/config";
 
 export class SocketIoAdapter extends IoAdapter {
   constructor(

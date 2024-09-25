@@ -103,5 +103,6 @@ export class AppModule implements NestModule {
     FavoriteDeck.sync({ alter: true });
     User.sync({ alter: true });
     Card.sync({ alter: true });
+    Playtest.sync({ alter: true });
   }
 }
