@@ -1,3 +1,5 @@
+import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/outline";
+import { HeartIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import Constants from "../Services/Constants";
@@ -11,9 +13,6 @@ import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
 import { Deck, MagicCard } from "../models/dtos";
 import "./MoxfieldDeckDetailView.css";
-import { HeartIcon } from "@heroicons/react/24/solid";
-import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/outline";
-import { ButtonIcon } from "../components/ButtonIcon";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;
@@ -78,8 +77,8 @@ const MoxfieldDeckDetailView = () => {
       ?.focus();
   }
 
-  async function setAsFavorite() {
-    await moxfieldService.setFavorite(deck.id, deck.isFavorite === true);
+  async function toggleFavorite() {
+    await moxfieldService.setFavoriteDeck(deck.id, !deck.isFavorite);
     // reload deck
     const newDeck = await moxfieldService.getDeck("" + deck.id);
     setDeck(newDeck);
@@ -107,13 +106,13 @@ const MoxfieldDeckDetailView = () => {
           {Constants.playModeEnabled && (
             <Button title="Play" onClick={didTapPlay} />
           )}
-          <ButtonIcon onClick={setAsFavorite}>
+          <Button onClick={toggleFavorite}>
             {deck.isFavorite ? (
               <HeartIcon className="h-6 w-6 text-brightBlue" />
             ) : (
               <HeartIcon2 className="h-6 w-6 text-brightBlue" />
             )}
-          </ButtonIcon>
+          </Button>
         </div>
         <h2>{deck.name}</h2>
         <div className="flex gap-2">
@@ -148,6 +147,7 @@ const MoxfieldDeckDetailView = () => {
               structure={structure}
               setPreviewImage={setPreviewImage}
               showCardPreview={showCardPreview}
+              isLocked={deck.isLocked}
             />
           </div>
         )}

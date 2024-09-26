@@ -20,6 +20,7 @@ export class DeckTransformer {
       commanders: [],
       mainboard: [],
       sideboard: [],
+      isLocked: deck.isLocked,
     };
   }
 
@@ -117,6 +118,7 @@ export class DeckTransformer {
       commanders: commanderCards,
       mainboard: mainboard,
       sideboard: sideboard,
+      isLocked: deck.isLocked,
     };
   }
 }

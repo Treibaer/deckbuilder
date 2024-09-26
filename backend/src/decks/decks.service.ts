@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
   UnauthorizedException,
@@ -74,6 +75,11 @@ export class DecksService {
     if (deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
     }
+
+    if (deck.isLocked) {
+      throw new ForbiddenException("Deck is locked");
+    }
+
     if (
       patchDeckDto.action === "moveZone" &&
       patchDeckDto.originZone &&
@@ -141,15 +147,21 @@ export class DecksService {
     if (deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
     }
+    if (deck.isLocked) {
+      throw new ForbiddenException("Deck is locked");
+    }
     await DeckCard.destroy({ where: { deck_id: id } });
     await deck.destroy();
   }
 
-  async update(id: number, deckDto: DeckDto) {
+  async updatePatch(id: number, deckDto: DeckDto) {
     const deck = await this.findOne(id);
 
     if (deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
+    }
+    if (deck.isLocked && deckDto.isLocked !== false) {
+      throw new ForbiddenException("Deck is locked");
     }
 
     if (deckDto.promoId !== undefined) {
@@ -164,6 +176,9 @@ export class DecksService {
     if (deckDto.format !== undefined) {
       deck.format = deckDto.format;
     }
+    if (deckDto.isLocked !== undefined) {
+      deck.isLocked = deckDto.isLocked;
+    }
     return await deck.save();
   }
 
@@ -173,6 +188,9 @@ export class DecksService {
 
     if (deck.creator.id !== this.userId) {
       throw new UnauthorizedException();
+    }
+    if (deck.isLocked) {
+      throw new ForbiddenException("Deck is locked");
     }
 
     const card = await Card.findByPk(cardDto.scryfallId);

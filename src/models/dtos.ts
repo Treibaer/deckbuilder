@@ -18,6 +18,12 @@ export type MagicCard = {
   colors: string;
   rarity: string;
   mapping: string;
+  isFavorite?: boolean;
+};
+
+export type SmallMagicCard = {
+  scryfallId: string;
+  name: string;
 };
 
 export type Deck = {
@@ -33,6 +39,7 @@ export type Deck = {
   mainboard: DeckCard[];
   sideboard: DeckCard[];
   isFavorite?: boolean;
+  isLocked: boolean;
 };
 
 export type DeckCard = {

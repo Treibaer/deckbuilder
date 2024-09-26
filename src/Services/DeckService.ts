@@ -38,6 +38,22 @@ export default class DeckService {
     return await this.client.post(path, cardObject, true);
   }
 
+  async setName(deck: Deck, name: string) {
+    const url = `/decks/${deck.id}`;
+    const cardObject = {
+      name,
+    };
+    return await this.client.patch(url, cardObject, true);
+  }
+
+  async toggleLock(deck: Deck) {
+    const url = `/decks/${deck.id}`;
+    const cardObject = {
+      isLocked: !deck.isLocked,
+    };
+    return await this.client.patch(url, cardObject, true);
+  }
+
   async setPromoId(deck: Deck, promoId: string) {
     const url = `/decks/${deck.id}`;
     const cardObject = {

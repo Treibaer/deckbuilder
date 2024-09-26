@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/outline";
+import {
+  ArrowTopRightOnSquareIcon,
+  HeartIcon,
+} from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import rotateImage from "../assets/rotate.svg";
-import MagicHelper from "../Services/MagicHelper";
-import "./CardPeekView.css";
 import { MagicCard } from "../models/dtos";
+import MagicHelper from "../Services/MagicHelper";
 import Button from "./Button";
+import AddToDeckDialog from "./CardDetails/AddToDeckDialog";
+import "./CardPeekView.css";
+import DelayedLoadingSpinner from "./Common/DelayedLoadingSpinner";
+import MoxfieldService from "../Services/MoxfieldService";
 
 const CardPeekView: React.FC<{
   card: MagicCard;
   onClose: () => void;
-}> = ({ card, onClose }) => {
+  updateFavorite?: () => void;
+}> = ({ card, onClose, updateFavorite }) => {
   const [faceSide, setFaceSide] = useState(0);
+  const [showAddToDeck, setShowAddToDeck] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const card2: any = card;
   // be compatible with scryfall api
@@ -24,15 +36,50 @@ const CardPeekView: React.FC<{
     card.cardFaces = [];
   }
 
+  async function checkFavorite() {
+    const isFav = await MoxfieldService.shared.isFavoriteCard(card.scryfallId);
+    setIsFavorite(isFav);
+  }
+
+  useEffect(() => {
+    checkFavorite();
+  }, []);
+
   function changeFaceSide() {
     setFaceSide((faceSide) => (faceSide + 1) % card.cardFaces.length);
   }
 
+  async function setAsFavorite() {
+    await MoxfieldService.shared.setFavoriteCard(card.scryfallId, !isFavorite);
+    await checkFavorite();
+    updateFavorite && updateFavorite();
+  }
   return (
     <div id="peekCardView">
-      <Link to={"/cards/" + card.scryfallId} target="_blank">
-        <Button title="Card details" />
-      </Link>
+      {showAddToDeck && (
+        <AddToDeckDialog
+          onClose={() => setShowAddToDeck(false)}
+          card={card}
+          setIsLoading={setIsLoading}
+        />
+      )}
+      {isLoading && <DelayedLoadingSpinner />}
+      <div className="flex gap-2">
+        <Button title="Close" onClick={onClose} />
+        <Button onClick={setAsFavorite}>
+          {isFavorite ? (
+            <HeartIcon className="h-6 w-6 text-brightBlue" />
+          ) : (
+            <HeartIcon2 className="h-6 w-6 text-brightBlue" />
+          )}
+        </Button>
+        <Button title="Add to deck" onClick={() => setShowAddToDeck(true)} />
+        <Link to={"/cards/" + card.scryfallId} target="_blank">
+          <Button title="Card details ">
+            <ArrowTopRightOnSquareIcon className="w-4 h-4" />
+          </Button>
+        </Link>
+      </div>
       <div className="background" onClick={onClose}></div>
       <div className="relative-wrapper">
         <div

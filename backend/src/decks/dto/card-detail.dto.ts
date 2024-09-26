@@ -12,4 +12,5 @@ export class CardDetailDto {
   rarity: string;
   cardFaces: any[];
   mapping: string;
+  isFavorite?: boolean;
 }

@@ -13,4 +13,5 @@ export class DeckDto {
   mainboard: DeckCardDto[];
   sideboard: DeckCardDto[];
   isFavorite?: boolean;
+  isLocked: boolean;
 }

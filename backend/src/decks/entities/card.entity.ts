@@ -33,9 +33,6 @@ export class Card extends Model {
   @Column({ allowNull: false, field: "released_at" })
   releasedAt: string;
 
-  @Column({ allowNull: false })
-  image: string;
-
   @Column({ allowNull: false, field: "type_line" })
   typeLine: string;
 
@@ -78,17 +75,6 @@ export class Card extends Model {
   @Column({ allowNull: false, field: "set_id" })
   setId: string;
 
-  @Column({ allowNull: false, field: "image_art_crop" })
-  imageArtCrop: string;
-
   @Column({ allowNull: false, field: "related_scryfall_ids" })
   relatedScryfallIds: string;
-
-  // Define the hasMany association here
-  // static associate() {
-  //   Card.hasMany(DeckCard, {
-  //     foreignKey: "scryfallId",
-  //     sourceKey: "scryfallId",
-  //   });
-  // }
 }

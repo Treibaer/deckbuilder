@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, LoaderFunction, useLoaderData } from "react-router-dom";
 import CardService from "../Services/CardService";
 import Helper from "../Services/Helper";
@@ -9,11 +9,15 @@ import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpin
 import MagicCardView from "../components/MagicCardView";
 import { CardDetailWithPrintings } from "../models/dtos";
 import { CardSize } from "../models/structure";
+import { HeartIcon } from "@heroicons/react/24/solid";
+import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/outline";
+import MoxfieldService from "../Services/MoxfieldService";
 
 const CardDetailView: React.FC<{}> = () => {
   const cardDetails = useLoaderData() as CardDetailWithPrintings;
   const [isLoading, setIsLoading] = useState(false);
   const [showAddToDeck, setShowAddToDeck] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(cardDetails.card.isFavorite);
 
   const card = cardDetails.card;
   const printings = cardDetails.printings;
@@ -21,6 +25,24 @@ const CardDetailView: React.FC<{}> = () => {
   async function openAddToCartDialog() {
     setShowAddToDeck(true);
   }
+
+  async function setAsFavorite() {
+    setIsFavorite(!isFavorite);
+    await MoxfieldService.shared.setFavoriteCard(card.scryfallId, !isFavorite);
+    // card.isFavorite = !card.isFavorite;
+  }
+
+  useEffect(() => {
+    setIsFavorite(cardDetails.card.isFavorite);
+  }, [cardDetails.card]);
+
+  // async function toggleFavorite() {
+  //   await moxfieldService.setFavoriteDeck(deck.id, !deck.isFavorite);
+  //   // reload deck
+  //   const newDeck = await moxfieldService.getDeck("" + deck.id);
+  //   setDeck(newDeck);
+  // }
+
 
   return (
     <>
@@ -56,6 +78,13 @@ const CardDetailView: React.FC<{}> = () => {
           {printings && <CardDetailPrintings cardDetails={cardDetails} />}
         </div>
         <div className="flex flex-row sm:flex-col gap-2 mb-8">
+          <Button onClick={setAsFavorite} className="flex justify-center">
+            {isFavorite ? (
+              <HeartIcon className="h-6 w-6 text-brightBlue" />
+            ) : (
+              <HeartIcon2 className="h-6 w-6 text-brightBlue" />
+            )}
+          </Button>
           <Button title="Add to deck" onClick={openAddToCartDialog} />
           {card.mapping && (
             <Link to={"/decks/moxfield?id=" + card.mapping}>

@@ -12,6 +12,7 @@ import { CardSet } from "./decks/entities/card-set.entity";
 import { Card } from "./decks/entities/card.entity";
 import { DeckCard } from "./decks/entities/deck-card.entity";
 import { Deck } from "./decks/entities/deck.entity";
+import { FavoriteCard } from "./decks/entities/favorite-card";
 import { FavoriteDeck } from "./decks/entities/favorite-deck";
 import { Game } from "./decks/entities/game.entity";
 import { Playtest } from "./decks/entities/playtest.entity";
@@ -26,16 +27,19 @@ import { MatchesController } from "./matches/matches.controller";
 import { MatchesService } from "./matches/matches.service";
 import { MoxfieldController } from "./moxfield/moxfield.controller";
 import { MoxfieldService } from "./moxfield/moxfield.service";
+import { EventsModule } from "./playtester/playtester.module";
 import { UsersModule } from "./users/users.module";
 import { UrlService } from "./utils/urlservice";
-import { EventsModule } from './playtester/playtester.module';
-import { EventsGateway } from "./playtester/playtester.gateway";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [".env.local", ".env", "/projects/magic/deckbuilder/backend/.env"],
+      envFilePath: [
+        ".env.local",
+        ".env",
+        "/projects/magic/deckbuilder/backend/.env",
+      ],
     }),
     DecksModule,
     ImageModule,
@@ -66,6 +70,7 @@ import { EventsGateway } from "./playtester/playtester.gateway";
           Game,
           Settings,
           FavoriteDeck,
+          FavoriteCard,
         ],
         autoLoadModels: true,
         logging: false,
@@ -93,7 +98,7 @@ import { EventsGateway } from "./playtester/playtester.gateway";
     PlaytestsService,
     ImportService,
     CardsService,
-    UrlService
+    UrlService,
   ],
 })
 export class AppModule implements NestModule {
@@ -104,5 +109,7 @@ export class AppModule implements NestModule {
     User.sync({ alter: true });
     Card.sync({ alter: true });
     Playtest.sync({ alter: true });
+    Deck.sync({ alter: true });
+    FavoriteCard.sync({ alter: true });
   }
 }

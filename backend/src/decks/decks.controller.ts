@@ -51,6 +51,7 @@ export class DecksController {
         commanders: [],
         mainboard: [],
         sideboard: [],
+        isLocked: deck.isLocked,
       };
     });
     return transformedDecks;
@@ -69,7 +70,7 @@ export class DecksController {
 
   @Patch(":id")
   updatePatch(@Param("id") id: string, @Body() deckDto: DeckDto) {
-    return this.decksService.update(+id, deckDto);
+    return this.decksService.updatePatch(+id, deckDto);
   }
 
   @Delete(":id")

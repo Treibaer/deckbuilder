@@ -9,9 +9,9 @@ const MainNavigation = () => {
           <NavigationLink to="/" title="Home" />
           <NavigationLink to="/search" title="Search" />
           <NavigationLink to="/sets" title="Sets" />
-          <NavigationLink to="/decks/moxfield" title="Moxfield Decks" />
-          <NavigationLink to="/decks/my" title="My Decks" />
-          <NavigationLink to="/decks/favorites" title="My Favorites" />
+          <NavigationLink to="/decks/moxfield" title="Moxfield" />
+          <NavigationLink to="/decks/my" title="Decks" />
+          <NavigationLink to="/decks/favorites" title="Favorites" />
           {/* <NavigationLink to="/drafts" title="Drafter" /> */}
 
           {/* {Constants.beta && <NavigationLink to="/users" title="Users" />} */}

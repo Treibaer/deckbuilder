@@ -4,13 +4,13 @@ import * as fs from "fs";
 import * as path from "path";
 import { DeckCardDto } from "src/decks/dto/deck-card.dto";
 import { DeckDto } from "src/decks/dto/deck.dto";
+import { MagicCardDto } from "src/decks/dto/magic-card.dto";
 import { Deck } from "src/decks/entities/deck.entity";
 import { FavoriteDeck } from "src/decks/entities/favorite-deck";
 import { MoxFieldMapping } from "src/decks/entities/moxfield-mapping.entity";
 import { UsersService } from "src/users/users.service";
 import { Card } from "../decks/entities/card.entity";
 import { DeckCard } from "../decks/entities/deck-card.entity";
-import { MagicCardDto } from "src/decks/dto/magic-card.dto";
 
 const formats = ["modern", "commander", "commanderPrecons", "standard"];
 const sortTypes = ["views", "created", "updated"];
@@ -55,7 +55,12 @@ export class MoxfieldService {
 
     const url = this.constructUrl(config);
 
-    const content = await this.loadAndCache(folder, localName, url);
+    const content = await this.loadAndCache(
+      folder,
+      localName,
+      url,
+      sortType !== "views",
+    );
 
     const data = JSON.parse(content);
 
@@ -111,6 +116,7 @@ export class MoxfieldService {
         commanders: [],
         mainboard: [],
         sideboard: [],
+        isLocked: true,
       };
     });
     return allDecks;
@@ -217,7 +223,7 @@ export class MoxfieldService {
     );
 
     const favorite = await FavoriteDeck.findOne({
-      where: { moxfieldId: deck.publicId },
+      where: { moxfieldId: deck.publicId, creator_id: this.userService.user.id },
     });
 
     const deckResponse: DeckDto = {
@@ -233,6 +239,7 @@ export class MoxfieldService {
       mainboard,
       sideboard: [],
       isFavorite: favorite !== null,
+      isLocked: true,
     };
     return deckResponse;
   }

@@ -47,7 +47,7 @@ export class ImageService {
     return Card.findByPk(scryfallId);
   }
 
-  getLocalPath(url: string, card: any, scryfallId: string): string {
+  getLocalPath(url: string): string {
     const cacheExtract = url
       .replace("https://cards.scryfall.io", "")
       .split("/");

@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom";
-import Button from "../Button";
 import { Match } from "../../models/dtos";
+import Button from "../Button";
 import DeckPreview from "./DeckPreview";
 
 const MatchRow: React.FC<{

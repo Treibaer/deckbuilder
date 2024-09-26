@@ -18,6 +18,9 @@ const AddToDeckDialog: React.FC<{
 
   async function addCardToDeck() {
     setIsLoading(true);
+    if (!selectedDeckId) {
+      return;
+    }
     onClose();
     const deck = myDecks.filter((deck) => deck.id === selectedDeckId)[0];
     await deckService.addCardToDeck(deck, card, "mainboard", selectedQuantity);
@@ -25,7 +28,11 @@ const AddToDeckDialog: React.FC<{
   }
 
   async function loadDecks() {
-    const currentDecks = await deckService.getAll();
+    let currentDecks = await deckService.getAll();
+    currentDecks = currentDecks.filter((deck) => !deck.isLocked); 
+    if (currentDecks.length === 0) {
+      return;
+    }
     setSelectedDeckId(currentDecks[0]?.id);
     setMyDecks((_) => currentDecks);
   }
@@ -51,17 +58,17 @@ const AddToDeckDialog: React.FC<{
       onSubmit={addCardToDeck}
       submitTitle="Add"
     >
-      <div className="cardPreview">
-        <MagicCardView card={card} size={CardSize.small} />
+      <div className="mx-auto">
+        <MagicCardView card={card} size={CardSize.large} />
       </div>
-      <div className="deckSelect">
+      <div className="mx-auto">
         {myDecks.length === 0 && (
-          <select disabled>
-            <option>Loading...</option>
+          <select disabled  className="h-8 px-2 rounded-xl">
+            <option>No decks available</option>
           </select>
         )}
-        {myDecks && (
-          <select name="deck" id="deck" onChange={handleDeckChange}>
+        {myDecks.length > 0 && (
+          <select name="deck" id="deck" className="h-8 px-2 rounded-xl" onChange={handleDeckChange}>
             {myDecks.map((deck) => (
               <option key={deck.id} value={deck.id}>
                 [{deck.id}] {deck.name}
@@ -70,11 +77,11 @@ const AddToDeckDialog: React.FC<{
           </select>
         )}
       </div>
-      <div className="quantitySelect">
-        <select onChange={handleQuantityChange}>
+      <div className="mx-auto">
+        <select onChange={handleQuantityChange}  className="h-8 px-2 rounded-xl" disabled={myDecks.length === 0}>
           {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
             <option key={i} value={i}>
-              {i + 1}
+              {i}
             </option>
           ))}
         </select>

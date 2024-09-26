@@ -12,9 +12,7 @@ const deckService = DeckService.shared;
 
 const MyDecksList = () => {
   const [isUpdating, setIsUpdating] = useState(false);
-  const [error, setError] = useState<{ message: string } | undefined>(
-    undefined
-  );
+  const [error, setError] = useState<string | undefined>(undefined);
   const [isCreatingDeck, setIsCreatingDeck] = useState(false);
   const data = useLoaderData() as Deck[];
   const [myDecks, setMyDecks] = useState<Deck[]>(data);
@@ -24,7 +22,7 @@ const MyDecksList = () => {
     setIsUpdating(true);
 
     if (!inputRef.current?.value) {
-      setError({ message: "Name is required" });
+      setError("Name is required");
       setIsUpdating(false);
       return;
     }
@@ -37,7 +35,7 @@ const MyDecksList = () => {
       setError(undefined);
     } catch (error) {
       console.log(error);
-      setError({ message: "Failed to create deck" });
+      setError("Failed to create deck");
     }
     setIsUpdating(false);
   }
@@ -78,7 +76,7 @@ const MyDecksList = () => {
         >
           <label htmlFor="name">Name</label>
           <input
-          autoComplete="off"
+            autoComplete="off"
             ref={inputRef}
             className="tb-input mb-10"
             type="text"
@@ -94,8 +92,9 @@ const MyDecksList = () => {
   );
 };
 
+export default MyDecksList;
+
 export const loader = async () => {
   return await deckService.getAll();
 };
 
-export default MyDecksList;

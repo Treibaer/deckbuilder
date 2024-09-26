@@ -36,14 +36,14 @@ export class ImageController {
     @Res() res: Response,
   ) {
     const front = parseInt(faceSide || "0") === 0 ? "front" : "back";
-    const card = await this.imageService.findCardByScryfallId(scryfallId);
+    // const card = await this.imageService.findCardByScryfallId(scryfallId);
 
     const firstChar = scryfallId[0];
     const secondChar = scryfallId[1];
     const extension = type === "png" ? "png" : "jpg";
     let url: string = `https://cards.scryfall.io/${type}/${front}/${firstChar}/${secondChar}/${scryfallId}.${extension}`;
 
-    const localPath = this.imageService.getLocalPath(url, card, scryfallId);
+    const localPath = this.imageService.getLocalPath(url);
 
     if (!(await this.imageService.fileExists(localPath)) || force === "true") {
       await this.imageService.downloadImage(url, localPath);

@@ -29,8 +29,17 @@ export default class MoxfieldService {
     return this.client.post<Deck>(path, {}, true);
   }
 
-  async setFavorite(deckId: number, favorite: boolean) {
-    const path = `/favorites`;
+  async setFavoriteDeck(deckId: number, favorite: boolean) {
+    const path = `/favorites/decks`;
     return this.client.post(path, { favorite, moxfieldId: deckId }, true);
+  }
+  
+  async setFavoriteCard(scryfallId: string, favorite: boolean) {
+    const path = `/favorites/cards`;
+    return this.client.post(path, { favorite, scryfallId }, true);
+  }
+
+  async isFavoriteCard(scryfallId: string) {
+    return this.client.get<boolean>(`/favorites/cards/${scryfallId}`, true);
   }
 }

@@ -3,6 +3,7 @@ import Button from "../components/Button";
 import DeckPreview from "../components/Matches/DeckPreview";
 import { Playtest } from "../models/dtos";
 import PlaytestService from "../Services/PlaytestService";
+import { FormatType, formatUnixTimestamp } from "../utils/dataUtils";
 
 const playtestService = PlaytestService.shared;
 
@@ -52,7 +53,10 @@ const PlaytestHistory = () => {
                   />
                 )}
               </td>
-              <td className="px-6">
+              <td
+                className="px-6"
+                title={formatUnixTimestamp(pt.createdAt, FormatType.DAY_TIME)}
+              >
                 {new Date(pt.createdAt * 1000).toLocaleDateString()}
               </td>
               <td className="px-6">
@@ -62,33 +66,6 @@ const PlaytestHistory = () => {
           ))}
         </tbody>
       </table>
-      <div className="flex flex-col w-full">
-        <div className="flex justify-start text-center text-xl w-full">
-          <div>ID</div>
-          <div className="w-[500px]">Preview</div>
-          <div>Date</div>
-          <div>Actions</div>
-        </div>
-        {playtestHistory.map((pt) => (
-          <div
-            key={pt.id}
-            className="flex justify-start gap-4 border-b border-b-slate-600 items-center h-12"
-          >
-            <div>{pt.id}</div>
-            <div className="w-[500px]">
-              {pt.promoId && (
-                <DeckPreview
-                  moxfieldId={pt.moxfieldId}
-                  name={pt.name}
-                  promoId={pt.promoId}
-                />
-              )}
-            </div>
-            <div>{new Date(pt.createdAt * 1000).toLocaleDateString()}</div>
-            <Button title="Play" onClick={() => play(pt.id)} />
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

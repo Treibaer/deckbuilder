@@ -2,6 +2,7 @@ import {
   AutoIncrement,
   BelongsTo,
   Column,
+  ForeignKey,
   HasMany,
   Model,
   PrimaryKey,
@@ -29,8 +30,15 @@ export class Deck extends Model {
   @Column({ field: "promo_id" })
   promoId: string;
 
+  @Column({ field: "is_locked", allowNull: false, defaultValue: false })
+  isLocked: boolean;
+
   @Column({ field: "public", defaultValue: true })
   isPublic: boolean;
+
+  @ForeignKey(() => User)
+  @Column
+  creator_id: number;
 
   @BelongsTo(() => User, "creator_id")
   creator: User;

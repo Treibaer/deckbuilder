@@ -1,3 +1,4 @@
+import { LockClosedIcon, LockOpenIcon } from "@heroicons/react/24/solid";
 import { useRef, useState } from "react";
 import {
   Link,
@@ -8,6 +9,7 @@ import {
 import Button from "../components/Button";
 import CardPeekView from "../components/CardPeekView";
 import Confirmation from "../components/Common/Confirmation";
+import Dialog from "../components/Common/Dialog";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
 import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
 import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
@@ -38,6 +40,26 @@ const MyDeckDetailView = () => {
     faceSide: 0,
   });
   const [viewStyle, setViewStyle] = useState("grid");
+
+  // edit name / title
+  const [editName, setEditName] = useState(false);
+  const nameInputRef = useRef<HTMLInputElement>(null);
+  const [error, setError] = useState<string | undefined>(undefined);
+
+  async function handleUpdateName() {
+    const name = nameInputRef.current?.value;
+    if (name && editName) {
+      try {
+        await DeckService.shared.setName(deck, name);
+        setEditName(false);
+        await loadDeck();
+      } catch (error: Error | any) {
+        setError(error.message);
+      }
+    } else {
+      setError("Title is required");
+    }
+  }
 
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResultCards, setSearchResultCards] = useState([]);
@@ -191,7 +213,12 @@ const MyDeckDetailView = () => {
       ?.focus();
   }
 
-  const showResults = searchResultCards.length > 0;
+  async function toggleLock() {
+    await DeckService.shared.toggleLock(deck);
+    await loadDeck();
+  }
+
+  const showResults = !deck.isLocked && searchResultCards.length > 0;
   return (
     <div id="magic-deck-view" className="h-[400px]">
       {cardPreview && (
@@ -213,6 +240,23 @@ const MyDeckDetailView = () => {
           setPrint={setPrint}
         />
       )}
+      {editName && (
+        <Dialog
+          title="Update Deck name"
+          submitTitle="Update"
+          onClose={() => setEditName(false)}
+          onSubmit={handleUpdateName}
+          error={error}
+        >
+          <input
+            type="text"
+            placeholder="Deck name"
+            className="tb-input mb-10"
+            defaultValue={initialDeck.name}
+            ref={nameInputRef}
+          />
+        </Dialog>
+      )}
       <div className="deck-details-header flex flex-col sm:flex-row justify-center sm:justify-between mb-4">
         <div className="flex gap-2">
           <Link to=".." relative="path">
@@ -221,10 +265,18 @@ const MyDeckDetailView = () => {
           <Button
             onClick={setShowDeletionConfirmation.bind(null, true)}
             title="Delete"
+            disabled={deck.isLocked}
           />
           {Constants.playModeEnabled && (
             <Button onClick={didTapPlay} title="Play" />
           )}
+          <Button onClick={toggleLock}>
+            {deck.isLocked ? (
+              <LockClosedIcon className="h-6 w-6 text-gray-400" />
+            ) : (
+              <LockOpenIcon className="h-6 w-6 text-gray-400" />
+            )}
+          </Button>{" "}
         </div>
         <div className="flex gap-4">
           <input
@@ -232,10 +284,16 @@ const MyDeckDetailView = () => {
             type="text"
             value={searchTerm}
             onChange={handleChange}
+            disabled={deck.isLocked}
           />
           <div className="w-10">{isLoading && <LoadingSpinner inline />}</div>
         </div>
-        <div className="title">{deck.name}</div>
+        <div
+          className="font-semibold text-lg select-none cursor-pointer"
+          onClick={() => !deck.isLocked && setEditName(true)}
+        >
+          {deck.name}
+        </div>
 
         <div className="flex gap-2">
           {viewStyles.map((s) => (
@@ -294,6 +352,7 @@ const MyDeckDetailView = () => {
                 setPromoId(previewId);
               }}
               title="Set Promo"
+              disabled={deck.isLocked}
             />
           )}
         </div>
@@ -311,7 +370,11 @@ const MyDeckDetailView = () => {
           />
         )}
         {viewStyle === "grid" && (
-          <div className={`w-full ${showResults ? "md:max-h-[55vh]" : "md:max-h-[85vh]"}`}>
+          <div
+            className={`w-full ${
+              showResults ? "md:max-h-[55vh]" : "md:max-h-[85vh]"
+            }`}
+          >
             <DeckDetailsGridView
               structure={structure}
               setPreviewImage={setPreviewImage}
@@ -320,6 +383,7 @@ const MyDeckDetailView = () => {
               openPrintSelection={showDetailOverlay}
               showCardPreview={showCardPreview}
               moveZone={moveZone}
+              isLocked={deck.isLocked}
             />
           </div>
         )}

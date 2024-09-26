@@ -92,7 +92,7 @@ const Matches = () => {
   }
 
   return (
-    <div className="mb-8">
+    <div className="mb-8 mx-auto">
       {isLoading && <DelayedLoadingSpinner />}
       {isCreatingMatch && (
         <CreateMatchDialog

@@ -11,6 +11,7 @@ const DeckDetailsGridView: React.FC<{
   openPrintSelection?: (card: MagicCard) => void;
   showCardPreview: (card: MagicCard) => void;
   moveZone?: (card: MagicCard, from: string, to: string) => void;
+  isLocked: boolean;
 }> = ({
   structure,
   setPreviewImage,
@@ -19,6 +20,7 @@ const DeckDetailsGridView: React.FC<{
   openPrintSelection,
   showCardPreview,
   moveZone,
+  isLocked,
 }) => {
   function formatTitle(title: string, section: DeckCard[]) {
     const cardAmount = section.reduce((acc, card) => acc + card.quantity, 0);
@@ -49,7 +51,7 @@ const DeckDetailsGridView: React.FC<{
     }
   };
 
-  const canEdit = addToDeck && updateCardAmount && openPrintSelection;
+  const canEdit = addToDeck && updateCardAmount && openPrintSelection && !isLocked;
 
   return (
     <div className="select-none overflow-y-scroll h-full w-full flex flex-col gap-2">

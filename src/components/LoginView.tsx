@@ -7,8 +7,8 @@ const LoginView: React.FC<{
   setIsLoggedIn: (isLoggedIn: boolean) => void;
 }> = ({ setIsLoggedIn }) => {
   const [username, setUsername] = useState("");
-  const [error, setError] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -25,8 +25,8 @@ const LoginView: React.FC<{
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        username: username,
-        password: password,
+        username,
+        password,
         client: "deckbuilder",
       }),
     });
@@ -41,13 +41,12 @@ const LoginView: React.FC<{
     }
   }
 
-    // Function to handle Enter key press
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-      if (event.key === "Enter") {
-        handleLogin();
-      }
-    };
-  
+  // Function to handle Enter key press
+  const handleKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      handleLogin();
+    }
+  };
 
   useEffect(() => {
     inputRef.current?.focus();

@@ -59,13 +59,13 @@ export class ImportService {
       console.log("Download and write completed successfully.");
       content = fs.readFileSync(cacheName, "utf8");
     } else {
-      // throw new PreconditionFailedException("file already exists");
+      throw new PreconditionFailedException("file already exists");
       content = fs.readFileSync(cacheName, "utf8");
     }
 
     // remove all cards from the database
     await this.sequelize.query("SET FOREIGN_KEY_CHECKS = 0;");
-    await Card.destroy({ truncate: true });
+    await this.sequelize.query("TRUNCATE TABLE `card`;");
     await this.sequelize.query("SET FOREIGN_KEY_CHECKS = 1;");
 
     // get amount of cards of entities
@@ -181,13 +181,11 @@ export class ImportService {
         isReprint: card.reprint ?? false,
         printsSearchUri: card.prints_search_uri ?? "",
         cardFacesNames: cardFaces.join("###"),
-        image: "",
-        imageArtCrop: "",
         relatedScryfallIds: allPartsAsString,
       });
     }
   }
-
+  
   async importSymbols() {
     const cacheFolder = path.join(this.cachePath, "card-symbols");
     if (!fs.existsSync(cacheFolder)) {
