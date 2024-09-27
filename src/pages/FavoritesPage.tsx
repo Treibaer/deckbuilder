@@ -1,19 +1,18 @@
 import { useState } from "react";
 import { LoaderFunction, useLoaderData } from "react-router-dom";
-import CardPeekView from "../components/CardPeekView";
-import DecksList from "../components/Decks/DecksList";
+import CardPeekView from "../components/Card/CardPeekView";
+import DecksListWrapper from "../components/Deck/DecksListWrapper";
 import MagicCardView from "../components/MagicCardView";
 import { Deck, MagicCard } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import Client from "../Services/Client";
-import MagicHelper from "../Services/MagicHelper";
 
 type FavoritesDto = {
   moxfieldDecks: Deck[];
   cards: MagicCard[];
 };
 
-const Favorites = () => {
+const FavoritesPage = () => {
   const loaderData = useLoaderData() as FavoritesDto;
 
   const [favoriteDecks, setFavoriteDecks] = useState(loaderData.moxfieldDecks);
@@ -25,14 +24,6 @@ const Favorites = () => {
     setFavoriteDecks(favorites.moxfieldDecks);
     setFavoriteCards(favorites.cards);
   }
-
-  const moxfieldDecks = favoriteDecks.map((deck: any) => {
-    return {
-      ...deck,
-      img: MagicHelper.artCropUrl(deck.promoId),
-      link: `/decks/moxfield/${deck.id}`,
-    };
-  });
 
   return (
     <div className="mx-auto">
@@ -47,7 +38,7 @@ const Favorites = () => {
         Favorite Decks
       </div>
       <div className="flex gap-4">
-        <DecksList decks={moxfieldDecks} />
+        <DecksListWrapper decks={favoriteDecks} type="moxfield" />
       </div>
       <div className="flex justify-center text-3xl font-semibold m-2 mt-8 mb-8">
         Favorite Cards
@@ -67,7 +58,7 @@ const Favorites = () => {
   );
 };
 
-export default Favorites;
+export default FavoritesPage;
 
 export const loader: LoaderFunction = async () => {
   return await Client.shared.get("/favorites", true);

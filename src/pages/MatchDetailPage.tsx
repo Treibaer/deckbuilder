@@ -1,15 +1,15 @@
 import { useParams } from "react-router-dom";
 
-function MatchPage() {
+function MatchDetailPage() {
   const { matchId } = useParams();
 
   return (
     <iframe
       className="absolute inset-0 w-screen h-screen"
       src={`/magic-web-js/duo3.html?matchId=${matchId}`}
-      title="Play Page"
+      title="Match"
     ></iframe>
   );
 }
 
-export default MatchPage;
+export default MatchDetailPage;

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { useLoaderData } from "react-router-dom";
-import DraftCreateView from "../components/DraftCreateView";
-import CardService from "../Services/CardService";
-import { CardSet } from "../models/dtos";
 import Button from "../components/Button";
-import TitleView from "../components/TitleView";
+import TitleView from "../components/Common/TitleView";
+import DraftCreateView from "../components/DraftCreateView";
+import { CardSet } from "../models/dtos";
+import CardService from "../Services/CardService";
 
 const cardService = CardService.shared;
 

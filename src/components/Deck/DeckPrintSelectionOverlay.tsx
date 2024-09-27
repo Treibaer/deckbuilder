@@ -4,7 +4,7 @@ import { CardSize } from "../../models/structure";
 import Button from "../Button";
 import MagicCardView from "../MagicCardView";
 
-const MyDeckPrintSelectionOverlay: React.FC<{
+const DeckPrintSelectionOverlay: React.FC<{
   closeOverlay: () => void;
   card: any;
   setPrint: (card: MagicCard, print: any) => void;
@@ -94,4 +94,4 @@ const MyDeckPrintSelectionOverlay: React.FC<{
   );
 };
 
-export default MyDeckPrintSelectionOverlay;
+export default DeckPrintSelectionOverlay;

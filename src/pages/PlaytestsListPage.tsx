@@ -1,17 +1,17 @@
 import { useLoaderData } from "react-router-dom";
 import Button from "../components/Button";
-import DeckPreview from "../components/Matches/DeckPreview";
+import DeckPreview from "../components/Deck/DeckPreview";
 import { Playtest } from "../models/dtos";
 import PlaytestService from "../Services/PlaytestService";
 import { FormatType, formatUnixTimestamp } from "../utils/dataUtils";
 
 const playtestService = PlaytestService.shared;
 
-const Playtests = () => {
+const PlaytestsListPage = () => {
   const playtestHistory = useLoaderData() as Playtest[];
 
   function play(id: number) {
-    window.open(`/play/${id}`, "_blank");
+    window.open(`/playtests/${id}`, "_blank");
   }
 
   return (
@@ -70,7 +70,7 @@ const Playtests = () => {
   );
 };
 
-export default Playtests;
+export default PlaytestsListPage;
 
 export const loader = async () => {
   return await playtestService.getAll();

@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
-import DecksList from "../components/Decks/DecksList";
+import CardSetItem from "../components/CardSetItem";
+import DeckPreview from "../components/Deck/DeckPreview";
+import DecksListWrapper from "../components/Deck/DecksListWrapper";
 import SearchBar from "../components/Search/SearchBar";
 import { Deck, Playtest } from "../models/dtos";
 import CardService from "../Services/CardService";
 import DeckService from "../Services/DeckService";
-import SetSingleView from "./SetSingleView";
 import PlaytestService from "../Services/PlaytestService";
-import DeckPreview from "../components/Matches/DeckPreview";
 
-const Home = () => {
+const HomePage = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [myDecks, setMyDecks] = useState<Deck[]>([]);
@@ -75,7 +75,7 @@ const Home = () => {
 
       <div className="flex flex-wrap mt-4 gap-2 justify-center">
         {sets.map((set) => (
-          <SetSingleView set={set} key={set.scryfallId} />
+          <CardSetItem set={set} key={set.scryfallId} />
         ))}
       </div>
       {myDecks.length > 0 && (
@@ -89,7 +89,7 @@ const Home = () => {
             </Link>
           </div>
           <div>
-            <DecksList decks={myDecks} type="custom" />
+            <DecksListWrapper decks={myDecks} type="custom" />
           </div>
         </>
       )}
@@ -121,4 +121,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomePage;

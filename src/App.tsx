@@ -3,37 +3,37 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./App.css";
 
 // comopnents
-import CardDetailView, {
+import CardDetailPage, {
   loader as cardDetailLoader,
-} from "./pages/CardDetailView";
-import MoxfieldDeckDetailView, {
+} from "./pages/CardDetailPage";
+import MoxfieldDecksListPage, {
   loader as moxfieldDeckDetailLoader,
-} from "./pages/MoxfieldDeckDetailView";
+} from "./pages/MoxfieldDeckDetailPage";
 import MoxfieldDeckOverview, {
   loader as moxfieldLoader,
-} from "./pages/MoxfieldDecksList";
-import MyDeckDetailView, {
+} from "./pages/MoxfieldDecksListPage";
+import CustomDeckDetailPage, {
   loader as myDeckViewLoader,
-} from "./pages/MyDeckDetailView";
-import SetList, { loader as setsLoader } from "./pages/SetList";
+} from "./pages/CustomDeckDetailPage.tsx";
+import CardSetsListPage, { loader as setsLoader } from "./pages/CardSetsListPage.tsx";
 
 // Pages
 import DraftView, { loader as draftViewLoader } from "./pages/DraftList";
-import Favorites, { loader as favoritesLoader } from "./pages/Favorites";
-import Home from "./pages/Home";
+import Favorites, { loader as favoritesLoader } from "./pages/FavoritesPage";
+import Home from "./pages/HomePage";
 import Imports, { loader as importLoader } from "./pages/Imports";
 import Logout from "./pages/Logout";
-import Matches, { loader as matchesLoader } from "./pages/Matches";
-import MatchPage from "./pages/MatchPage";
-import MyDecksList, { loader as myDecksListLoader } from "./pages/MyDecksList";
-import PlayPage from "./pages/PlayPage";
-import Playtests, {
+import MatchDetailPage from "./pages/MatchDetailPage.tsx";
+import MatchesListPage, { loader as matchesLoader } from "./pages/MatchesListPage";
+import CustomDecksListPage, { loader as myDecksListLoader } from "./pages/CustomDecksListPage.tsx";
+import DeckPlaytestPage from "./pages/DeckPlaytestPage.tsx";
+import PlaytestsListPage, {
   loader as playtestHistoryLoader,
-} from "./pages/Playtests";
+} from "./pages/PlaytestsListPage.tsx";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import RootLayout from "./pages/RootLayout";
-import SearchView, { loader as searchCardLoader } from "./pages/SearchView";
+import CardSearchPage, { loader as searchCardLoader } from "./pages/CardSearchPage.tsx";
 import Settings from "./pages/Settings";
 import Users, { loader as usersLoader } from "./pages/Users";
 
@@ -45,15 +45,15 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       {
         path: "/search",
-        element: <SearchView />,
+        element: <CardSearchPage />,
         loader: searchCardLoader,
       },
       {
         path: "/cards/:cardId",
-        element: <CardDetailView />,
+        element: <CardDetailPage />,
         loader: cardDetailLoader,
       },
-      { path: "/sets", element: <SetList />, loader: setsLoader },
+      { path: "/sets", element: <CardSetsListPage />, loader: setsLoader },
       {
         path: "/decks/moxfield",
         element: <MoxfieldDeckOverview />,
@@ -61,33 +61,33 @@ const router = createBrowserRouter([
       },
       {
         path: "/decks/moxfield/:publicId",
-        element: <MoxfieldDeckDetailView />,
+        element: <MoxfieldDecksListPage />,
         loader: moxfieldDeckDetailLoader,
       },
       { path: "/drafts", element: <DraftView />, loader: draftViewLoader },
       { path: "/decks", element: <h1>All Public Decks</h1> },
       {
         path: "/decks/my",
-        element: <MyDecksList />,
+        element: <CustomDecksListPage />,
         loader: myDecksListLoader,
       },
       {
         path: "/decks/my/:deckId",
-        element: <MyDeckDetailView />,
+        element: <CustomDeckDetailPage />,
         loader: myDeckViewLoader,
       },
       { path: "/users", element: <Users />, loader: usersLoader },
-      { path: "/matches", element: <Matches />, loader: matchesLoader },
       { path: "/profile", element: <Profile /> },
       { path: "/imports", element: <Imports />, loader: importLoader },
       {
         path: "/playtests",
-        element: <Playtests />,
+        element: <PlaytestsListPage />,
         loader: playtestHistoryLoader,
       },
+      { path: "/playtests/:playtestId", element: <DeckPlaytestPage /> },
       { path: "/settings", element: <Settings /> },
-      { path: "/play/:matchId", element: <PlayPage /> },
-      { path: "/match/:matchId", element: <MatchPage /> },
+      { path: "/matches", element: <MatchesListPage />, loader: matchesLoader },
+      { path: "/matches/:matchId", element: <MatchDetailPage /> },
       { path: "/decks/favorites", element: <Favorites />, loader: favoritesLoader },
     ],
     // errorElement: <ErrorPage />,

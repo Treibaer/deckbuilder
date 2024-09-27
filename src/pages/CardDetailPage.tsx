@@ -1,54 +1,42 @@
+import { HeartIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartFilledIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { Link, LoaderFunction, useLoaderData } from "react-router-dom";
 import CardService from "../Services/CardService";
 import Helper from "../Services/Helper";
+import MoxfieldService from "../Services/MoxfieldService";
 import Button from "../components/Button";
-import AddToDeckDialog from "../components/CardDetails/AddToDeckDialog";
-import CardDetailPrintings from "../components/CardDetails/CardDetailPrintings";
+import AddCardToDeckDialog from "../components/Card/AddCardToDeckDialog";
+import CardPrintingsList from "../components/Card/CardPrintingsList";
 import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 import MagicCardView from "../components/MagicCardView";
 import { CardDetailWithPrintings } from "../models/dtos";
 import { CardSize } from "../models/structure";
-import { HeartIcon } from "@heroicons/react/24/solid";
-import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/outline";
-import MoxfieldService from "../Services/MoxfieldService";
 
-const CardDetailView: React.FC<{}> = () => {
-  const cardDetails = useLoaderData() as CardDetailWithPrintings;
+const CardDetailPage: React.FC<{}> = () => {
+  const { card, printings } = useLoaderData() as CardDetailWithPrintings;
   const [isLoading, setIsLoading] = useState(false);
   const [showAddToDeck, setShowAddToDeck] = useState(false);
-  const [isFavorite, setIsFavorite] = useState(cardDetails.card.isFavorite);
+  const [isFavorite, setIsFavorite] = useState(card.isFavorite);
 
-  const card = cardDetails.card;
-  const printings = cardDetails.printings;
-
-  async function openAddToCartDialog() {
+  async function openAddToDeckDialog() {
     setShowAddToDeck(true);
   }
 
-  async function setAsFavorite() {
+  async function toggleFavorite() {
     setIsFavorite(!isFavorite);
     await MoxfieldService.shared.setFavoriteCard(card.scryfallId, !isFavorite);
-    // card.isFavorite = !card.isFavorite;
   }
 
   useEffect(() => {
-    setIsFavorite(cardDetails.card.isFavorite);
-  }, [cardDetails.card]);
-
-  // async function toggleFavorite() {
-  //   await moxfieldService.setFavoriteDeck(deck.id, !deck.isFavorite);
-  //   // reload deck
-  //   const newDeck = await moxfieldService.getDeck("" + deck.id);
-  //   setDeck(newDeck);
-  // }
-
+    setIsFavorite(card.isFavorite);
+  }, [card]);
 
   return (
     <>
       {isLoading && <FullscreenLoadingSpinner />}
       {showAddToDeck && (
-        <AddToDeckDialog
+        <AddCardToDeckDialog
           onClose={() => setShowAddToDeck(false)}
           card={card}
           setIsLoading={setIsLoading}
@@ -75,17 +63,19 @@ const CardDetailView: React.FC<{}> = () => {
           <div className="border border-lightBlue p-2 rounded-lg">
             {card.oracleText}
           </div>
-          {printings && <CardDetailPrintings cardDetails={cardDetails} />}
+          {printings && (
+            <CardPrintingsList cardDetails={{ card, printings }} />
+          )}
         </div>
         <div className="flex flex-row sm:flex-col gap-2 mb-8">
-          <Button onClick={setAsFavorite} className="flex justify-center">
+          <Button onClick={toggleFavorite} className="flex justify-center">
             {isFavorite ? (
-              <HeartIcon className="h-6 w-6 text-brightBlue" />
+              <HeartFilledIcon className="h-6 w-6 text-brightBlue" />
             ) : (
-              <HeartIcon2 className="h-6 w-6 text-brightBlue" />
+              <HeartIcon className="h-6 w-6 text-brightBlue" />
             )}
           </Button>
-          <Button title="Add to deck" onClick={openAddToCartDialog} />
+          <Button title="Add to deck" onClick={openAddToDeckDialog} />
           {card.mapping && (
             <Link to={"/decks/moxfield?id=" + card.mapping}>
               <Button title="Find decks with" />
@@ -97,7 +87,7 @@ const CardDetailView: React.FC<{}> = () => {
   );
 };
 
-export default CardDetailView;
+export default CardDetailPage;
 
 export const loader: LoaderFunction<{ cardId: string }> = async ({
   params,

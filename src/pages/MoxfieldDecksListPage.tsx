@@ -6,12 +6,12 @@ import {
 } from "react-router-dom";
 import MoxfieldService from "../Services/MoxfieldService";
 import Button from "../components/Button";
-import DeckList from "../components/Decks/DecksList";
+import DeckList from "../components/Deck/DecksListWrapper";
 import { Deck } from "../models/dtos";
 
 const moxfieldService = MoxfieldService.shared;
 
-const MoxfieldDecksList = () => {
+const MoxfieldDecksListPage = () => {
   const data = useLoaderData() as any;
   const navigate = useNavigate();
 
@@ -136,7 +136,7 @@ const MoxfieldDecksList = () => {
   );
 };
 
-export default MoxfieldDecksList;
+export default MoxfieldDecksListPage;
 
 export const loader = async ({ request }: any) => {
   const queryParameters = new URL(request.url).searchParams;

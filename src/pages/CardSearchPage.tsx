@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLoaderData, useNavigate, useSearchParams } from "react-router-dom";
 import MagicCardList from "../components/MagicCardList";
-import MagicFilterView from "../components/Search/MagicFilterView";
+import CardSearchFilter from "../components/Search/CardSearchFilter";
 import SearchBar from "../components/Search/SearchBar";
 import SearchPagination from "../components/Search/SearchPagination";
 import CardService from "../Services/CardService";
 
-const SearchView: React.FC = () => {
+const CardSearchPage: React.FC = () => {
   /*
     useEffect(() => {
     const handleKeyDown = (event) => {
@@ -74,7 +74,7 @@ const SearchView: React.FC = () => {
         handleChange={handleChange}
         setShowFilter={setShowFilter}
       />
-      <MagicFilterView
+      <CardSearchFilter
         query={searchTerm}
         sets={data.sets}
         showFilter={showFilter}
@@ -104,4 +104,4 @@ export const loader = async ({ request }: any) => {
   );
 };
 
-export default SearchView;
+export default CardSearchPage;

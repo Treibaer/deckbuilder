@@ -4,7 +4,7 @@ import cardStackImage from "../../assets/cardstack.svg";
 import viewsImage from "../../assets/views.svg";
 import MagicHelper from "../../Services/MagicHelper";
 
-const DecksList: React.FC<{ decks: any[], type: "moxfield" | "custom" }> = ({ decks, type }) => {
+const DecksListWrapper: React.FC<{ decks: any[], type: "moxfield" | "custom" }> = ({ decks, type }) => {
   for (const deck of decks) {
     if (!deck.img) {
       deck.img = deck.promoId
@@ -70,4 +70,4 @@ const DecksList: React.FC<{ decks: any[], type: "moxfield" | "custom" }> = ({ de
   );
 };
 
-export default DecksList;
+export default DecksListWrapper;

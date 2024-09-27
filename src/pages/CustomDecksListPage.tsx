@@ -2,15 +2,14 @@ import { useRef, useState } from "react";
 import { useLoaderData } from "react-router-dom";
 import DelayedLoadingSpinner from "../components/Common/DelayedLoadingSpinner";
 import Dialog from "../components/Common/Dialog";
-import DeckList from "../components/Decks/DecksList";
-import TitleView from "../components/TitleView";
+import TitleView from "../components/Common/TitleView";
+import DeckList from "../components/Deck/DecksListWrapper";
 import { Deck } from "../models/dtos";
 import DeckService from "../Services/DeckService";
-import MagicHelper from "../Services/MagicHelper";
 
 const deckService = DeckService.shared;
 
-const MyDecksList = () => {
+const CustomDecksListPage = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [error, setError] = useState<string | undefined>(undefined);
   const [isCreatingDeck, setIsCreatingDeck] = useState(false);
@@ -92,7 +91,7 @@ const MyDecksList = () => {
   );
 };
 
-export default MyDecksList;
+export default CustomDecksListPage;
 
 export const loader = async () => {
   return await deckService.getAll();

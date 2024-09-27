@@ -5,17 +5,17 @@ import {
 } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import Button from "../components/Button";
 import LoadingSpinner from "../components/Common/LoadingSpinner";
-import MyDeckPrintSelectionOverlay from "../components/Decks/MyDeckPrintSelectionOverlay";
+import DeckPrintSelectionOverlay from "../components/Deck/DeckPrintSelectionOverlay";
 import MagicCardView from "../components/MagicCardView";
-import MagicFilterView from "../components/Search/MagicFilterView";
+import CardSearchFilter from "../components/Search/CardSearchFilter";
 import SearchBar from "../components/Search/SearchBar";
 import SearchPagination from "../components/Search/SearchPagination";
 import { Deck, MagicCard } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import CardService from "../Services/CardService";
 import DeckService from "../Services/DeckService";
-import Button from "../components/Button";
 
 const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
   deck,
@@ -170,7 +170,7 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
       </div>
       {selectedCard && (
         <div className="fixed z-30">
-          <MyDeckPrintSelectionOverlay
+          <DeckPrintSelectionOverlay
             closeOverlay={() => setSelectedCard(null)}
             card={selectedCard}
             setPrint={overrideCard}
@@ -183,7 +183,7 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
         handleChange={handleChange}
         setShowFilter={setShowFilter}
       />
-      <MagicFilterView
+      <CardSearchFilter
         query={searchTerm}
         sets={sets}
         showFilter={showFilter}

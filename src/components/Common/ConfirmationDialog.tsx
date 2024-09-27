@@ -1,6 +1,6 @@
 import Button from "../Button";
 
-const Confirmation: React.FC<{
+const ConfirmationDialog: React.FC<{
   onConfirm: () => void;
   onCancel: () => void;
 }> = ({ onConfirm, onCancel }) => {
@@ -19,4 +19,4 @@ const Confirmation: React.FC<{
   );
 };
 
-export default Confirmation;
+export default ConfirmationDialog;

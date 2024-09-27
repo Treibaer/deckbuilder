@@ -1,7 +1,7 @@
 import { User } from "../../models/dtos";
 import Dialog from "../Common/Dialog";
 
-const CreateMatchDialog: React.FC<{
+const MatchCreationDialog: React.FC<{
   onSubmit: () => void;
   onClose: () => void;
   users: User[];
@@ -29,4 +29,4 @@ const CreateMatchDialog: React.FC<{
   );
 };
 
-export default CreateMatchDialog;
+export default MatchCreationDialog;

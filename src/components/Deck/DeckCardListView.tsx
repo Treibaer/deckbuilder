@@ -2,7 +2,7 @@ import { DeckCard, MagicCard } from "../../models/dtos";
 import { DeckStructure } from "../../models/structure";
 import Button from "../Button";
 
-const DeckDetailsListView: React.FC<{
+const DeckCardListView: React.FC<{
   structure: DeckStructure;
   setPreviewImage: (card: MagicCard, faceSide?: number) => void;
   addToDeck?: (card: MagicCard, zone: string) => void;
@@ -121,4 +121,4 @@ const DeckDetailsListView: React.FC<{
   );
 };
 
-export default DeckDetailsListView;
+export default DeckCardListView;

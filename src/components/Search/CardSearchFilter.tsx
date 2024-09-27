@@ -24,7 +24,7 @@ const formats = [
 ];
 const colors = ["w", "u", "b", "r", "g", "c"];
 
-const MagicFilterView: React.FC<{
+const CardSearchFilter: React.FC<{
   query: string;
   sets: CardSet[];
   showFilter: boolean;
@@ -330,4 +330,4 @@ const MagicFilterView: React.FC<{
   );
 };
 
-export default MagicFilterView;
+export default CardSearchFilter;

@@ -3,16 +3,16 @@ import { LoaderFunction, useLoaderData } from "react-router-dom";
 import DeckService from "../Services/DeckService";
 import MatchService from "../Services/MatchService";
 import DelayedLoadingSpinner from "../components/Common/DelayedLoadingSpinner";
-import CreateMatchDialog from "../components/Matches/CreateMatchDialog";
-import MatchRow from "../components/Matches/MatchRow";
-import SelectDeckDialog from "../components/Matches/SelectDeckDialog";
-import TitleView from "../components/TitleView";
+import TitleView from "../components/Common/TitleView";
+import DeckSelectionDialog from "../components/Matches/DeckSelectionDialog";
+import MatchCreationDialog from "../components/Matches/MatchCreationDialog";
+import MatchListItem from "../components/Matches/MatchListItem";
 import { Deck, Match, User } from "../models/dtos";
 
 const matchService = MatchService.shared;
 const deckService = DeckService.shared;
 
-const Matches = () => {
+const MatchesListPage = () => {
   const [matches, setMatches] = useState<Match[]>(useLoaderData() as Match[]);
   const [isLoading, setIsLoading] = useState(false);
   const [isCreatingMatch, setIsCreatingMatch] = useState(false);
@@ -53,7 +53,7 @@ const Matches = () => {
   }
 
   async function openMatch(matchId: number) {
-    window.open(`/match/${matchId}`, "_blank")?.focus();
+    window.open(`/matches/${matchId}`, "_blank")?.focus();
   }
 
   async function openDeckSelection(match: Match, playerIndex: number) {
@@ -93,7 +93,7 @@ const Matches = () => {
     <div className="mb-8 mx-auto">
       {isLoading && <DelayedLoadingSpinner />}
       {isCreatingMatch && (
-        <CreateMatchDialog
+        <MatchCreationDialog
           users={users}
           onClose={close}
           onSubmit={createMatch}
@@ -101,7 +101,7 @@ const Matches = () => {
         />
       )}
       {isSelectingDeck && (
-        <SelectDeckDialog decks={decks} onClose={close} onSubmit={selectDeck} />
+        <DeckSelectionDialog decks={decks} onClose={close} onSubmit={selectDeck} />
       )}
       <TitleView title="Matches" openDialog={openCreateMatchForm} />
       <table className="mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 select-none">
@@ -123,7 +123,7 @@ const Matches = () => {
         </thead>
         <tbody>
           {matches.map((match, _) => (
-            <MatchRow
+            <MatchListItem
               key={match.id}
               match={match}
               openMatch={openMatch}
@@ -136,7 +136,7 @@ const Matches = () => {
   );
 };
 
-export default Matches;
+export default MatchesListPage;
 
 export const loader: LoaderFunction = async () => {
   return await matchService.getAll();

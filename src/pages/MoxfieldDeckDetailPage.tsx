@@ -1,5 +1,5 @@
-import { HeartIcon as HeartIcon2 } from "@heroicons/react/24/outline";
-import { HeartIcon } from "@heroicons/react/24/solid";
+import { HeartIcon } from "@heroicons/react/24/outline";
+import { HeartIcon as HeartFilledIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import Constants from "../Services/Constants";
@@ -7,12 +7,11 @@ import MagicHelper from "../Services/MagicHelper";
 import MoxfieldService from "../Services/MoxfieldService";
 import PlaytestService from "../Services/PlaytestService";
 import Button from "../components/Button";
-import CardPeekView from "../components/CardPeekView";
+import CardPeekView from "../components/Card/CardPeekView";
 import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
-import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
-import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
+import DeckCardGridView from "../components/Deck/DeckCardGridView";
+import DeckCardListView from "../components/Deck/DeckCardListView";
 import { Deck, MagicCard } from "../models/dtos";
-import "./MoxfieldDeckDetailView.css";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;
@@ -24,7 +23,7 @@ type HoveredType = {
   faceSide: number;
 };
 
-const MoxfieldDeckDetailView = () => {
+const MoxfieldDeckDetailPage = () => {
   const navigator = useNavigate();
   const data = useLoaderData() as Deck;
   const [deck, setDeck] = useState(data);
@@ -72,7 +71,7 @@ const MoxfieldDeckDetailView = () => {
     const response = await PlaytestService.shared.createFromMoxfieldDeck(
       deck.id
     );
-    window.open(`/play/${response.id}`, "_blank")?.focus();
+    window.open(`/playtests/${response.id}`, "_blank")?.focus();
   }
 
   async function toggleFavorite() {
@@ -85,14 +84,13 @@ const MoxfieldDeckDetailView = () => {
   return (
     <div id="magic-deck-view">
       {isLoading && <FullscreenLoadingSpinner />}
-
       {cardPreview && (
         <CardPeekView
           card={cardPreview}
           onClose={setCardPreview.bind(null, null)}
         />
       )}
-      <div className="deck-details-header flex flex-col sm:flex-row justify-center sm:justify-between mb-2">
+      <div className="items-center flex flex-col sm:flex-row justify-center sm:justify-between mb-2">
         <div className="flex gap-2 items-center">
           <Button
             title="Back"
@@ -106,9 +104,9 @@ const MoxfieldDeckDetailView = () => {
           )}
           <Button onClick={toggleFavorite}>
             {deck.isFavorite ? (
-              <HeartIcon className="h-6 w-6 text-brightBlue" />
+              <HeartFilledIcon className="h-6 w-6 text-brightBlue" />
             ) : (
-              <HeartIcon2 className="h-6 w-6 text-brightBlue" />
+              <HeartIcon className="h-6 w-6 text-brightBlue" />
             )}
           </Button>
         </div>
@@ -127,21 +125,21 @@ const MoxfieldDeckDetailView = () => {
         </div>
       </div>
 
-      <div id="deck-detail">
-        <div className="image-stats hidden sm:block">
-          <img className="backside" src={backside} alt=" " />
-          <img src={image} alt=" " />
+      <div className="flex gap-4 relative">
+        <div className="image-stats hidden sm:block relative flex-shrink-0">
+          <img className="absolute backside magicCard large" src={backside} alt=" " />
+          <img className="magicCard large" src={image} alt=" " />
           <div>Cards: {deck.cardCount}</div>
         </div>
         {viewStyle === "list" && (
-          <DeckDetailsListView
+          <DeckCardListView
             structure={structure}
             setPreviewImage={setPreviewImage}
           />
         )}
         {viewStyle === "grid" && (
           <div className={`w-full md:max-h-[85vh]`}>
-            <DeckDetailsGridView
+            <DeckCardGridView
               structure={structure}
               setPreviewImage={setPreviewImage}
               showCardPreview={showCardPreview}
@@ -154,7 +152,7 @@ const MoxfieldDeckDetailView = () => {
   );
 };
 
-export default MoxfieldDeckDetailView;
+export default MoxfieldDeckDetailPage;
 
 export const loader = async ({ params }: any) => {
   return await moxfieldService.getDeck(params.publicId);

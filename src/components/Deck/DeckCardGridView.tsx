@@ -1,9 +1,9 @@
 import { DeckCard, MagicCard } from "../../models/dtos";
-import MagicCardView from "../MagicCardView";
-import Button from "../Button";
 import { CardSize, DeckStructure } from "../../models/structure";
+import Button from "../Button";
+import MagicCardView from "../MagicCardView";
 
-const DeckDetailsGridView: React.FC<{
+const DeckCardGridView: React.FC<{
   structure: DeckStructure;
   setPreviewImage: (card: MagicCard | null, faceSide?: number) => void;
   addToDeck?: (card: MagicCard, zone: string) => void;
@@ -117,4 +117,4 @@ const DeckDetailsGridView: React.FC<{
   );
 };
 
-export default DeckDetailsGridView;
+export default DeckCardGridView;

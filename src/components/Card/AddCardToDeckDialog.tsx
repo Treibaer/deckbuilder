@@ -7,7 +7,7 @@ import MagicCardView from "../MagicCardView";
 
 const deckService = DeckService.shared;
 
-const AddToDeckDialog: React.FC<{
+const AddCardToDeckDialog: React.FC<{
   onClose: () => void;
   card: MagicCard;
   setIsLoading: (value: boolean) => void;
@@ -90,4 +90,4 @@ const AddToDeckDialog: React.FC<{
   );
 };
 
-export default AddToDeckDialog;
+export default AddCardToDeckDialog;

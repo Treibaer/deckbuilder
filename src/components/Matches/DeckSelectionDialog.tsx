@@ -5,11 +5,11 @@ import MoxfieldService from "../../Services/MoxfieldService";
 import Button from "../Button";
 import Dialog from "../Common/Dialog";
 import LoadingSpinner from "../Common/LoadingSpinner";
-import DeckPreview from "./DeckPreview";
+import DeckPreview from "../Deck/DeckPreview";
 
 type Tab = "myDeck" | "moxfield" | "favorites";
 
-const SelectDeckDialog: React.FC<{
+const DeckSelectionDialog: React.FC<{
   onSubmit: (deckId?: number, moxfieldId?: string) => void;
   onClose: () => void;
   decks: Deck[];
@@ -216,4 +216,4 @@ const SelectDeckDialog: React.FC<{
   );
 };
 
-export default SelectDeckDialog;
+export default DeckSelectionDialog;

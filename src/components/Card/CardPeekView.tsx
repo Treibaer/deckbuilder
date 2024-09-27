@@ -5,14 +5,14 @@ import {
 } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import rotateImage from "../assets/rotate.svg";
-import { MagicCard } from "../models/dtos";
-import MagicHelper from "../Services/MagicHelper";
-import Button from "./Button";
-import AddToDeckDialog from "./CardDetails/AddToDeckDialog";
+import rotateImage from "../../assets/rotate.svg";
+import { MagicCard } from "../../models/dtos";
+import MagicHelper from "../../Services/MagicHelper";
+import MoxfieldService from "../../Services/MoxfieldService";
+import Button from "../Button";
+import DelayedLoadingSpinner from "../Common/DelayedLoadingSpinner";
+import AddCardToDeckDialog from "./AddCardToDeckDialog";
 import "./CardPeekView.css";
-import DelayedLoadingSpinner from "./Common/DelayedLoadingSpinner";
-import MoxfieldService from "../Services/MoxfieldService";
 
 const CardPeekView: React.FC<{
   card: MagicCard;
@@ -57,7 +57,7 @@ const CardPeekView: React.FC<{
   return (
     <div id="peekCardView">
       {showAddToDeck && (
-        <AddToDeckDialog
+        <AddCardToDeckDialog
           onClose={() => setShowAddToDeck(false)}
           card={card}
           setIsLoading={setIsLoading}

@@ -1,10 +1,10 @@
 import { useLoaderData } from "react-router-dom";
 import CardService from "../Services/CardService";
+import CardSetItem from "../components/CardSetItem";
 import { CardSet } from "../models/dtos";
-import SetSingleView from "./SetSingleView";
 const cardService = CardService.shared;
 
-const SetList = () => {
+const CardSetsListPage = () => {
   let sets = useLoaderData() as CardSet[];
 
   // sort sets by release date
@@ -19,14 +19,14 @@ const SetList = () => {
       </div>
       <div className="flex flex-wrap mt-4 gap-2 justify-center">
         {sets.map((set) => (
-          <SetSingleView set={set} key={set.scryfallId} />
+          <CardSetItem set={set} key={set.scryfallId} />
         ))}
       </div>
     </>
   );
 };
 
-export default SetList;
+export default CardSetsListPage;
 
 export const loader = async () => {
   return await cardService.getSets();

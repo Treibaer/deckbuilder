@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useMousePosition } from "../../hooks/useMousePosition";
 import { CardDetailWithPrintings } from "../../models/dtos";
 
-const CardDetailPrintings: React.FC<{
+const CardPrintingsList: React.FC<{
   cardDetails: CardDetailWithPrintings;
 }> = ({ cardDetails }) => {
   const mousePosition = useMousePosition();
@@ -54,4 +54,4 @@ const CardDetailPrintings: React.FC<{
   );
 };
 
-export default CardDetailPrintings;
+export default CardPrintingsList;

@@ -7,18 +7,17 @@ import {
   useNavigate,
 } from "react-router-dom";
 import Button from "../components/Button";
-import CardPeekView from "../components/CardPeekView";
-import Confirmation from "../components/Common/Confirmation";
+import CardPeekView from "../components/Card/CardPeekView";
+import ConfirmationDialog from "../components/Common/ConfirmationDialog";
 import Dialog from "../components/Common/Dialog";
-import DeckDetailsGridView from "../components/Decks/DeckDetailsGridView";
-import DeckDetailsListView from "../components/Decks/DeckDetailsListView";
-import MyDeckPrintSelectionOverlay from "../components/Decks/MyDeckPrintSelectionOverlay";
+import DeckCardGridView from "../components/Deck/DeckCardGridView";
+import DeckCardListView from "../components/Deck/DeckCardListView";
+import DeckPrintSelectionOverlay from "../components/Deck/DeckPrintSelectionOverlay";
 import { Deck, MagicCard } from "../models/dtos";
 import Constants from "../Services/Constants";
 import DeckService from "../Services/DeckService";
 import MagicHelper from "../Services/MagicHelper";
 import PlaytestService from "../Services/PlaytestService";
-import "./MoxfieldDeckDetailView.css";
 import Sandbox from "./Sandbox";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
@@ -30,7 +29,7 @@ type HoveredType = {
   faceSide: number;
 };
 
-const MyDeckDetailView = () => {
+const CustomDeckDetailPage = () => {
   const navigator = useNavigate();
   const initialDeck = useLoaderData() as Deck;
 
@@ -159,7 +158,7 @@ const MyDeckDetailView = () => {
 
   async function didTapPlay() {
     const response = await PlaytestService.shared.create(deck.id);
-    window.open(`/play/${response.id}`, "_blank")?.focus();
+    window.open(`/playtests/${response.id}`, "_blank")?.focus();
   }
 
   async function toggleLock() {
@@ -181,7 +180,6 @@ const MyDeckDetailView = () => {
         </div>
       )}
       <div
-        id="magic-deck-view"
         className={showSandbox ? "w-1/2 h-full p-2 overflow-scroll" : "w-full"}
       >
         {cardPreview && (
@@ -193,14 +191,14 @@ const MyDeckDetailView = () => {
 
         {showDeletionConfirmation && (
           <div className="fullscreenBlurWithLoading">
-            <Confirmation
+            <ConfirmationDialog
               onCancel={() => setShowDeletionConfirmation(false)}
               onConfirm={deleteDeck}
             />
           </div>
         )}
         {cardDetails && (
-          <MyDeckPrintSelectionOverlay
+          <DeckPrintSelectionOverlay
             card={cardDetails}
             closeOverlay={setCardDetails.bind(null, null)}
             setPrint={setPrint}
@@ -269,14 +267,23 @@ const MyDeckDetailView = () => {
             ))}
           </div>
         </div>
-        <div id="deck-detail">
+        <div className="flex gap-4 relative">
           <div
-            className={`image-stats hidden ${
+            className={`image-stats hidden flex-shrink-0 ${
               showSandbox ? "2xl:block" : "sm:block"
             }`}
           >
-            <img className="backside" src={backside} alt=" " />
-            <img style={{ zIndex: 1 }} src={image} alt=" " />
+            <img
+              className="backside absolute magicCard large"
+              src={backside}
+              alt=" "
+            />
+            <img
+              className="magicCard large"
+              style={{ zIndex: 1 }}
+              src={image}
+              alt=" "
+            />
             <div>Cards: {deck.cardCount}</div>
             <p>Valid: {DeckService.shared.isValid(deck) ? "yes" : "no"}</p>
             {deck.promoId !== previewId && hovered.isPreviewCardFromDeck && (
@@ -292,7 +299,7 @@ const MyDeckDetailView = () => {
 
           {cards.length === 0 && <p>No cards in deck</p>}
           {viewStyle === "list" && (
-            <DeckDetailsListView
+            <DeckCardListView
               structure={structure}
               setPreviewImage={setPreviewImage}
               addToDeck={addToDeck}
@@ -304,7 +311,7 @@ const MyDeckDetailView = () => {
           )}
           {viewStyle === "grid" && (
             <div className="w-full md:max-h-[85vh]">
-              <DeckDetailsGridView
+              <DeckCardGridView
                 structure={structure}
                 setPreviewImage={setPreviewImage}
                 addToDeck={addToDeck}
@@ -328,4 +335,4 @@ export const loader: LoaderFunction<{ deckId: number }> = async ({
   return await DeckService.shared.get(Number(params.deckId));
 };
 
-export default MyDeckDetailView;
+export default CustomDeckDetailPage;

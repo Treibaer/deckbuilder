@@ -1,5 +1,5 @@
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { ButtonIcon } from "./ButtonIcon";
+import { ButtonIcon } from "../ButtonIcon";
 
 export const TitleView: React.FC<{ title: string; openDialog: () => void }> = ({
   title,

@@ -1,8 +1,8 @@
 import { Match } from "../../models/dtos";
 import Button from "../Button";
-import DeckPreview from "./DeckPreview";
+import DeckPreview from "../Deck/DeckPreview";
 
-const MatchRow: React.FC<{
+const MatchListItem: React.FC<{
   match: Match;
   onSelectDeck: (match: any, player: number) => void;
   openMatch: (matchId: number) => void;
@@ -66,4 +66,4 @@ const MatchRow: React.FC<{
   );
 };
 
-export default MatchRow;
+export default MatchListItem;

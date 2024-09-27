@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Helper from "../Services/Helper";
-import CardPeekView from "./CardPeekView";
 import MagicCardView from "./MagicCardView";
 import Button from "./Button";
 import { CardSize, CardStyle } from "../models/structure";
+import CardPeekView from "./Card/CardPeekView";
 
 const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
   let [style, setStyle] = useState(CardStyle.cards);
