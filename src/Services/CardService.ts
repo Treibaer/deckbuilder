@@ -11,6 +11,43 @@ export default class CardService {
   }
 
   async getWithPrintings(scryfallId: string) {
-    return this.client.get<CardDetailWithPrintings>(`/cards/${scryfallId}`, true);
+    return this.client.get<CardDetailWithPrintings>(
+      `/cards/${scryfallId}`,
+      true
+    );
+  }
+
+  async searchCards(q: string, page: string | null) {
+    const sets = await this.getSets();
+
+    sets.sort((a, b) => (a.name > b.name ? 1 : -1));
+    if (q === "") {
+      return { data: [], sets: sets };
+    }
+
+    q += " game:paper";
+
+    let url = `https://api.scryfall.com/cards/search?q=${q}`;
+    if (page) {
+      url += `&page=${page}`;
+    }
+    const response = await fetch(url);
+    if (!response.ok) {
+      return { data: [], sets: sets, amount: 0, hasMore: false };
+    }
+
+    const json = await response.json();
+    json.data.map((card: any) => {
+      card.scryfallId = card.id;
+      card.oracleId = card.oracle_id;
+      return card;
+    });
+
+    return {
+      data: json.data,
+      hasMore: json.has_more,
+      amount: json.total_cards,
+      sets: sets,
+    };
   }
 }

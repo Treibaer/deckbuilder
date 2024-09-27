@@ -181,6 +181,9 @@ export default class MagicHelper {
         case "is":
           filter.is = value;
           break;
+        case "order":
+          filter.order = value;
+          break;
         default:
           break;
       }
@@ -188,7 +191,7 @@ export default class MagicHelper {
     return filter;
   }
 
-  static createUrlFromFilter(filter: SearchFilter) {
+  static createQueryFromFilter(filter: SearchFilter) {
     let query = "";
     if (filter.cardName) {
       query += ` name:${filter.cardName}`;
@@ -235,7 +238,7 @@ export default class MagicHelper {
       query += ` order:${filter.order}`;
     }
     query = query.trim().toLowerCase();
-    return `/search?q=${query}`;
+    return query;
   }
 
   static extractOperator(value: string) {

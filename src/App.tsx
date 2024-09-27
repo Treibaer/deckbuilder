@@ -24,19 +24,18 @@ import Home from "./pages/Home";
 import Imports, { loader as importLoader } from "./pages/Imports";
 import Logout from "./pages/Logout";
 import Matches, { loader as matchesLoader } from "./pages/Matches";
+import MatchPage from "./pages/MatchPage";
 import MyDecksList, { loader as myDecksListLoader } from "./pages/MyDecksList";
-import PlaytestHistory, {
+import PlayPage from "./pages/PlayPage";
+import Playtests, {
   loader as playtestHistoryLoader,
-} from "./pages/PlaytestHistory";
+} from "./pages/Playtests";
 import Profile from "./pages/Profile";
 import Register from "./pages/Register";
 import RootLayout from "./pages/RootLayout";
 import SearchView, { loader as searchCardLoader } from "./pages/SearchView";
-import Users, { loader as usersLoader } from "./pages/Users";
 import Settings from "./pages/Settings";
-import PlayPage from "./pages/PlayPage";
-import MatchPage from "./pages/MatchPage";
-import Sandbox from "./pages/Sandbox";
+import Users, { loader as usersLoader } from "./pages/Users";
 
 const router = createBrowserRouter([
   {
@@ -82,12 +81,11 @@ const router = createBrowserRouter([
       { path: "/profile", element: <Profile /> },
       { path: "/imports", element: <Imports />, loader: importLoader },
       {
-        path: "/profile/playtests",
-        element: <PlaytestHistory />,
+        path: "/playtests",
+        element: <Playtests />,
         loader: playtestHistoryLoader,
       },
       { path: "/settings", element: <Settings /> },
-      { path: "/sandbox", element: <Sandbox /> },
       { path: "/play/:matchId", element: <PlayPage /> },
       { path: "/match/:matchId", element: <MatchPage /> },
       { path: "/decks/favorites", element: <Favorites />, loader: favoritesLoader },

@@ -4,10 +4,11 @@ export type CardDetailWithPrintings = {
 };
 export type MagicCard = {
   scryfallId: string;
+  oracleId: string;
   name: string;
   typeLine: string;
   reprint: boolean;
-  printSearchUri: string;
+  printsSearchUri: string;
   cardFaces: string[];
   releasedAt: string;
   setCode: string;

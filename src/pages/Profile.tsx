@@ -8,7 +8,7 @@ const Profile = () => {
       <h1 className="mb-8">Profile</h1>
       <div className="flex gap-4">
         {Constants.playModeEnabled && (
-          <Link to="/profile/playtests">
+          <Link to="/playtests">
             <Button title="Playtest History" />
           </Link>
         )}

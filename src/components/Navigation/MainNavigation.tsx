@@ -9,7 +9,6 @@ const MainNavigation = () => {
           <NavigationLink to="/" title="Home" />
           <NavigationLink to="/search" title="Search" />
           <NavigationLink to="/sets" title="Sets" />
-          <NavigationLink to="/sandbox" title="Sandbox" />
           <NavigationLink to="/decks/moxfield" title="Moxfield" />
           <NavigationLink to="/decks/my" title="Decks" />
           <NavigationLink to="/decks/favorites" title="Favorites" />

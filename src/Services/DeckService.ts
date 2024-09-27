@@ -27,10 +27,10 @@ export default class DeckService {
     return await this.client.post(path, data, true);
   }
 
-  async addCardToDeck(deck: Deck, card: MagicCard, zone: string, quantity = 1) {
+  async addCardToDeck(deck: Deck, scryfallId: string, zone: string, quantity = 1) {
     const path = `/decks/${deck.id}/cards`;
     const cardObject = {
-      scryfallId: card.scryfallId,
+      scryfallId: scryfallId,
       quantity: quantity,
       zone: zone,
       action: "add",
@@ -64,13 +64,13 @@ export default class DeckService {
 
   async updateCardAmount(
     deck: Deck,
-    card: MagicCard,
+    scryfallId: string,
     zone: string,
     quantity: number
   ) {
     const path = `/decks/${deck.id}/cards`;
     const cardObject = {
-      scryfallId: card.scryfallId,
+      scryfallId: scryfallId,
       quantity: quantity,
       zone: zone,
       action: "modify",

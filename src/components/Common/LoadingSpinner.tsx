@@ -1,7 +1,10 @@
-const LoadingSpinner: React.FC<{ inline?: boolean }> = ({ inline }) => {
+const LoadingSpinner: React.FC<{ inline?: boolean, size?: number }> = ({ inline, size }) => {
   let classes = "border-8 w-20 h-20 absolute";
   if (inline) {
     classes = "border-2 w-8 h-8";
+  }
+  if (size) {
+    classes = `border-8 w-${size} h-${size}`;
   }
   return (
     <div className={inline ? "" : "-translate-x-10 -translate-y-10"}>

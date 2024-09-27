@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import Helper from "../../Services/Helper";
 import MagicHelper from "../../Services/MagicHelper";
 import { CardSet } from "../../models/dtos";
@@ -26,24 +25,22 @@ const formats = [
 const colors = ["w", "u", "b", "r", "g", "c"];
 
 const MagicFilterView: React.FC<{
+  query: string;
   sets: CardSet[];
   showFilter: boolean;
   setShowFilter: (show: boolean) => void;
-}> = ({ sets, showFilter, setShowFilter }) => {
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const q = searchParams.get("q") ?? "";
-
-  const prevFilter = MagicHelper.extractFilterFromQuery(q);
+  onSubmit: (query: string) => void;
+}> = ({ query, sets, showFilter, setShowFilter, onSubmit }) => {
+  const prevFilter = MagicHelper.extractFilterFromQuery(query);
 
   const [filter, setFilter] = useState(prevFilter);
 
   const [key, setKey] = useState(Math.floor(Math.random() * 1000000));
 
   useEffect(() => {
-    setFilter(MagicHelper.extractFilterFromQuery(q));
+    setFilter(MagicHelper.extractFilterFromQuery(query));
     setKey(Math.floor(Math.random() * 1000000));
-  }, [q]);
+  }, [query]);
 
   function toggleColor(symbol: string) {
     if (filter.colors.includes(symbol)) {
@@ -54,10 +51,9 @@ const MagicFilterView: React.FC<{
     setFilter({ ...filter, colors: filter.colors });
   }
 
-  function onSubmit() {
-    const url = MagicHelper.createUrlFromFilter(filter);
-    navigate(url);
-    setShowFilter(false);
+  function handleSubmit() {
+    const query = MagicHelper.createQueryFromFilter(filter);
+    onSubmit(query);
   }
 
   return (
@@ -75,7 +71,9 @@ const MagicFilterView: React.FC<{
         </div>
         <div className="flex flex-col gap-2 mt-4">
           <div className="flex items-center gap-2">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name" className="w-40">
+              Name
+            </label>
             <input
               className="tb-input"
               type="text"
@@ -89,7 +87,9 @@ const MagicFilterView: React.FC<{
             />
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="type">Type</label>
+            <label htmlFor="type" className="w-40">
+              Type
+            </label>
             <input
               className="tb-input"
               type="text"
@@ -103,7 +103,9 @@ const MagicFilterView: React.FC<{
             />
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="manaValue">Mana Value</label>
+            <label htmlFor="manaValue" className="w-40">
+              Mana Value
+            </label>
             <input
               className="tb-input"
               type="number"
@@ -116,7 +118,9 @@ const MagicFilterView: React.FC<{
             />
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="power">Power</label>
+            <label htmlFor="power" className="w-40">
+              Power
+            </label>
             <input
               className="tb-input"
               type="number"
@@ -129,7 +133,9 @@ const MagicFilterView: React.FC<{
             />
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="toughness">Toughness</label>
+            <label htmlFor="toughness" className="w-40">
+              Toughness
+            </label>
             <input
               className="tb-input"
               type="number"
@@ -142,7 +148,9 @@ const MagicFilterView: React.FC<{
             />
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="rarity">Rarity</label>
+            <label htmlFor="rarity" className="w-40">
+              Rarity
+            </label>
             <select
               className="tb-select bg-mediumBlue w-full"
               name="rarity"
@@ -161,7 +169,9 @@ const MagicFilterView: React.FC<{
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="set">Set</label>
+            <label htmlFor="set" className="w-40">
+              Set
+            </label>
             <select
               className="tb-select bg-mediumBlue w-full"
               name="set"
@@ -182,7 +192,9 @@ const MagicFilterView: React.FC<{
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="format">Format</label>
+            <label htmlFor="format" className="w-40">
+              Format
+            </label>
             <select
               className="tb-select bg-mediumBlue w-full"
               name="format"
@@ -201,7 +213,9 @@ const MagicFilterView: React.FC<{
             </select>
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="oracle">Text</label>
+            <label htmlFor="oracle" className="w-40">
+              Text
+            </label>
             <textarea
               className="tb-input"
               name="oracle"
@@ -213,9 +227,11 @@ const MagicFilterView: React.FC<{
             />
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="colors">Colors</label>
-            <div className="flex gap-2">
-              <div className="radioGroup">
+            <label htmlFor="colors" className="w-40">
+              Colors
+            </label>
+            <div className="flex gap-4">
+              <div className="radioGroup flex gap-2">
                 <input
                   type="radio"
                   id="colorsOr"
@@ -230,15 +246,17 @@ const MagicFilterView: React.FC<{
                   name="colorsLogic"
                   value="And"
                 />
+                <label htmlFor="colorsAnd">And</label>
               </div>
-              <label htmlFor="colorsAnd">And</label>
               <div className="flex">
                 {colors.map((symbol) => {
                   return (
                     <div
                       key={symbol}
                       className={
-                        filter.colors.includes(symbol) ? "active" : undefined
+                        filter.colors.includes(symbol)
+                          ? "border border-brightBlue rounded-xl"
+                          : undefined
                       }
                       onClick={() => {
                         toggleColor(symbol);
@@ -252,7 +270,9 @@ const MagicFilterView: React.FC<{
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="unique">All prints</label>
+            <label htmlFor="unique" className="w-40">
+              All prints
+            </label>
             <input
               type="checkbox"
               name="unique"
@@ -267,7 +287,9 @@ const MagicFilterView: React.FC<{
             />
           </div>
           <div className="flex items-center gap-2">
-            <label htmlFor="unique">Fullart</label>
+            <label htmlFor="unique" className="w-40">
+              Fullart
+            </label>
             <input
               type="checkbox"
               name="fullart"
@@ -281,7 +303,27 @@ const MagicFilterView: React.FC<{
               }}
             />
           </div>
-          <Button title="Submit" onClick={onSubmit} />
+          <div className="flex items-center gap-2">
+            <label htmlFor="sort" className="w-40">
+              Sort by
+            </label>
+            <select
+              className="tb-input"
+              onChange={(event) => {
+                setFilter({ ...filter, order: event.target.value });
+              }}
+              defaultValue={filter.order}
+            >
+              <option value="name">Name</option>
+              <option value="set">Set</option>
+              <option value="rarity">Rarity</option>
+              <option value="color">Color</option>
+              <option value="released">Released</option>
+            </select>
+          </div>
+          <div className="flex justify-end">
+            <Button title="Submit" onClick={handleSubmit} />
+          </div>
         </div>
       </div>
     </div>

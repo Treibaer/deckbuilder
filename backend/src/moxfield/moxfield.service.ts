@@ -309,6 +309,7 @@ export class MoxfieldService {
 
     return {
       scryfallId: card.scryfall_id,
+      oracleId: card.oracle_id,
       name: card.name,
       typeLine: card.type_line ?? "",
       reprint: card.reprint,

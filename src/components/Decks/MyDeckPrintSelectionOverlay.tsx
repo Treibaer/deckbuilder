@@ -1,9 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import MagicCardView from "../MagicCardView";
-import { CardSize } from "../../models/structure";
 import { MagicCard } from "../../models/dtos";
+import { CardSize } from "../../models/structure";
 import Button from "../Button";
+import MagicCardView from "../MagicCardView";
 
 const MyDeckPrintSelectionOverlay: React.FC<{
   closeOverlay: () => void;
@@ -28,6 +27,8 @@ const MyDeckPrintSelectionOverlay: React.FC<{
 
     for (let i = 0; i < resData.data.length; i++) {
       resData.data[i].cardFaces = resData.data[i].card_faces ?? [];
+      resData.data[i].scryfallId = resData.data[i].id;
+      resData.data[i].oracleId = resData.data[i].oracle_id;
     }
 
     setPrints(resData.data);
@@ -38,7 +39,7 @@ const MyDeckPrintSelectionOverlay: React.FC<{
     if (card.reprint) {
       loadPrints();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [card.reprint]);
 
   prints.map((print: any) => {
@@ -47,19 +48,18 @@ const MyDeckPrintSelectionOverlay: React.FC<{
   });
 
   return (
-    <div className="fullscreenBlurWithLoading">
-      <div className="card-detail-overlay">
-        <div className="card-detail-overlay-content">
-          <div className="card-detail-overlay-header">
-            <Button title="Close" onClick={closeOverlay} />
-            <div className="title">{card.name}</div>
-            <Link to={`/cards/${card.scryfallId}`} target="_blank">
-              <Button title="Open Card 🔗" />
-            </Link>
-          </div>
+    <div className="blurredBackground" onClick={closeOverlay}>
+      <div
+        className="backdrop-blur-xl bg-transparent w-[calc(100vw-16px)] border border-lightBlue overflow-y-scroll max-h-[calc(100%-32px)] max-w-[500px] sm:max-w-[500px] md:max-w-[1024px] p-2 rounded shadow-lg absolute top-1/2 sm:top-4 left-1/2 transform -translate-x-1/2"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="flex justify-end absolute right-1 top-1 z-10">
+          <Button onClick={closeOverlay} title="X" />
+        </div>
+        <div className="flex flex-col h-full overflow-y-scroll">
           {isLoading && <div>Loading...</div>}
           {!isLoading && (
-            <div className="card-detail-overlay-prints">
+            <div className="card-detail-overlay-prints flex flex-wrap gap-2 justify-center mt-2 mx-8">
               {prints.map((print: any) => (
                 <div
                   key={print.scryfallId}
@@ -69,14 +69,21 @@ const MyDeckPrintSelectionOverlay: React.FC<{
                       : undefined
                   }
                 >
-                  <h4 title={print.set_name}>{print.set_name}</h4>
+                  <div className="flex justify-between mb-1 items-center">
+                    <div
+                      className="text-nowrap w-32 overflow-hidden text-ellipsis h-8"
+                      title={print.set_name}
+                    >
+                      {print.set_name}
+                    </div>
+                    {card.scryfallId !== print.scryfallId && (
+                      <Button
+                        title="Select"
+                        onClick={() => setPrint(card, print)}
+                      />
+                    )}
+                  </div>
                   <MagicCardView card={print} size={CardSize.small} />
-                  {card.scryfallId !== print.scryfallId && (
-                    <Button
-                      title="Select"
-                      onClick={() => setPrint(card, print)}
-                    />
-                  )}
                 </div>
               ))}
             </div>

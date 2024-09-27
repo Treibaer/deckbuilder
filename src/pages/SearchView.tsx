@@ -6,8 +6,6 @@ import SearchBar from "../components/Search/SearchBar";
 import SearchPagination from "../components/Search/SearchPagination";
 import CardService from "../Services/CardService";
 
-const cardService = CardService.shared;
-
 const SearchView: React.FC = () => {
   /*
     useEffect(() => {
@@ -58,6 +56,11 @@ const SearchView: React.FC = () => {
     navigate(`/search?q=${searchTerm}`);
   }
 
+  function submitFilter(query: string) {
+    navigate(`/search?q=${query}`);
+    setShowFilter(false);
+  }
+
   return (
     <div className="w-full">
       {data.data.length === 0 && (
@@ -72,9 +75,11 @@ const SearchView: React.FC = () => {
         setShowFilter={setShowFilter}
       />
       <MagicFilterView
+        query={searchTerm}
         sets={data.sets}
         showFilter={showFilter}
         setShowFilter={setShowFilter}
+        onSubmit={submitFilter}
       />
       <SearchPagination
         pages={pages}
@@ -90,37 +95,13 @@ const SearchView: React.FC = () => {
 };
 
 export const loader = async ({ request }: any) => {
-  const sets = await cardService.getSets();
-  sets.sort((a, b) => (a.name > b.name ? 1 : -1));
-
   const queryParameters = new URL(request.url).searchParams;
   let q = queryParameters.get("q");
 
-  if (!q) {
-    return { data: [], sets: sets };
-  }
-  q += " game:paper";
-
-  let url = `https://api.scryfall.com/cards/search?q=${q}`;
-  if (queryParameters.has("page")) {
-    url += `&page=${queryParameters.get("page")}`;
-  }
-  const response = await fetch(url);
-  if (!response.ok) {
-    return { data: [], sets: sets, amount: 0, hasMore: false };
-  }
-
-  const json = await response.json();
-  json.data.map((card: any) => {
-    card.scryfallId = card.id;
-    return card;
-  });
-  return {
-    data: json.data,
-    hasMore: json.has_more,
-    amount: json.total_cards,
-    sets: sets,
-  };
+  return await CardService.shared.searchCards(
+    q ?? "",
+    queryParameters.get("page")
+  );
 };
 
 export default SearchView;

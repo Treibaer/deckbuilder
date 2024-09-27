@@ -47,6 +47,7 @@ export class PlaytestsService {
     return {
       name: deckCard.card.name,
       scryfallId: deckCard.scryfallId,
+      oracleId: deckCard.card.oracleId,
       cardFaces: deckCard.card.cardFacesNames.split("###"),
       typeLine: "",
       reprint: false,

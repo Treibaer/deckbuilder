@@ -3,16 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import DecksList from "../components/Decks/DecksList";
 import SearchBar from "../components/Search/SearchBar";
-import { Deck } from "../models/dtos";
+import { Deck, Playtest } from "../models/dtos";
 import CardService from "../Services/CardService";
 import DeckService from "../Services/DeckService";
 import SetSingleView from "./SetSingleView";
+import PlaytestService from "../Services/PlaytestService";
+import DeckPreview from "../components/Matches/DeckPreview";
 
 const Home = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [myDecks, setMyDecks] = useState<Deck[]>([]);
   const [sets, setSets] = useState<any[]>([]);
+  const [playtests, setPlaytests] = useState<Playtest[]>([]);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchTerm(event.target.value);
@@ -33,11 +36,20 @@ const Home = () => {
     }
     async function fetchSets() {
       const sets = await CardService.shared.getSets();
-      sets.length = 4;
+      sets.length = 5;
       setSets(sets);
+    }
+    async function fetchPlaytests() {
+      const playtests = await PlaytestService.shared.getAll();
+      playtests.sort((a, b) => {
+        return a.createdAt > b.createdAt ? -1 : 1;
+      });
+      playtests.length = 3;
+      setPlaytests(playtests);
     }
     fetchDecks();
     fetchSets();
+    fetchPlaytests();
   }, []);
 
   return (
@@ -78,6 +90,30 @@ const Home = () => {
           </div>
           <div>
             <DecksList decks={myDecks} type="custom" />
+          </div>
+        </>
+      )}
+      {playtests.length > 0 && (
+        <>
+          <div className="flex justify-center items-center gap-4 my-4">
+            <div className="cursor-default text-3xl font-semibold m-2 text-center">
+              Recent Playtests
+            </div>
+            <Link to="/playtests">
+              <Button title="View All" />
+            </Link>
+          </div>
+          <div className="flex flex-col mt-4 gap-2 items-center">
+            {playtests.map((playtest) => (
+              <div className="w-[600px]">
+                <DeckPreview
+                  key={playtest.id}
+                  name={playtest.name}
+                  promoId={playtest.promoId}
+                  moxfieldId={playtest.moxfieldId}
+                />
+              </div>
+            ))}
           </div>
         </>
       )}

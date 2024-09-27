@@ -7,7 +7,7 @@ import { FormatType, formatUnixTimestamp } from "../utils/dataUtils";
 
 const playtestService = PlaytestService.shared;
 
-const PlaytestHistory = () => {
+const Playtests = () => {
   const playtestHistory = useLoaderData() as Playtest[];
 
   function play(id: number) {
@@ -70,7 +70,7 @@ const PlaytestHistory = () => {
   );
 };
 
-export default PlaytestHistory;
+export default Playtests;
 
 export const loader = async () => {
   return await playtestService.getAll();

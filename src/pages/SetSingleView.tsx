@@ -3,13 +3,14 @@ import { CardSet } from "../models/dtos";
 import MagicHelper from "../Services/MagicHelper";
 
 const SetSingleView: React.FC<{ set: CardSet }> = ({ set }) => {
+  const query = MagicHelper.createQueryFromFilter({
+    set: set.code,
+    order: "set",
+    colors: [],
+  });
   return (
     <Link
-      to={MagicHelper.createUrlFromFilter({
-        set: set.code,
-        order: "set",
-        colors: [],
-      })}
+      to={`/search?q=${query}`}
       key={set.scryfallId}
       className="w-48 border border-lightBlue  p-2 rounded-lg bg-mediumBlue text-center flex flex-col hover:bg-lightBlue"
     >

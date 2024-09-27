@@ -17,7 +17,7 @@ const MagicCardView: React.FC<{
   hoverable?: boolean;
 }> = ({
   card,
-  onTap = () => {},
+  onTap,
   onMouseOver = (_faceSide) => {},
   size = "normal",
 }) => {
@@ -46,7 +46,7 @@ const MagicCardView: React.FC<{
       <div
         className={`image-wrapper ${
           faceSide.current % 2 === 1 ? "flipped" : ""
-        }`}
+        } ${onTap ? "cursor-pointer" : ""}`}
       >
         <LazyImage
           src={image}

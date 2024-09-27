@@ -23,7 +23,7 @@ const AddToDeckDialog: React.FC<{
     }
     onClose();
     const deck = myDecks.filter((deck) => deck.id === selectedDeckId)[0];
-    await deckService.addCardToDeck(deck, card, "mainboard", selectedQuantity);
+    await deckService.addCardToDeck(deck, card.scryfallId, "mainboard", selectedQuantity);
     setIsLoading(false);
   }
 

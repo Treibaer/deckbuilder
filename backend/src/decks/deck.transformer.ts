@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { DeckDto } from "./dto/deck.dto";
 import { Deck } from "./entities/deck.entity";
+import { DeckCard } from "./entities/deck-card.entity";
+import { DeckCardDto } from "./dto/deck-card.dto";
 
 @Injectable()
 export class DeckTransformer {
@@ -29,7 +31,7 @@ export class DeckTransformer {
     let cardCount = 0;
     const commanderCards = deck.cards
       .filter((card) => card.zone === "commandZone")
-      .map((card) => {
+      .map<DeckCardDto>((card) => {
         const cardFacesNames = card.card.cardFacesNames.split("###");
         let cardFaces: any = [];
         if (cardFacesNames.length > 1) {
@@ -44,6 +46,7 @@ export class DeckTransformer {
           id: 0,
           card: {
             scryfallId: card.card.scryfallId,
+            oracleId: card.card.oracleId,
             name: card.card.name,
             typeLine: card.card.typeLine,
             reprint: card.card.isReprint,
@@ -56,7 +59,7 @@ export class DeckTransformer {
 
     const mainboard = deck.cards
       .filter((card) => card.zone === "mainboard")
-      .map((card) => {
+      .map<DeckCardDto>((card) => {
         const cardFacesNames = card.card.cardFacesNames.split("###");
         let cardFaces: any = [];
         if (cardFacesNames.length > 1) {
@@ -71,6 +74,7 @@ export class DeckTransformer {
           id: 0,
           card: {
             scryfallId: card.card.scryfallId,
+            oracleId: card.card.oracleId,
             name: card.card.name,
             typeLine: card.card.typeLine,
             reprint: card.card.isReprint,
@@ -83,7 +87,7 @@ export class DeckTransformer {
 
     const sideboard = deck.cards
       .filter((card) => card.zone === "sideboard")
-      .map((card) => {
+      .map<DeckCardDto>((card) => {
         const cardFacesNames = card.card.cardFacesNames.split("###");
         let cardFaces: any = [];
         if (cardFacesNames.length > 1) {
@@ -98,6 +102,7 @@ export class DeckTransformer {
           id: 0,
           card: {
             scryfallId: card.card.scryfallId,
+            oracleId: card.card.oracleId,
             name: card.card.name,
             typeLine: card.card.typeLine,
             reprint: card.card.isReprint,
