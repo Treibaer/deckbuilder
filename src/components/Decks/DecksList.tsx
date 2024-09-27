@@ -2,8 +2,21 @@ import { NavLink } from "react-router-dom";
 import Helper from "../../Services/Helper";
 import cardStackImage from "../../assets/cardstack.svg";
 import viewsImage from "../../assets/views.svg";
+import MagicHelper from "../../Services/MagicHelper";
 
-const DecksList: React.FC<{ decks: any[] }> = ({ decks }) => {
+const DecksList: React.FC<{ decks: any[], type: "moxfield" | "custom" }> = ({ decks, type }) => {
+  for (const deck of decks) {
+    if (!deck.img) {
+      deck.img = deck.promoId
+        ? MagicHelper.artCropUrl(deck.promoId)
+        : undefined;
+    }
+    if (type === "moxfield") {
+      deck.link = `/decks/moxfield/${deck.id}`;
+    } else {
+      deck.link = `/decks/my/${deck.id}`;
+    }
+  }
   return (
     <div className="">
       <div className="flex flex-wrap gap-2 justify-center text-sm md:text-base">

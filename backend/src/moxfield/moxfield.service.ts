@@ -12,7 +12,7 @@ import { UsersService } from "src/users/users.service";
 import { Card } from "../decks/entities/card.entity";
 import { DeckCard } from "../decks/entities/deck-card.entity";
 
-const formats = ["modern", "commander", "commanderPrecons", "standard"];
+const formats = ["modern", "commander", "precons", "commanderPrecons", "standard"];
 const sortTypes = ["views", "created", "updated"];
 
 class ConfigDto {
@@ -117,6 +117,7 @@ export class MoxfieldService {
         mainboard: [],
         sideboard: [],
         isLocked: true,
+        updatedAt: 0,
       };
     });
     return allDecks;
@@ -240,7 +241,9 @@ export class MoxfieldService {
       sideboard: [],
       isFavorite: favorite !== null,
       isLocked: true,
+      updatedAt: 0,
     };
+    console.log(deckResponse)
     return deckResponse;
   }
 

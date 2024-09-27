@@ -14,4 +14,5 @@ export class DeckDto {
   sideboard: DeckCardDto[];
   isFavorite?: boolean;
   isLocked: boolean;
+  updatedAt: number;
 }

@@ -21,6 +21,7 @@ export class DeckTransformer {
       mainboard: [],
       sideboard: [],
       isLocked: deck.isLocked,
+      updatedAt: deck.updatedAt,
     };
   }
 
@@ -119,6 +120,7 @@ export class DeckTransformer {
       mainboard: mainboard,
       sideboard: sideboard,
       isLocked: deck.isLocked,
+      updatedAt: deck.updatedAt,
     };
   }
 }

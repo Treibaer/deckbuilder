@@ -40,6 +40,7 @@ export type Deck = {
   sideboard: DeckCard[];
   isFavorite?: boolean;
   isLocked: boolean;
+  updatedAt: number;
 };
 
 export type DeckCard = {

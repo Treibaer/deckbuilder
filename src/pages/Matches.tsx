@@ -53,9 +53,7 @@ const Matches = () => {
   }
 
   async function openMatch(matchId: number) {
-    window
-      .open("/magic-web-js/duo3.html?matchId=" + matchId, "_blank")
-      ?.focus();
+    window.open(`/match/${matchId}`, "_blank")?.focus();
   }
 
   async function openDeckSelection(match: Match, playerIndex: number) {

@@ -72,9 +72,7 @@ const MoxfieldDeckDetailView = () => {
     const response = await PlaytestService.shared.createFromMoxfieldDeck(
       deck.id
     );
-    window
-      .open("/magic-web-js/play.html?matchId=" + response.id, "_blank")
-      ?.focus();
+    window.open(`/play/${response.id}`, "_blank")?.focus();
   }
 
   async function toggleFavorite() {

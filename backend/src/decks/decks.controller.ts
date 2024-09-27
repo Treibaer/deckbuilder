@@ -52,6 +52,7 @@ export class DecksController {
         mainboard: [],
         sideboard: [],
         isLocked: deck.isLocked,
+        updatedAt: deck.updatedAt,
       };
     });
     return transformedDecks;

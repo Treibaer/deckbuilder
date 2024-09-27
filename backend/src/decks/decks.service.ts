@@ -38,6 +38,8 @@ export class DecksService {
         promoId: "",
         format: "",
         description: "",
+        createdAt: Math.floor(Date.now() / 1000),
+        updatedAt: Math.floor(Date.now() / 1000),
       });
       return createDeckDto;
     } catch (error) {
@@ -108,6 +110,8 @@ export class DecksService {
         await oldDeckCard.destroy();
       } else {
         oldDeckCard.zone = destinationZone;
+        deck.updatedAt = Math.floor(Date.now() / 1000);
+        await deck.save();
         await oldDeckCard.save();
       }
       return [];
@@ -134,6 +138,8 @@ export class DecksService {
       if (deck.promoId === oldId) {
         deck.promoId = newId;
       }
+
+      deck.updatedAt = Math.floor(Date.now() / 1000);
       await oldDeckCard.save();
       await deck.save();
       return [];
@@ -179,6 +185,9 @@ export class DecksService {
     if (deckDto.isLocked !== undefined) {
       deck.isLocked = deckDto.isLocked;
     }
+    if (!deckDto.isLocked === undefined) {
+      deck.updatedAt = Math.floor(Date.now() / 1000);
+    }
     return await deck.save();
   }
 
@@ -206,6 +215,8 @@ export class DecksService {
     if (cardDto.action === "modify" && cardDto.quantity === 0) {
       cardDto.action = "remove";
     }
+    deck.updatedAt = Math.floor(Date.now() / 1000);
+    await deck.save();
 
     switch (cardDto.action) {
       case "add":

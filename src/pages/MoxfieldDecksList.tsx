@@ -4,11 +4,10 @@ import {
   useNavigate,
   useSearchParams,
 } from "react-router-dom";
-import MagicHelper from "../Services/MagicHelper";
 import MoxfieldService from "../Services/MoxfieldService";
+import Button from "../components/Button";
 import DeckList from "../components/Decks/DecksList";
 import { Deck } from "../models/dtos";
-import Button from "../components/Button";
 
 const moxfieldService = MoxfieldService.shared;
 
@@ -29,8 +28,7 @@ const MoxfieldDecksList = () => {
   const mappedDecks = data.decks.map((deck: Deck) => {
     return {
       id: deck.id,
-      img: deck.promoId ? MagicHelper.artCropUrl(deck.promoId) : undefined,
-      link: `/decks/moxfield/${deck.id}`,
+      promoId: deck.promoId,
       name: deck.name,
       format: deck.format,
       viewCount: deck.viewCount,
@@ -75,7 +73,7 @@ const MoxfieldDecksList = () => {
               switchFormat(event.target.value);
             }}
           >
-            {["All", "modern", "commander", "commanderPrecons", "standard"].map(
+            {["All", "modern", "commander", "commanderPrecons", "precons", "standard"].map(
               (format) => {
                 return (
                   <option value={format} key={format}>
@@ -133,7 +131,7 @@ const MoxfieldDecksList = () => {
         </div>
       )}
 
-      <DeckList decks={mappedDecks} />
+      <DeckList decks={mappedDecks} type="moxfield" />
     </>
   );
 };

@@ -3,7 +3,7 @@ import Button from "../Button";
 
 const SearchBar: React.FC<{
   handleSearch: () => void;
-  setShowFilter: (value: boolean) => void;
+  setShowFilter?: (value: boolean) => void;
   searchTerm: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }> = ({ handleSearch, setShowFilter, searchTerm, handleChange }) => {
@@ -29,7 +29,9 @@ const SearchBar: React.FC<{
         }}
       />
       <Button title="Search" onClick={handleSearch} />
-      <Button title="Advanced" onClick={() => setShowFilter(true)} />
+      {setShowFilter && (
+        <Button title="Advanced" onClick={() => setShowFilter(true)} />
+      )}
     </div>
   );
 };

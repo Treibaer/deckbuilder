@@ -34,6 +34,9 @@ import RootLayout from "./pages/RootLayout";
 import SearchView, { loader as searchCardLoader } from "./pages/SearchView";
 import Users, { loader as usersLoader } from "./pages/Users";
 import Settings from "./pages/Settings";
+import PlayPage from "./pages/PlayPage";
+import MatchPage from "./pages/MatchPage";
+import Sandbox from "./pages/Sandbox";
 
 const router = createBrowserRouter([
   {
@@ -84,6 +87,9 @@ const router = createBrowserRouter([
         loader: playtestHistoryLoader,
       },
       { path: "/settings", element: <Settings /> },
+      { path: "/sandbox", element: <Sandbox /> },
+      { path: "/play/:matchId", element: <PlayPage /> },
+      { path: "/match/:matchId", element: <MatchPage /> },
       { path: "/decks/favorites", element: <Favorites />, loader: favoritesLoader },
     ],
     // errorElement: <ErrorPage />,

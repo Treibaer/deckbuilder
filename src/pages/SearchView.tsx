@@ -38,8 +38,6 @@ const SearchView: React.FC = () => {
 
   const [showFilter, setShowFilter] = useState(false);
 
-
-
   let pages = Math.ceil(data.amount / cards.length);
 
   if (!data.hasMore) {

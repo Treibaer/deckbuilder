@@ -45,4 +45,10 @@ export class Deck extends Model {
 
   @HasMany(() => DeckCard, "deck_id")
   cards: DeckCard[];
+
+  @Column({ field: "created_at", allowNull: false })
+  createdAt: number;
+
+  @Column({ field: "updated_at", allowNull: false })
+  updatedAt: number;
 }

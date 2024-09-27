@@ -51,7 +51,7 @@ const MyDecksList = () => {
   const mappedDecks = myDecks.map((deck) => {
     return {
       id: deck.id,
-      img: deck.promoId ? MagicHelper.artCropUrl(deck.promoId) : undefined,
+      promoId: deck.promoId,
       link: `/decks/my/${deck.id}`,
       name: deck.name,
       format: deck.format,
@@ -87,7 +87,7 @@ const MyDecksList = () => {
       {isUpdating && <DelayedLoadingSpinner />}
       <TitleView title="My Decks" openDialog={showDeckForm} />
       {myDecks.length === 0 && <p>No decks found</p>}
-      <DeckList decks={mappedDecks} />
+      <DeckList decks={mappedDecks} type="custom" />
     </div>
   );
 };
