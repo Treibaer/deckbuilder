@@ -24,6 +24,8 @@ export class DeckTransformer {
       sideboard: [],
       isLocked: deck.isLocked,
       updatedAt: deck.updatedAt,
+      folderId: deck.folder_id,
+      isArchived: deck.isArchived
     };
   }
 
@@ -126,6 +128,8 @@ export class DeckTransformer {
       sideboard: sideboard,
       isLocked: deck.isLocked,
       updatedAt: deck.updatedAt,
+      folderId: deck.folder_id,
+      isArchived: deck.isArchived
     };
   }
 }

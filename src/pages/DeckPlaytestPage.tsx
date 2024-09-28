@@ -13,7 +13,7 @@ function DeckPlaytestPage() {
 
   return (
     <iframe
-      className="absolute inset-0 w-screen h-screen"
+      className="fixed inset-0 w-screen h-screen"
       src={`/magic-web-js/play.html?matchId=${playtestId}`}
       title="Play Page"
       ref={iframeRef}

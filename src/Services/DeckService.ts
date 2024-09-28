@@ -1,4 +1,4 @@
-import { Deck, MagicCard } from "../models/dtos";
+import { Deck, DeckFolder, MagicCard } from "../models/dtos";
 import Client from "./Client";
 import MagicHelper from "./MagicHelper";
 
@@ -7,8 +7,9 @@ export default class DeckService {
   private client = Client.shared;
   private constructor() {}
 
-  async getAll() {
-    return this.client.get<Deck[]>("/decks", true);
+  async getAll(folderId: number | null = null) {
+    const folderIdQuery = folderId !== null ? `?folderId=${folderId}` : "";
+    return this.client.get<Deck[]>(`/decks${folderIdQuery}`, true);
   }
 
   async get(deckId: number) {
@@ -19,15 +20,36 @@ export default class DeckService {
     return deck;
   }
 
-  async create(name: string) {
-    const path = `/decks`;
-    const data = {
-      name,
-    };
-    return await this.client.post(path, data, true);
+  async create(name: string, folder_id: number | null) {
+    return await this.client.post(`/decks`, { name, folder_id }, true);
   }
 
-  async addCardToDeck(deck: Deck, scryfallId: string, zone: string, quantity = 1) {
+  async createFolder(name: string) {
+    return await this.client.post(`/decks/folders`, { name }, true);
+  }
+
+  async updateFolder(folderId: number, name: string) {
+    return await this.client.patch(
+      `/decks/folders/${folderId}`,
+      { name },
+      true
+    );
+  }
+
+  async deleteFolder(folderId: number) {
+    return await this.client.delete(`/decks/folders/${folderId}`, true);
+  }
+
+  async getFolders() {
+    return await this.client.get<DeckFolder[]>(`/decks/folders`, true);
+  }
+
+  async addCardToDeck(
+    deck: Deck,
+    scryfallId: string,
+    zone: string,
+    quantity = 1
+  ) {
     const path = `/decks/${deck.id}/cards`;
     const cardObject = {
       scryfallId: scryfallId,
@@ -42,6 +64,14 @@ export default class DeckService {
     const url = `/decks/${deck.id}`;
     const cardObject = {
       name,
+    };
+    return await this.client.patch(url, cardObject, true);
+  }
+
+  async toggleArchive(deck: Deck) {
+    const url = `/decks/${deck.id}`;
+    const cardObject = {
+      isArchived: !deck.isArchived,
     };
     return await this.client.patch(url, cardObject, true);
   }

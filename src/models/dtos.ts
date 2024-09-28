@@ -2,6 +2,11 @@ export type CardDetailWithPrintings = {
   card: MagicCard;
   printings: MagicCard[];
 };
+export type FavoritesDto = {
+  moxfieldDecks: Deck[];
+  cards: MagicCard[];
+};
+
 export type MagicCard = {
   scryfallId: string;
   oracleId: string;
@@ -27,6 +32,11 @@ export type SmallMagicCard = {
   name: string;
 };
 
+export type DeckFolder = {
+  id: number;
+  name: string;
+};
+
 export type Deck = {
   id: number;
   name: string;
@@ -42,6 +52,8 @@ export type Deck = {
   isFavorite?: boolean;
   isLocked: boolean;
   updatedAt: number;
+  folderId: number | null;
+  isArchived: boolean;
 };
 
 export type DeckCard = {

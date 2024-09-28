@@ -50,7 +50,7 @@ const DeckPrintSelectionOverlay: React.FC<{
   return (
     <div className="blurredBackground" onClick={closeOverlay}>
       <div
-        className="backdrop-blur-xl bg-transparent w-[calc(100vw-16px)] border border-lightBlue overflow-y-scroll max-h-[calc(100%-32px)] max-w-[500px] sm:max-w-[500px] md:max-w-[1024px] p-2 rounded shadow-lg absolute top-1/2 sm:top-4 left-1/2 transform -translate-x-1/2"
+        className="backdrop-blur-xl bg-transparent w-full sm:w-[calc(100vw-16px)] border border-lightBlue overflow-y-scroll max-h-[calc(100%-32px)] max-w-[500px] sm:max-w-[500px] md:max-w-[1024px] sm:p-2 rounded shadow-lg absolute top-4 left-1/2 transform -translate-x-1/2"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="flex justify-end absolute right-1 top-1 z-10">
@@ -59,7 +59,7 @@ const DeckPrintSelectionOverlay: React.FC<{
         <div className="flex flex-col h-full overflow-y-scroll">
           {isLoading && <div>Loading...</div>}
           {!isLoading && (
-            <div className="card-detail-overlay-prints flex flex-wrap gap-2 justify-center mt-2 mx-8">
+            <div className="card-detail-overlay-prints flex flex-wrap gap-2 justify-center mt-2 sm:mx-8">
               {prints.map((print: any) => (
                 <div
                   key={print.scryfallId}

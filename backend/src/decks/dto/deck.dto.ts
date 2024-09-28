@@ -15,4 +15,6 @@ export class DeckDto {
   isFavorite?: boolean;
   isLocked: boolean;
   updatedAt: number;
+  folderId: number | null;
+  isArchived: boolean;
 }

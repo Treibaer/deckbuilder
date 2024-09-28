@@ -29,10 +29,10 @@ const Button: React.FC<ButtonProps> = ({
     <button
       className={`${className} ${
         active ? "border-brightBlue" : "border-slate-700"
-      } bg-customBlue px-3 text-nowrap inline rounded-custom-tb h-8 border-solid border  hover:bg-lightBlue`}
+      } bg-customBlue px-3 text-nowrap inline rounded-custom-tb h-8 border-solid border hover:bg-lightBlue`}
       onClick={onClick}
     >
-      <div className="flex items-center gap-4">
+      <div className="flex items-center justify-center gap-4">
         {title}
         {children}
       </div>

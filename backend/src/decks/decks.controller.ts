@@ -10,6 +10,7 @@ import {
   Patch,
   Post,
   Put,
+  Query,
   UseFilters,
 } from "@nestjs/common";
 import { DeckTransformer } from "./deck.transformer";
@@ -32,9 +33,29 @@ export class DecksController {
     return this.decksService.create(createDeckDto);
   }
 
+  @Post("folders")
+  createFolder(@Body() folder: { name: string }) {
+    return this.decksService.createFolder(folder.name);
+  }
+
+  @Patch("folders/:id")
+  updateFolder(@Param("id") id: string, @Body() folder: { name: string }) {
+    return this.decksService.updateFolder(+id, folder.name);
+  }
+
+  @Delete("folders/:id")
+  deleteFolder(@Param("id") id: string) {
+    return this.decksService.deleteFolder(+id);
+  }
+
+  @Get("folders")
+  async getFolders() {
+    return this.decksService.getFolders();
+  }
+
   @Get()
-  async findAll(): Promise<DeckDto[]> {
-    const decks = await this.decksService.findAll();
+  async findAll(@Query("folderId") folderId?: string): Promise<DeckDto[]> {
+    const decks = await this.decksService.findAll(folderId ? parseInt(folderId) : null);
     const transformedDecks = decks.map((deck) => {
       const cardCount = deck.cards.filter(
         (card) => card.zone !== "sideboard",
@@ -53,6 +74,8 @@ export class DecksController {
         sideboard: [],
         isLocked: deck.isLocked,
         updatedAt: deck.updatedAt,
+        folderId: deck.folder_id,
+        isArchived: deck.isArchived,
       };
     });
     return transformedDecks;

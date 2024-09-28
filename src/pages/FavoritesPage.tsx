@@ -3,14 +3,9 @@ import { LoaderFunction, useLoaderData } from "react-router-dom";
 import CardPeekView from "../components/Card/CardPeekView";
 import DecksListWrapper from "../components/Deck/DecksListWrapper";
 import MagicCardView from "../components/MagicCardView";
-import { Deck, MagicCard } from "../models/dtos";
+import { FavoritesDto, MagicCard } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import Client from "../Services/Client";
-
-type FavoritesDto = {
-  moxfieldDecks: Deck[];
-  cards: MagicCard[];
-};
 
 const FavoritesPage = () => {
   const loaderData = useLoaderData() as FavoritesDto;

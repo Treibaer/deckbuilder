@@ -1,12 +1,10 @@
-import { useNavigate } from "react-router-dom";
 import Button from "../Button";
 
 const SearchPagination: React.FC<{
   pages: number;
   selectedPage: number;
-  searchTerm: string;
-}> = ({ pages, selectedPage, searchTerm }) => {
-  const navigate = useNavigate();
+  goToPage: (page: number) => void;
+}> = ({ pages, selectedPage, goToPage }) => {
   return (
     <>
       {pages > 1 && (
@@ -15,8 +13,7 @@ const SearchPagination: React.FC<{
             <Button
               key={i}
               onClick={() => {
-                let url = `/search?q=${searchTerm}&page=${i + 1}`;
-                navigate(url);
+                goToPage(i + 1);
               }}
               title={`${i + 1}`}
               active={selectedPage === i}

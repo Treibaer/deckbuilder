@@ -61,6 +61,11 @@ const CardSearchPage: React.FC = () => {
     setShowFilter(false);
   }
 
+  function goToPage(page: number) {
+    let url = `/search?q=${searchTerm}&page=${page}`;
+    navigate(url);
+  }
+
   return (
     <div className="w-full">
       {data.data.length === 0 && (
@@ -84,7 +89,7 @@ const CardSearchPage: React.FC = () => {
       <SearchPagination
         pages={pages}
         selectedPage={selectedPage}
-        searchTerm={searchTerm}
+        goToPage={goToPage}
       />
       <div>
         {data.amount === 0 && <p>No cards found</p>}

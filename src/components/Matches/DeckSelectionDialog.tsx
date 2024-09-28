@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Deck } from "../../models/dtos";
+import { Deck, FavoritesDto } from "../../models/dtos";
 import Client from "../../Services/Client";
 import MoxfieldService from "../../Services/MoxfieldService";
 import Button from "../Button";
@@ -27,8 +27,8 @@ const DeckSelectionDialog: React.FC<{
 
   useEffect(() => {
     async function loadFavorites() {
-      const favorites = await Client.shared.get<Deck[]>("/favorites", true);
-      setFavoriteDecks(favorites);
+      const favorites = await Client.shared.get<FavoritesDto>("/favorites", true);
+      setFavoriteDecks(favorites.moxfieldDecks);
     }
     loadFavorites();
   }, [tab]);
@@ -125,7 +125,7 @@ const DeckSelectionDialog: React.FC<{
         {tab === "myDeck" && (
           <div className="flex gap-2 flex-col items-center">
             <select
-              className="tb-select bg-transparent w-full"
+              className="tb-select bg-mediumBlue w-full"
               name="deck"
               defaultValue={deck?.id ?? 0}
               onChange={(event) =>
@@ -156,7 +156,7 @@ const DeckSelectionDialog: React.FC<{
         {tab === "favorites" && (
           <div className="flex gap-2 flex-col items-center">
             <select
-              className="tb-select bg-transparent w-full"
+              className="tb-select bg-mediumBlue w-full"
               defaultValue={favoriteDeck?.id ?? ""}
               onChange={(event) =>
                 setFavoriteDeck(

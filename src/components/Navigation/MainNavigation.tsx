@@ -5,7 +5,7 @@ const MainNavigation = () => {
   return (
     <header className="select-none p-8 justify-center flex">
       <nav>
-        <ul className="flex gap-4 list flex-wrap">
+        <ul className="flex gap-4 list flex-wrap justify-center">
           <NavigationLink to="/" title="Home" />
           <NavigationLink to="/search" title="Search" />
           <NavigationLink to="/sets" title="Sets" />

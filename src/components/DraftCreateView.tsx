@@ -55,7 +55,7 @@ const DraftCreateView: React.FC<{
               <div className="flex gap-4 items-center">
                 <select
                   // className="bg-mediumBlue border border-lightBlue text-white rounded-md p-2"
-                  className="tb-select w-full bg-transparent"
+                  className="tb-select bg-mediumBlue w-full"
                   name="booster"
                   defaultValue={booster[index]}
                   onChange={(event) => {

@@ -30,6 +30,7 @@ import { MoxfieldService } from "./moxfield/moxfield.service";
 import { EventsModule } from "./playtester/playtester.module";
 import { UsersModule } from "./users/users.module";
 import { UrlService } from "./utils/urlservice";
+import { DeckFolder } from "./decks/entities/deck-folder.entity";
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { UrlService } from "./utils/urlservice";
           Settings,
           FavoriteDeck,
           FavoriteCard,
+          DeckFolder,
         ],
         autoLoadModels: true,
         logging: false,
@@ -111,5 +113,6 @@ export class AppModule implements NestModule {
     Playtest.sync({ alter: true });
     Deck.sync({ alter: true });
     FavoriteCard.sync({ alter: true });
+    DeckFolder.sync({ alter: true });
   }
 }

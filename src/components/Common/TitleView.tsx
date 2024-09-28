@@ -1,5 +1,4 @@
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { ButtonIcon } from "../ButtonIcon";
+import EditButton from "../EditButton";
 
 export const TitleView: React.FC<{ title: string; openDialog: () => void }> = ({
   title,
@@ -8,9 +7,7 @@ export const TitleView: React.FC<{ title: string; openDialog: () => void }> = ({
   return (
     <div className="flex justify-center items-center gap-4 m-2 select-none">
       <div className="cursor-default text-3xl font-semibold">{title}</div>
-      <ButtonIcon onClick={openDialog}>
-        <PencilSquareIcon className="size-5" />
-      </ButtonIcon>
+      <EditButton onClick={openDialog} />
     </div>
   );
 };

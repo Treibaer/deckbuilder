@@ -101,7 +101,11 @@ const MatchesListPage = () => {
         />
       )}
       {isSelectingDeck && (
-        <DeckSelectionDialog decks={decks} onClose={close} onSubmit={selectDeck} />
+        <DeckSelectionDialog
+          decks={decks}
+          onClose={close}
+          onSubmit={selectDeck}
+        />
       )}
       <TitleView title="Matches" openDialog={openCreateMatchForm} />
       <table className="mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 select-none">

@@ -14,6 +14,7 @@ import { Card } from "./entities/card.entity";
 import { DeckCard } from "./entities/deck-card.entity";
 import { Deck } from "./entities/deck.entity";
 import { User } from "./entities/user.entity";
+import { DeckFolder } from "./entities/deck-folder.entity";
 
 @Injectable()
 export class DecksService {
@@ -48,9 +49,68 @@ export class DecksService {
     }
   }
 
-  async findAll(): Promise<Deck[]> {
-    return await this.deckModel.findAll({
+  async createFolder(name: string) {
+    // check if folder already exists
+    const existingFolder = await DeckFolder.findOne({
+      where: { creator_id: this.userId, name },
+    });
+    if (existingFolder) {
+      throw new BadRequestException("Folder already exists");
+    }
+    try {
+      const folder = await DeckFolder.create({
+        creator_id: this.userId,
+        name,
+        createdAt: Math.floor(Date.now() / 1000),
+        updatedAt: Math.floor(Date.now() / 1000),
+      });
+      return folder;
+    } catch (error) {
+      console.log(error);
+      throw new BadRequestException("Failed to create deck");
+    }
+  }
+
+  async updateFolder(id: number, name: string) {
+    const folder = await DeckFolder.findByPk(id);
+    if (!folder) {
+      throw new NotFoundException("Folder not found");
+    }
+    if (folder.creator_id !== this.userId) {
+      throw new UnauthorizedException();
+    }
+    folder.name = name;
+    folder.updatedAt = Math.floor(Date.now() / 1000);
+    return await folder.save();
+  }
+
+  async deleteFolder(id: number) {
+    const folder = await DeckFolder.findByPk(id);
+    if (!folder) {
+      throw new NotFoundException("Folder not found");
+    }
+    if (folder.creator_id !== this.userId) {
+      throw new UnauthorizedException();
+    }
+    const decks = await this.deckModel.findAll({ where: { folder_id: id } });
+    if (decks.length > 0) {
+      throw new BadRequestException("Folder is not empty");
+    }
+    await DeckFolder.destroy({ where: { id } });
+  }
+
+  async getFolders() {
+    return await DeckFolder.findAll({
       where: { creator_id: this.userId },
+    });
+  }
+
+  async findAll(folderId: number | null): Promise<Deck[]> {
+    const filter: any = folderId !== null && folderId !== 0 ? { folder_id: folderId } : {};
+    console.log(folderId);
+    console.log(filter);
+    return await this.deckModel.findAll({
+      where: { ...filter, creator_id: this.userId, is_archived: folderId === 0 },
       include: [DeckCard],
     });
   }
@@ -185,7 +245,10 @@ export class DecksService {
     if (deckDto.isLocked !== undefined) {
       deck.isLocked = deckDto.isLocked;
     }
-    if (!deckDto.isLocked === undefined) {
+    if (deckDto.isArchived !== undefined) {
+      deck.isArchived = deckDto.isArchived;
+    }
+    if (!deckDto.isLocked === undefined && !deckDto.isArchived === undefined) {
       deck.updatedAt = Math.floor(Date.now() / 1000);
     }
     return await deck.save();

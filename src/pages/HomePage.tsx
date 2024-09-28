@@ -103,9 +103,9 @@ const HomePage = () => {
               <Button title="View All" />
             </Link>
           </div>
-          <div className="flex flex-col mt-4 gap-2 items-center">
+          <div className="flex flex-col mt-4 gap-2 sm:items-center">
             {playtests.map((playtest) => (
-              <div className="w-[600px]">
+              <div className="sm:w-[400px]">
                 <DeckPreview
                   key={playtest.id}
                   name={playtest.name}

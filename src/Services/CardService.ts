@@ -6,8 +6,8 @@ export default class CardService {
   private client = Client.shared;
   private constructor() {}
 
-  async getSets() {
-    return this.client.get<CardSet[]>("/sets", true);
+  async getSets(setType: string = "default") {
+    return this.client.get<CardSet[]>(`/sets?setType=${setType}`, true);
   }
 
   async getWithPrintings(scryfallId: string) {

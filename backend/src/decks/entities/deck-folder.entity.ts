@@ -3,24 +3,27 @@ import {
   BelongsTo,
   Column,
   ForeignKey,
+  HasMany,
   Model,
   PrimaryKey,
   Table,
 } from "sequelize-typescript";
 import { User } from "./user.entity";
+import { DeckCard } from "./deck-card.entity";
+import { Deck } from "./deck.entity";
 
-@Table({ tableName: "favorite_card", timestamps: false })
-export class FavoriteCard extends Model {
+@Table({ tableName: "deck_folder", timestamps: false })
+export class DeckFolder extends Model {
   @PrimaryKey
   @AutoIncrement
-  @Column({ allowNull: false })
+  @Column
   id: number;
 
-  @Column({ allowNull: false, field: "scryfall_id" })
-  scryfallId: string;
+  @Column
+  name: string;
 
   @ForeignKey(() => User)
-  @Column({ allowNull: false })
+  @Column
   creator_id: number;
 
   @BelongsTo(() => User, "creator_id")
@@ -28,4 +31,7 @@ export class FavoriteCard extends Model {
 
   @Column({ field: "created_at", allowNull: false })
   createdAt: number;
+
+  @Column({ field: "updated_at", allowNull: false })
+  updatedAt: number;
 }

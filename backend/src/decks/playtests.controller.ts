@@ -44,7 +44,7 @@ export class PlayTestsContoller {
     const playtest = await Playtest.findOne({
       where: {
         id: body.id,
-        creator_id: this.userService.user.id,
+        // creator_id: this.userService.user.id,
       },
       attributes: ["id", "createdAt", "promoId", "name", "moxfieldId", "relatedCards"],
     });

@@ -31,6 +31,7 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
   const [sets, setSets] = useState<any[]>([]);
   const [cards, setCards] = useState<MagicCard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [pages, setPages] = useState(0);
 
   // const [deck, setDeck] = useState<Deck | null>(null);
 
@@ -55,9 +56,10 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
         "" + selectedPage
       );
       setCards(cards.data);
+      setPages(cards.amount / cards.data.length);
       setIsLoading(false);
     }
-  }, [q]);
+  }, [q, page]);
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setSearchTerm(event.target.value);
@@ -113,6 +115,11 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
   function submitFilter(query: string) {
     navigate(`/decks/my/${deck.id}?q=${query}`);
     setShowFilter(false);
+  }
+
+  function goToPage(page: number) {
+    let url = `/decks/my/${deck.id}?q=${searchTerm}&page=${page}`;
+    navigate(url);
   }
 
   function transformCard(card: any): MagicCard {
@@ -191,9 +198,9 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
         onSubmit={submitFilter}
       />
       <SearchPagination
-        pages={0}
+        pages={pages}
         selectedPage={selectedPage}
-        searchTerm={searchTerm}
+        goToPage={goToPage}
       />
 
       {!isLoading && (

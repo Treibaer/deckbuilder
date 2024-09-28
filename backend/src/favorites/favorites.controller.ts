@@ -107,7 +107,6 @@ export class FavoritesController {
   @Get("cards/:scryfallId")
   @HttpCode(HttpStatus.OK)
   async isFavorite(@Param("scryfallId") scryfallId: string) {
-    console.log(scryfallId);
     const existing = await FavoriteCard.findOne({
       where: {
         creator_id: this.userService.user.id,

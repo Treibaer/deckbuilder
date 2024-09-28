@@ -8,11 +8,19 @@ const Dialog: React.FC<{
   submitTitle?: string;
   children: React.ReactNode;
   disabledButton?: boolean;
-}> = ({ title, error, onClose, onSubmit, children, submitTitle, disabledButton }) => {
+}> = ({
+  title,
+  error,
+  onClose,
+  onSubmit,
+  children,
+  submitTitle,
+  disabledButton,
+}) => {
   return (
-    <div className="blurredBackground" onClick={onClose}>
+    <div className="blurredBackground select-none" onClick={onClose}>
       {error && (
-        <div className="bg-red-300 w-1/2 mx-auto p-1 m-1 rounded text-slate-800">
+        <div className="bg-red-300 w-1/2 mx-auto p-1 m-1 rounded text-slate-800 z-10 relative">
           {error}
         </div>
       )}
@@ -26,7 +34,11 @@ const Dialog: React.FC<{
         </div>
         <div className="flex flex-col gap-2">{children}</div>
         <div className="absolute right-0 bottom-0 p-2">
-          <Button title={submitTitle ?? "Create"} disabled={disabledButton} onClick={onSubmit} />
+          <Button
+            title={submitTitle ?? "Create"}
+            disabled={disabledButton}
+            onClick={onSubmit}
+          />
         </div>
       </div>
     </div>

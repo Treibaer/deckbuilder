@@ -99,6 +99,16 @@ export default class Client {
       }
     );
     if (options.method === "DELETE") {
+      if (!response.ok) {
+        let message: string | null = null;
+        try {
+          const responseJson = await response.json();
+          message = responseJson.message;
+        } catch {
+          throw new Error("Failed to delete");
+        }
+        throw new Error(message ?? "Failed to delete");
+      }
       return null as any;
     }
     return this.handleResponse(response);

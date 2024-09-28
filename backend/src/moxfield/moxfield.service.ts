@@ -118,6 +118,8 @@ export class MoxfieldService {
         sideboard: [],
         isLocked: true,
         updatedAt: 0,
+        folderId: null,
+        isArchived: false,
       };
     });
     return allDecks;
@@ -242,8 +244,9 @@ export class MoxfieldService {
       isFavorite: favorite !== null,
       isLocked: true,
       updatedAt: 0,
+      folderId: null,
+      isArchived: false,
     };
-    console.log(deckResponse)
     return deckResponse;
   }
 

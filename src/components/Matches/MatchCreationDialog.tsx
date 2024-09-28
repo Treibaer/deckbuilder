@@ -14,7 +14,7 @@ const MatchCreationDialog: React.FC<{
       </div>
       <div className="formRow">
         <select
-          className="tb-select bg-transparent w-full mb-10"
+          className="tb-select bg-mediumBlue w-full mb-10"
           name="enemy"
           onChange={(event) => setEnemyId(Number(event.target.value))}
         >

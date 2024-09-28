@@ -5,7 +5,7 @@ function MatchDetailPage() {
 
   return (
     <iframe
-      className="absolute inset-0 w-screen h-screen"
+      className="fixed inset-0 w-screen h-screen"
       src={`/magic-web-js/duo3.html?matchId=${matchId}`}
       title="Match"
     ></iframe>
