@@ -60,12 +60,13 @@ export default class DeckService {
     return await this.client.post(path, cardObject, true);
   }
 
-  async setName(deck: Deck, name: string) {
+  async updateDeck(deck: Deck, name: string, folderId: number | null) {
     const url = `/decks/${deck.id}`;
-    const cardObject = {
+    const data = {
       name,
+      folderId,
     };
-    return await this.client.patch(url, cardObject, true);
+    return await this.client.patch(url, data, true);
   }
 
   async toggleArchive(deck: Deck) {

@@ -13,7 +13,7 @@ const CardPrintingsList: React.FC<{
       <div className="text-xl font-semibold">Printings</div>
       {previewImage && mousePosition.x && mousePosition.y && (
         <div
-          className="w-[250px] h-[350px] absolute"
+          className="w-[250px] h-[350px] fixed"
           style={{
             top: mousePosition.y + 10,
             left: mousePosition.x + 10,
@@ -29,7 +29,10 @@ const CardPrintingsList: React.FC<{
           return (
             <li key={index} className="">
               {isSelected && (
-                <div key={print.id} className="py-2 bg-lightBlue select-none px-2 rounded">
+                <div
+                  key={print.id}
+                  className="py-2 bg-lightBlue select-none px-2 rounded"
+                >
                   <div title={print.setName}>{print.setName}</div>
                 </div>
               )}

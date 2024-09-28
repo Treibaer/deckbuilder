@@ -3,6 +3,7 @@ import Helper from "../../Services/Helper";
 import MagicHelper from "../../Services/MagicHelper";
 import { CardSet } from "../../models/dtos";
 import Button from "../Button";
+import Select from "../Select";
 
 const formats = [
   "",
@@ -151,8 +152,7 @@ const CardSearchFilter: React.FC<{
             <label htmlFor="rarity" className="w-40">
               Rarity
             </label>
-            <select
-              className="tb-select bg-mediumBlue w-full"
+            <Select
               name="rarity"
               defaultValue={filter.rarity}
               onChange={(event) => {
@@ -166,14 +166,13 @@ const CardSearchFilter: React.FC<{
                   </option>
                 );
               })}
-            </select>
+            </Select>
           </div>
           <div className="flex items-center gap-2">
             <label htmlFor="set" className="w-40">
               Set
             </label>
-            <select
-              className="tb-select bg-mediumBlue w-full"
+            <Select
               name="set"
               key={`set_${key}`}
               defaultValue={filter.set}
@@ -189,14 +188,13 @@ const CardSearchFilter: React.FC<{
                   </option>
                 );
               })}
-            </select>
+            </Select>
           </div>
           <div className="flex items-center gap-2">
             <label htmlFor="format" className="w-40">
               Format
             </label>
-            <select
-              className="tb-select bg-mediumBlue w-full"
+            <Select
               name="format"
               onChange={(event) => {
                 setFilter({ ...filter, format: event.target.value });
@@ -210,7 +208,7 @@ const CardSearchFilter: React.FC<{
                   </option>
                 );
               })}
-            </select>
+            </Select>
           </div>
           <div className="flex items-center gap-2">
             <label htmlFor="oracle" className="w-40">
@@ -307,8 +305,7 @@ const CardSearchFilter: React.FC<{
             <label htmlFor="sort" className="w-40">
               Sort by
             </label>
-            <select
-              className="tb-input"
+            <Select
               onChange={(event) => {
                 setFilter({ ...filter, order: event.target.value });
               }}
@@ -319,7 +316,7 @@ const CardSearchFilter: React.FC<{
               <option value="rarity">Rarity</option>
               <option value="color">Color</option>
               <option value="released">Released</option>
-            </select>
+            </Select>
           </div>
           <div className="flex justify-end">
             <Button title="Submit" onClick={handleSubmit} />

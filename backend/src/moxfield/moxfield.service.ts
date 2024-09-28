@@ -12,7 +12,13 @@ import { UsersService } from "src/users/users.service";
 import { Card } from "../decks/entities/card.entity";
 import { DeckCard } from "../decks/entities/deck-card.entity";
 
-const formats = ["modern", "commander", "precons", "commanderPrecons", "standard"];
+const formats = [
+  "modern",
+  "commander",
+  "precons",
+  "commanderPrecons",
+  "standard",
+];
 const sortTypes = ["views", "created", "updated"];
 
 class ConfigDto {
@@ -135,6 +141,8 @@ export class MoxfieldService {
       format: deck.format,
       isPublic: true,
       creator_id: this.userService.user.id,
+      createdAt: Math.floor(Date.now() / 1000),
+      updatedAt: Math.floor(Date.now() / 1000),
     });
 
     await Promise.all([
@@ -226,7 +234,10 @@ export class MoxfieldService {
     );
 
     const favorite = await FavoriteDeck.findOne({
-      where: { moxfieldId: deck.publicId, creator_id: this.userService.user.id },
+      where: {
+        moxfieldId: deck.publicId,
+        creator_id: this.userService.user.id,
+      },
     });
 
     const deckResponse: DeckDto = {

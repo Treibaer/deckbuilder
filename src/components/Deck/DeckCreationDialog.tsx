@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Dialog from "../Common/Dialog";
+import Select from "../Select";
 
 const DeckCreationDialog: React.FC<{
   onSubmit: (name: string, folderId: number | null) => void;
@@ -53,19 +54,19 @@ const DeckCreationDialog: React.FC<{
         onChange={(event) => setName(event.target.value)}
       />
       <label htmlFor="folder">Folder</label>
-      <select
-        className="tb-select bg-mediumBlue w-full mb-10"
-        name="enemy"
-        onChange={handleChangeFolder}
-        defaultValue={currentFolderId ? currentFolderId : ""}
-      >
-        <option value=""> No folder</option>
-        {folders.map((folder, index) => (
-          <option key={index} value={folder.id}>
-            {folder.name}
-          </option>
-        ))}
-      </select>
+      <div className="mb-10">
+        <Select
+          onChange={handleChangeFolder}
+          defaultValue={currentFolderId ? currentFolderId : ""}
+        >
+          <option value=""> No folder</option>
+          {folders.map((folder, index) => (
+            <option key={index} value={folder.id}>
+              {folder.name}
+            </option>
+          ))}
+        </Select>
+      </div>
     </Dialog>
   );
 };

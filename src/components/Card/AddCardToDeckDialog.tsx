@@ -4,6 +4,7 @@ import DeckService from "../../Services/DeckService";
 import Dialog from "../Common/Dialog";
 import { CardSize } from "../../models/structure";
 import MagicCardView from "../MagicCardView";
+import Select from "../Select";
 
 const deckService = DeckService.shared;
 
@@ -23,13 +24,18 @@ const AddCardToDeckDialog: React.FC<{
     }
     onClose();
     const deck = myDecks.filter((deck) => deck.id === selectedDeckId)[0];
-    await deckService.addCardToDeck(deck, card.scryfallId, "mainboard", selectedQuantity);
+    await deckService.addCardToDeck(
+      deck,
+      card.scryfallId,
+      "mainboard",
+      selectedQuantity
+    );
     setIsLoading(false);
   }
 
   async function loadDecks() {
     let currentDecks = await deckService.getAll();
-    currentDecks = currentDecks.filter((deck) => !deck.isLocked); 
+    currentDecks = currentDecks.filter((deck) => !deck.isLocked);
     if (currentDecks.length === 0) {
       return;
     }
@@ -63,28 +69,28 @@ const AddCardToDeckDialog: React.FC<{
       </div>
       <div className="mx-auto">
         {myDecks.length === 0 && (
-          <select disabled  className="h-8 px-2 rounded-xl">
+          <Select disabled>
             <option>No decks available</option>
-          </select>
+          </Select>
         )}
         {myDecks.length > 0 && (
-          <select name="deck" id="deck" className="h-8 px-2 rounded-xl" onChange={handleDeckChange}>
+          <Select onChange={handleDeckChange} defaultValue={myDecks[0].id}>
             {myDecks.map((deck) => (
               <option key={deck.id} value={deck.id}>
                 [{deck.id}] {deck.name}
               </option>
             ))}
-          </select>
+          </Select>
         )}
       </div>
       <div className="mx-auto">
-        <select onChange={handleQuantityChange}  className="h-8 px-2 rounded-xl" disabled={myDecks.length === 0}>
+        <Select onChange={handleQuantityChange} disabled={myDecks.length === 0}>
           {Array.from({ length: 10 }, (_, i) => i + 1).map((i) => (
             <option key={i} value={i}>
               {i}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
     </Dialog>
   );

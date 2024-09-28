@@ -6,6 +6,7 @@ import Button from "../Button";
 import Dialog from "../Common/Dialog";
 import LoadingSpinner from "../Common/LoadingSpinner";
 import DeckPreview from "../Deck/DeckPreview";
+import Select from "../Select";
 
 type Tab = "myDeck" | "moxfield" | "favorites";
 
@@ -27,7 +28,10 @@ const DeckSelectionDialog: React.FC<{
 
   useEffect(() => {
     async function loadFavorites() {
-      const favorites = await Client.shared.get<FavoritesDto>("/favorites", true);
+      const favorites = await Client.shared.get<FavoritesDto>(
+        "/favorites",
+        true
+      );
       setFavoriteDecks(favorites.moxfieldDecks);
     }
     loadFavorites();
@@ -122,69 +126,6 @@ const DeckSelectionDialog: React.FC<{
         />
       </div>
       <div className="h-24">
-        {tab === "myDeck" && (
-          <div className="flex gap-2 flex-col items-center">
-            <select
-              className="tb-select bg-mediumBlue w-full"
-              name="deck"
-              defaultValue={deck?.id ?? 0}
-              onChange={(event) =>
-                setDeck(
-                  decks.find((deck) => deck.id === +event.target.value) ?? null
-                )
-              }
-            >
-              <option value={0}>Select Deck</option>
-              {decks.map((deck, index) => (
-                <option key={index} value={deck.id}>
-                  [{deck.id}] {deck.name}
-                </option>
-              ))}
-            </select>
-
-            <div className="w-full select-none">
-              {deck && (
-                <DeckPreview
-                  deckId={deck.id}
-                  name={deck.name}
-                  promoId={deck.promoId}
-                />
-              )}
-            </div>
-          </div>
-        )}
-        {tab === "favorites" && (
-          <div className="flex gap-2 flex-col items-center">
-            <select
-              className="tb-select bg-mediumBlue w-full"
-              defaultValue={favoriteDeck?.id ?? ""}
-              onChange={(event) =>
-                setFavoriteDeck(
-                  favoriteDecks.find(
-                    (deck) => `${deck.id}` === event.target.value
-                  ) ?? null
-                )
-              }
-            >
-              <option value={0}>Select Deck</option>
-              {favoriteDecks.map((deck, index) => (
-                <option key={index} value={deck.id}>
-                  [{deck.format}] - [{deck.colors.join(", ")}]: {deck.name}
-                </option>
-              ))}
-            </select>
-
-            <div className="w-full select-none">
-              {favoriteDeck && (
-                <DeckPreview
-                  moxfieldId={"" + favoriteDeck.id}
-                  name={favoriteDeck.name}
-                  promoId={favoriteDeck.promoId}
-                />
-              )}
-            </div>
-          </div>
-        )}
         {tab === "moxfield" && (
           <div className="flex gap-2 flex-col items-center">
             <div className="flex gap-2 items-center w-full">
@@ -206,6 +147,65 @@ const DeckSelectionDialog: React.FC<{
                   moxfieldId={"" + moxfieldDeck.id}
                   name={moxfieldDeck.name}
                   promoId={moxfieldDeck.promoId}
+                />
+              )}
+            </div>
+          </div>
+        )}
+        {tab === "favorites" && (
+          <div className="flex gap-2 flex-col items-center">
+            <Select
+              defaultValue={favoriteDeck?.id ?? ""}
+              onChange={(event) =>
+                setFavoriteDeck(
+                  favoriteDecks.find(
+                    (deck) => `${deck.id}` === event.target.value
+                  ) ?? null
+                )
+              }
+            >
+              <option value={0}>Select Deck</option>
+              {favoriteDecks.map((deck, index) => (
+                <option key={index} value={deck.id}>
+                  [{deck.format}] - [{deck.colors.join(", ")}]: {deck.name}
+                </option>
+              ))}
+            </Select>
+
+            <div className="w-full select-none">
+              {favoriteDeck && (
+                <DeckPreview
+                  moxfieldId={"" + favoriteDeck.id}
+                  name={favoriteDeck.name}
+                  promoId={favoriteDeck.promoId}
+                />
+              )}
+            </div>
+          </div>
+        )}
+        {tab === "myDeck" && (
+          <div className="flex gap-2 flex-col items-center">
+            <Select
+              defaultValue={deck?.id ?? 0}
+              onChange={(event) =>
+                setDeck(
+                  decks.find((deck) => deck.id === +event.target.value) ?? null
+                )
+              }
+            >
+              <option value={0}>Select Deck</option>
+              {decks.map((deck, index) => (
+                <option key={index} value={deck.id}>
+                  [{deck.id}] {deck.name}
+                </option>
+              ))}
+            </Select>
+            <div className="w-full select-none">
+              {deck && (
+                <DeckPreview
+                  deckId={deck.id}
+                  name={deck.name}
+                  promoId={deck.promoId}
                 />
               )}
             </div>

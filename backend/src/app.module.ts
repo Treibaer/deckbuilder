@@ -31,6 +31,7 @@ import { EventsModule } from "./playtester/playtester.module";
 import { UsersModule } from "./users/users.module";
 import { UrlService } from "./utils/urlservice";
 import { DeckFolder } from "./decks/entities/deck-folder.entity";
+import { FavoritesService } from "./favorites/favorites.service";
 
 @Module({
   imports: [
@@ -101,6 +102,7 @@ import { DeckFolder } from "./decks/entities/deck-folder.entity";
     ImportService,
     CardsService,
     UrlService,
+    FavoritesService,
   ],
 })
 export class AppModule implements NestModule {

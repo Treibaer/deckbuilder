@@ -1,5 +1,6 @@
 import { User } from "../../models/dtos";
 import Dialog from "../Common/Dialog";
+import Select from "../Select";
 
 const MatchCreationDialog: React.FC<{
   onSubmit: () => void;
@@ -9,12 +10,11 @@ const MatchCreationDialog: React.FC<{
 }> = ({ onSubmit, onClose, users, setEnemyId }) => {
   return (
     <Dialog title="Create Match" onClose={onClose} onSubmit={onSubmit}>
-      <div className="formRow">
+      <div>
         <label htmlFor="enemy">Enemy</label>
       </div>
-      <div className="formRow">
-        <select
-          className="tb-select bg-mediumBlue w-full mb-10"
+      <div className="mb-10">
+        <Select
           name="enemy"
           onChange={(event) => setEnemyId(Number(event.target.value))}
         >
@@ -23,7 +23,7 @@ const MatchCreationDialog: React.FC<{
               {user.username}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
     </Dialog>
   );

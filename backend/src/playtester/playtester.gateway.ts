@@ -15,6 +15,7 @@ import { GameCard, GameState } from "src/decks/playtests.service";
 import { PlaytesterService } from "./playtester.service";
 import { Connection } from "./models/connection";
 import { Wrapper } from "./models/wrapper";
+import { SettingsDto } from "./models/settings.dto";
 
 @WebSocketGateway(3000, {
   cors: {
@@ -104,7 +105,7 @@ export class EventsGateway
     const connection = this.connections.get(client.id);
     if (!connection) {
       // ignore not authenticated connections
-      console.error("Connection not found for client:", client.id);
+      console.error("Connection not found for client: ", client.id);
       return;
     }
     if (!type) {
@@ -162,17 +163,7 @@ export class EventsGateway
       this.sendOthers(client.id, connection.playtestId, "legacy", data);
     }
     if (type == "settings") {
-      const data = wrapper.data as {
-        type: string;
-        data: {
-          life: number;
-          counters: {
-            energy: number;
-            poison: number;
-            commanderDamage: number;
-          };
-        };
-      };
+      const data = wrapper.data as Wrapper<SettingsDto>;
       const game: GameState = JSON.parse(playtest.game);
       game.life = data.data.life;
       game.counters.energy = data.data.counters.energy;
@@ -215,7 +206,6 @@ export class EventsGateway
       ) {
         continue;
       }
-
       client.emit(event, data);
     }
   }

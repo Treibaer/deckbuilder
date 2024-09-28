@@ -1,28 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import DeckService from "../../Services/DeckService";
-import { Deck } from "../../models/dtos";
+import { Deck, DeckFolder } from "../../models/dtos";
 import Button from "../Button";
 import ConfirmationDialog from "../Common/ConfirmationDialog";
 import Dialog from "../Common/Dialog";
+import Select from "../Select";
 
 const DeckUpdateDialog: React.FC<{
   deck: Deck;
+  folders: DeckFolder[];
   onClose: () => void;
   update: () => Promise<void>;
-}> = ({ deck, onClose, update }) => {
+}> = ({ deck, onClose, update, folders }) => {
   const navigator = useNavigate();
   const [error, setError] = useState<string | undefined>(undefined);
   const nameInputRef = useRef<HTMLInputElement>(null);
-  const [showDeletionConfirmation, setShowDeletionConfirmation] =
-    useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [folderId, setFolderId] = useState<number | null>(deck.folderId);
 
-
-    useEffect(() => {
-      setTimeout(() => {
-        nameInputRef.current?.focus();
-      }, 100);
-    }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      nameInputRef.current?.focus();
+    }, 100);
+  }, []);
 
   async function deleteDeck() {
     await DeckService.shared.deleteDeck(deck);
@@ -36,22 +37,30 @@ const DeckUpdateDialog: React.FC<{
 
   async function handleUpdateName() {
     const name = nameInputRef.current?.value;
-    if (name) {
-      try {
-        await DeckService.shared.setName(deck, name);
-        onClose();
-        await update();
-      } catch (error: Error | any) {
-        setError(error.message);
-      }
-    } else {
-      setError("Title is required");
+    if (!name) {
+      setError("Name is required");
+      return;
+    }
+    try {
+      await DeckService.shared.updateDeck(deck, name, folderId);
+      onClose();
+      await update();
+    } catch (error: Error | any) {
+      setError(error.message);
     }
   }
 
   async function toggleArchive() {
     await DeckService.shared.toggleArchive(deck);
     await update();
+  }
+
+  function handleChangeFolder(event: React.ChangeEvent<HTMLSelectElement>) {
+    if (!event.target.value) {
+      setFolderId(null);
+      return;
+    }
+    setFolderId(Number(event.target.value));
   }
 
   return (
@@ -66,15 +75,28 @@ const DeckUpdateDialog: React.FC<{
         <input
           type="text"
           placeholder="Deck name"
-          className="tb-input mb-10"
+          className="tb-input"
           defaultValue={deck.name}
           ref={nameInputRef}
         />
+
+        <Select
+          onChange={handleChangeFolder}
+          defaultValue={deck.folderId ?? undefined}
+          disabled={deck.isArchived}
+        >
+          <option value=""> No folder</option>
+          {folders.map((folder, index) => (
+            <option key={index} value={folder.id}>
+              {folder.name}
+            </option>
+          ))}
+        </Select>
         <div className="flex gap-2">
           <Button
             className="w-32 text-red-300"
             title="Delete"
-            onClick={() => setShowDeletionConfirmation(true)}
+            onClick={() => setShowDeleteConfirm(true)}
             disabled={deck.isLocked}
           />
           <Button
@@ -84,10 +106,10 @@ const DeckUpdateDialog: React.FC<{
           />
         </div>
       </Dialog>
-      {showDeletionConfirmation && (
+      {showDeleteConfirm && (
         <div className="fullscreenBlurWithLoading">
           <ConfirmationDialog
-            onCancel={() => setShowDeletionConfirmation(false)}
+            onCancel={() => setShowDeleteConfirm(false)}
             onConfirm={deleteDeck}
           />
         </div>

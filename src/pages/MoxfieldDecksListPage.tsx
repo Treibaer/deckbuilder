@@ -8,6 +8,7 @@ import MoxfieldService from "../Services/MoxfieldService";
 import Button from "../components/Button";
 import DeckList from "../components/Deck/DecksListWrapper";
 import { Deck } from "../models/dtos";
+import Select from "../components/Select";
 
 const moxfieldService = MoxfieldService.shared;
 
@@ -56,7 +57,9 @@ const MoxfieldDecksListPage = () => {
   return (
     <>
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 select-none">
-        {!data.referenceCard && <div className="text-3xl font-semibold">Moxfield Decks</div>}
+        {!data.referenceCard && (
+          <div className="text-3xl font-semibold">Moxfield Decks</div>
+        )}
         {data.referenceCard && (
           <div className="text-xl">
             Moxfield Decks for{" "}
@@ -66,25 +69,28 @@ const MoxfieldDecksListPage = () => {
           </div>
         )}
         <div className="flex gap-2">
-          <select
-            className="tb-select bg-mediumBlue"
+          <Select
             defaultValue={format}
             onChange={(event) => {
               switchFormat(event.target.value);
             }}
           >
-            {["All", "modern", "commander", "commanderPrecons", "precons", "standard"].map(
-              (format) => {
-                return (
-                  <option value={format} key={format}>
-                    {format}
-                  </option>
-                );
-              }
-            )}
-          </select>
-          <select
-            className="tb-select bg-mediumBlue"
+            {[
+              "All",
+              "modern",
+              "commander",
+              "commanderPrecons",
+              "precons",
+              "standard",
+            ].map((format) => {
+              return (
+                <option value={format} key={format}>
+                  {format}
+                </option>
+              );
+            })}
+          </Select>
+          <Select
             defaultValue={sortType}
             onChange={(event) => {
               switchSortType(event.target.value);
@@ -93,10 +99,9 @@ const MoxfieldDecksListPage = () => {
             <option value="views">Most Views</option>
             <option value="created">Recently Created</option>
             <option value="updated">Recently Updated</option>
-          </select>
+          </Select>
           {data.referenceCard && (
-            <select
-              className="tb-select bg-mediumBlue"
+            <Select
               defaultValue={zone}
               onChange={(event) => {
                 switchZone(event.target.value);
@@ -109,7 +114,7 @@ const MoxfieldDecksListPage = () => {
                   </option>
                 );
               })}
-            </select>
+            </Select>
           )}
         </div>
         <div>

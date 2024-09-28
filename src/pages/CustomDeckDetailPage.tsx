@@ -9,7 +9,7 @@ import DeckCardListView from "../components/Deck/DeckCardListView";
 import DeckPrintSelectionOverlay from "../components/Deck/DeckPrintSelectionOverlay";
 import DeckUpdateDialog from "../components/Deck/DeckUpdateDialog";
 import EditButton from "../components/EditButton";
-import { Deck, MagicCard } from "../models/dtos";
+import { Deck, DeckFolder, MagicCard } from "../models/dtos";
 import Constants from "../Services/Constants";
 import DeckService from "../Services/DeckService";
 import MagicHelper from "../Services/MagicHelper";
@@ -39,12 +39,21 @@ const CustomDeckDetailPage = () => {
   const [deck, setDeck] = useState(initialDeck);
   const [cardPreview, setCardPreview] = useState<MagicCard | null>(null);
   const [cardDetails, setCardDetails] = useState<MagicCard | null>(null);
+  const [folders, setFolders] = useState<DeckFolder[]>([]);
 
   useEffect(() => {
     if (showSandbox && deck.isLocked) {
       setShowSandbox(false);
     }
   }, [deck.isLocked]);
+
+  useEffect(() => {
+    async function loadFolders() {
+      const folders = await DeckService.shared.getFolders();
+      setFolders(folders);
+    }
+    loadFolders();
+  }, []);
 
   const previewId = hovered?.scryfallId ?? deck.promoId;
   const image = previewId
@@ -164,6 +173,7 @@ const CustomDeckDetailPage = () => {
         {showUpdateDialog && (
           <DeckUpdateDialog
             deck={deck}
+            folders={folders}
             onClose={() => setShowUpdateDialog(false)}
             update={loadDeck}
           />
@@ -233,15 +243,16 @@ const CustomDeckDetailPage = () => {
             />
             <div>Cards: {deck.cardCount}</div>
             <p>Valid: {DeckService.shared.isValid(deck) ? "yes" : "no"}</p>
-            {deck.promoId !== previewId && hovered.isPreviewCardFromDeck && (
-              <Button
-                onClick={() => {
-                  setPromoId(previewId);
-                }}
-                title="Set Promo"
-                disabled={deck.isLocked}
-              />
-            )}
+            {deck.promoId !== previewId &&
+              hovered.isPreviewCardFromDeck &&
+              !deck.isLocked && (
+                <Button
+                  onClick={() => {
+                    setPromoId(previewId);
+                  }}
+                  title="Set Promo"
+                />
+              )}
           </div>
 
           {cards.length === 0 && <p>No cards in deck</p>}

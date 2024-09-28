@@ -1,7 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
 import { Request } from "express";
-import { Op } from "sequelize";
 import { User } from "src/decks/entities/user.entity";
 
 @Injectable()

@@ -8,15 +8,14 @@ import {
   Param,
   Post,
 } from "@nestjs/common";
-import { UsersService } from "src/users/users.service";
-import { PlaytestDto } from "./dto/playtest.dto";
-import { Playtest } from "./entities/playtest.entity";
-import { Deck } from "./entities/deck.entity";
-import { MagicCardDto } from "./dto/magic-card.dto";
-import { DeckCard } from "./entities/deck-card.entity";
-import { Card } from "./entities/card.entity";
-import { DeckDto } from "./dto/deck.dto";
 import { MoxfieldService } from "src/moxfield/moxfield.service";
+import { UsersService } from "src/users/users.service";
+import { DeckDto } from "./dto/deck.dto";
+import { PlaytestDto } from "./dto/playtest.dto";
+import { Card } from "./entities/card.entity";
+import { DeckCard } from "./entities/deck-card.entity";
+import { Deck } from "./entities/deck.entity";
+import { Playtest } from "./entities/playtest.entity";
 import { GameState, PlaytestsService } from "./playtests.service";
 
 @Controller("api/v1/playtests")

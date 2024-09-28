@@ -1,10 +1,11 @@
 import { Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
+import { MoxfieldService } from "src/moxfield/moxfield.service";
 import { UsersModule } from "src/users/users.module";
 import { UsersService } from "src/users/users.service";
 import { UrlService } from "src/utils/urlservice";
-import { CardController } from "../cards/cards.controller";
+import { DeckFoldersController } from "./deck-folders.controller";
 import { DeckTransformer } from "./deck.transformer";
 import { DecksController } from "./decks.controller";
 import { DecksService } from "./decks.service";
@@ -14,14 +15,31 @@ import { Deck } from "./entities/deck.entity";
 import { MoxFieldMapping } from "./entities/moxfield-mapping.entity";
 import { User } from "./entities/user.entity";
 import { PlayTestsContoller } from "./playtests.controller";
-import { SetsController } from "./sets.controller";
-import { MoxfieldService } from "src/moxfield/moxfield.service";
 import { PlaytestsService } from "./playtests.service";
+import { SetsController } from "./sets.controller";
+import { DeckFoldersService } from "./deck-folders.service";
 
 @Module({
-  imports: [SequelizeModule.forFeature([Deck, User, DeckCard, Card, MoxFieldMapping]), UsersModule],
-  controllers: [DecksController, PlayTestsContoller, SetsController],
-  providers: [DecksService, DeckTransformer, ConfigService, UrlService, UsersService, MoxfieldService, PlaytestsService],
+  imports: [
+    SequelizeModule.forFeature([Deck, User, DeckCard, Card, MoxFieldMapping]),
+    UsersModule,
+  ],
+  controllers: [
+    DecksController,
+    PlayTestsContoller,
+    SetsController,
+    DeckFoldersController,
+  ],
+  providers: [
+    DecksService,
+    DeckTransformer,
+    ConfigService,
+    UrlService,
+    UsersService,
+    MoxfieldService,
+    PlaytestsService,
+    DeckFoldersService,
+  ],
   exports: [
     SequelizeModule,
     // , DecksService

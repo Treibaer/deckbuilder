@@ -79,7 +79,7 @@ const CustomDecksListPage = () => {
     }
     setIsUpdating(false);
   }
-  
+
   async function updateFolder() {
     setIsUpdating(true);
     if (!editFolderInputRef.current?.value) {
@@ -236,7 +236,7 @@ const CustomDecksListPage = () => {
           </div>
           <div className="flex flex-col gap-2 w-32">
             <Link to="/decks/my">
-              <div className={!folderId ? "text-brightBlue" : undefined}>
+              <div className={folderId === null ? "text-brightBlue" : undefined}>
                 All
               </div>
             </Link>

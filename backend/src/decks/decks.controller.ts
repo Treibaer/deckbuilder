@@ -3,22 +3,20 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   ParseIntPipe,
   Patch,
   Post,
   Put,
   Query,
-  UseFilters,
+  UseFilters
 } from "@nestjs/common";
+import { HttpExceptionFilter } from "../utils/http-exception.filter";
 import { DeckTransformer } from "./deck.transformer";
 import { DecksService } from "./decks.service";
 import { DeckDto } from "./dto/deck.dto";
 import { PatchDeckDto } from "./dto/patch-deck.dto";
 import { PostDeckCardsDto } from "./dto/post-deck-cards.dt";
-import { HttpExceptionFilter } from "../utils/http-exception.filter";
 
 @Controller("api/v1/decks")
 @UseFilters(HttpExceptionFilter)
@@ -31,26 +29,6 @@ export class DecksController {
   @Post()
   create(@Body() createDeckDto: DeckDto) {
     return this.decksService.create(createDeckDto);
-  }
-
-  @Post("folders")
-  createFolder(@Body() folder: { name: string }) {
-    return this.decksService.createFolder(folder.name);
-  }
-
-  @Patch("folders/:id")
-  updateFolder(@Param("id") id: string, @Body() folder: { name: string }) {
-    return this.decksService.updateFolder(+id, folder.name);
-  }
-
-  @Delete("folders/:id")
-  deleteFolder(@Param("id") id: string) {
-    return this.decksService.deleteFolder(+id);
-  }
-
-  @Get("folders")
-  async getFolders() {
-    return this.decksService.getFolders();
   }
 
   @Get()
@@ -81,7 +59,7 @@ export class DecksController {
     return transformedDecks;
   }
 
-  @Get(":id")
+  @Get(":id(\\d+)")
   async findOne(@Param("id", ParseIntPipe) id: number): Promise<DeckDto> {
     const deck = await this.decksService.findOne(id);
     return this.deckTransformer.transformDeck(deck);
