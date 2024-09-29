@@ -12,11 +12,13 @@ const MainNavigation = () => {
           <NavigationLink to="/decks/moxfield" title="Moxfield" />
           <NavigationLink to="/decks/my" title="Decks" />
           <NavigationLink to="/decks/favorites" title="Favorites" />
-          {/* <NavigationLink to="/drafts" title="Drafter" /> */}
 
           {/* {Constants.beta && <NavigationLink to="/users" title="Users" />} */}
           {Constants.playModeEnabled && (
-            <NavigationLink to="/matches" title="Matches" />
+            <>
+              <NavigationLink to="/matches" title="Matches" />
+              {/* <NavigationLink to="/drafts" title="Drafter" /> */}
+            </>
           )}
           {Constants.beta && <NavigationLink to="/settings" title="Settings" />}
         </ul>

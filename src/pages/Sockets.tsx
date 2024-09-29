@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import socket from "../Services/socket";
 import Button from "../components/Button";
+import { Wrapper } from "../models/websocket";
 
 const Sockets = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);

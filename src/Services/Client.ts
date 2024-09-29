@@ -14,7 +14,7 @@ export default class Client {
    * @param url - The endpoint URL (relative to the API base).
    * @returns A promise that resolves to the response data.
    */
-  async get<T>(url: string, newBackend = false) {
+  async get<T>(url: string, newBackend: boolean) {
     return this.request<T>(url, newBackend, { method: "GET" });
   }
 

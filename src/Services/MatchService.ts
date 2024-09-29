@@ -11,7 +11,7 @@ export default class MatchService {
   }
 
   async getUsers() {
-    return this.client.get<User[]>("/users");
+    return this.client.get<User[]>("/users", false);
   }
 
   async create(enemyId: number) {

@@ -231,7 +231,7 @@ const CustomDecksListPage = () => {
         )}
       </div>
       <div className="flex flex-col sm:flex-row gap-4">
-        <div className="w-full">
+        <div>
           <div className="flex gap-2 justify-center items-center flex-row">
             <div>Folders</div>
             <AddButton onClick={showFolderForm} />

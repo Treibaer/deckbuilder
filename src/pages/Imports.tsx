@@ -33,10 +33,6 @@ const Imports = () => {
     await rawImport("/import/symbols");
   }
 
-  async function importVersions() {
-    await rawImport("/import/versions");
-  }
-
   async function rawImport(path: string) {
     setIsLoading(true);
     try {

@@ -105,9 +105,8 @@ const HomePage = () => {
           </div>
           <div className="flex flex-col mt-4 gap-2 sm:items-center">
             {playtests.map((playtest) => (
-              <div className="sm:w-[400px]">
+              <div className="sm:w-[400px]" key={playtest.id}>
                 <DeckPreview
-                  key={playtest.id}
                   name={playtest.name}
                   promoId={playtest.promoId}
                   moxfieldId={playtest.moxfieldId}

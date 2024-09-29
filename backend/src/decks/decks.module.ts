@@ -18,6 +18,8 @@ import { PlayTestsContoller } from "./playtests.controller";
 import { PlaytestsService } from "./playtests.service";
 import { SetsController } from "./sets.controller";
 import { DeckFoldersService } from "./deck-folders.service";
+import { DraftsController } from "./drafts.controller";
+import { DraftsService } from "./drafts.service";
 
 @Module({
   imports: [
@@ -29,6 +31,7 @@ import { DeckFoldersService } from "./deck-folders.service";
     PlayTestsContoller,
     SetsController,
     DeckFoldersController,
+    DraftsController,
   ],
   providers: [
     DecksService,
@@ -39,6 +42,7 @@ import { DeckFoldersService } from "./deck-folders.service";
     MoxfieldService,
     PlaytestsService,
     DeckFoldersService,
+    DraftsService,
   ],
   exports: [
     SequelizeModule,
