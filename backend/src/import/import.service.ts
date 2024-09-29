@@ -6,7 +6,9 @@ import {
 import axios from "axios";
 import * as fs from "fs";
 import * as path from "path";
+import { fn } from "sequelize";
 import { Sequelize } from "sequelize-typescript";
+import { Col } from "sequelize/types/utils";
 import { CardSet } from "src/decks/entities/card-set.entity";
 import { Card } from "src/decks/entities/card.entity";
 
@@ -178,7 +180,7 @@ export class ImportService {
         toughness: card.toughness ?? 0,
         colors: card.colors.join("_"),
         rarity: card.rarity,
-        isReprint: card.reprint ?? false,
+        versions: 0,
         printsSearchUri: card.prints_search_uri ?? "",
         cardFacesNames: cardFaces.join("###"),
         relatedScryfallIds: allPartsAsString,
@@ -248,4 +250,27 @@ export class ImportService {
       }
     }
   }
+  
+  async updateVersions(): Promise<void> {
+    // Step 1: Group cards by oracleId and count versions
+    const cardsGroupedByOracleId = await Card.findAll({
+      attributes: [
+        'oracleId',
+        [fn('COUNT', Sequelize.col('oracle_id')), 'versionCount'],
+      ],
+      group: ['oracleId'],
+    });
+
+    // Step 2: Update versions for each card
+    for (const group of cardsGroupedByOracleId) {
+      const { oracleId, versionCount } = group.get();
+      
+      // Update all cards with the same oracleId with the counted version number
+      await Card.update(
+        { versions: versionCount },
+        { where: { oracle_id: oracleId } },
+      );
+    }
+  }
 }
+

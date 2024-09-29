@@ -50,7 +50,7 @@ export class PlaytestsService {
       oracleId: deckCard.card.oracleId,
       cardFaces: deckCard.card.cardFacesNames.split("###"),
       typeLine: "",
-      reprint: false,
+      versions: deckCard.card.versions,
       printsSearchUri: "",
     };
   }

@@ -76,7 +76,7 @@ export class EventsGateway
   }
 
   private log(message: string) {
-    // console.log(message);
+    console.log(message);
     this.logger.log(message);
   }
 
@@ -93,6 +93,54 @@ export class EventsGateway
     console.log(`Client disconnected: ${client.id}`);
     this.clients.delete(client.id);
     this.connections.delete(client.id);
+  }
+
+  @SubscribeMessage("matches")
+  async handleMessageMessages(
+    client: Socket,
+    wrapper: any & { data: { type: string } },
+  ) {
+    const type = wrapper.type;
+    const connection = this.connections.get(client.id);
+    if (!connection) {
+      // ignore not authenticated connections
+      console.error("Connection not found for client: ", client.id);
+      return;
+    }
+    if (!type) {
+      console.error("No type in message:", wrapper);
+      return;
+    }
+
+    if (type === "authentication") {
+      const data: { type: string; id: number } = wrapper.data;
+      this.log("Authentication received");
+
+      connection.hasAuthenticated = true;
+      connection.event = "matches";
+      client.emit("matches", {
+        type: "authentication",
+        data: { state: "success" },
+      });
+      return;
+    }
+    if (!connection.hasAuthenticated) {
+      console.error("Not authenticated:", connection);
+      client.disconnect(true);
+      return;
+    }
+
+    // const allowedTypes = ["update", "update2"];
+
+    // if (!allowedTypes.includes(type)) {
+    //   console.error("Invalid type:", type);
+    //   return;
+    // }
+
+    this.sendOthers(client.id, 0, "matches", {
+      type: type,
+      data: { what: "matches" },
+    });
   }
 
   @SubscribeMessage("legacy")
@@ -129,6 +177,7 @@ export class EventsGateway
       }
       connection.playtestId = playtest.id;
       connection.hasAuthenticated = true;
+      connection.event = "legacy";
       const game = JSON.parse(playtest.game);
       this.send(client, "legacy", {
         type: "gameState",
@@ -202,7 +251,8 @@ export class EventsGateway
         id === clientId ||
         !connection ||
         !connection.hasAuthenticated ||
-        connection.playtestId !== playtestId
+        connection.playtestId !== playtestId ||
+        connection.event !== event
       ) {
         continue;
       }

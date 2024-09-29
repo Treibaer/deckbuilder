@@ -8,6 +8,7 @@ import DeckSelectionDialog from "../components/Matches/DeckSelectionDialog";
 import MatchCreationDialog from "../components/Matches/MatchCreationDialog";
 import MatchListItem from "../components/Matches/MatchListItem";
 import { Deck, Match, User } from "../models/dtos";
+import { useSocket } from "../hooks/useSocket";
 
 const matchService = MatchService.shared;
 const deckService = DeckService.shared;
@@ -20,6 +21,23 @@ const MatchesListPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [enemyId, setEnemyId] = useState(0);
   const [decks, setDecks] = useState<Deck[]>([]);
+
+  const { listenOn, listenOff, emit } = useSocket();
+
+  useEffect(() => {
+    listenOn("matches", "update", (_) => {
+      loadMatches();
+    });
+    return () => {
+      listenOff("matches", "update");
+    };
+  }, []);
+
+  async function refresh() {
+    await loadMatches();
+    emit("matches", "update", {});
+  }
+
 
   // vars for deck selection
   const [selectedPlayerPosition, setSelectedPlayerPosition] = useState(0);
@@ -48,7 +66,7 @@ const MatchesListPage = () => {
     setIsCreatingMatch(false);
 
     await matchService.create(enemyId);
-    await loadMatches();
+    await refresh();
     setIsLoading(false);
   }
 
@@ -80,7 +98,7 @@ const MatchesListPage = () => {
       deckId?.toString(),
       moxfieldId
     );
-    await loadMatches();
+    await refresh();
     setIsLoading(false);
   }
 

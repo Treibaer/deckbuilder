@@ -221,22 +221,26 @@ const CustomDecksListPage = () => {
         </div>
       )}
       {isUpdating && <DelayedLoadingSpinner />}
-      <div className="flex gap-2 items-center flex-row justify-center mb-4">
-        <div className="text-3xl font-semibold text-center">{title}</div>
+      <div className="flex gap-2 flex-wrap items-center flex-row justify-center mb-4">
+        <div className="text-3xl font-semibold text-nowrap text-ellipsis overflow-hidden text-center">{title}</div>
         {folderId !== null && folderId !== 0 && (
           <EditButton onClick={showFolderEditForm} />
         )}
-        <AddButton title="Create Deck" onClick={showDeckForm} />
+        {folderId !== 0 && (
+          <AddButton title="Create Deck" onClick={showDeckForm} />
+        )}
       </div>
-      <div className="flex gap-4">
-        <div>
-          <div className="flex gap-2 justify-start items-center flex-row">
+      <div className="flex flex-col sm:flex-row gap-4">
+        <div className="w-full">
+          <div className="flex gap-2 justify-center items-center flex-row">
             <div>Folders</div>
             <AddButton onClick={showFolderForm} />
           </div>
-          <div className="flex flex-col gap-2 w-32">
+          <div className="flex flex-col mx-auto gap-2 sm:w-32">
             <Link to="/decks/my">
-              <div className={folderId === null ? "text-brightBlue" : undefined}>
+              <div
+                className={folderId === null ? "text-brightBlue" : undefined}
+              >
                 All
               </div>
             </Link>

@@ -89,10 +89,10 @@ const DeckCardGridView: React.FC<{
                               title="-"
                               onClick={() => handleRemoveFromDeck(card, key)}
                             />
-                            {card.card.reprint && (
+                            {card.card.versions > 1 && (
                               <Button
                               className="w-10"
-                                title="..."
+                                title="P"
                                 onClick={() => openPrintSelection(card.card)}
                               />
                             )}

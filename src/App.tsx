@@ -36,6 +36,7 @@ import RootLayout from "./pages/RootLayout";
 import CardSearchPage, { loader as searchCardLoader } from "./pages/CardSearchPage.tsx";
 import Settings from "./pages/Settings";
 import Users, { loader as usersLoader } from "./pages/Users";
+import Sockets from "./pages/Sockets.tsx";
 
 const router = createBrowserRouter([
   {

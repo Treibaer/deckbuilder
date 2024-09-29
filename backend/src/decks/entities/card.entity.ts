@@ -36,9 +36,6 @@ export class Card extends Model {
   @Column({ allowNull: false, field: "type_line" })
   typeLine: string;
 
-  @Column({ allowNull: false, field: "reprint" })
-  isReprint: boolean;
-
   @Column({ allowNull: false, field: "prints_search_uri" })
   printsSearchUri: string;
 
@@ -77,4 +74,7 @@ export class Card extends Model {
 
   @Column({ allowNull: false, field: "related_scryfall_ids" })
   relatedScryfallIds: string;
+
+  @Column({ allowNull: false, field: "versions", defaultValue: 0 })
+  versions: number;
 }

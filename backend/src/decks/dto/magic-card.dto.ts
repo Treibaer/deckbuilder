@@ -3,7 +3,7 @@ export class MagicCardDto {
   oracleId: string;
   name: string;
   typeLine: string;
-  reprint: boolean;
+  versions: number;
   printsSearchUri: string;
   cardFaces: any[]
 }

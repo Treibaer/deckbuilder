@@ -17,9 +17,9 @@ import { CardSize } from "../models/structure";
 import CardService from "../Services/CardService";
 import DeckService from "../Services/DeckService";
 
-const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
+const Sandbox: React.FC<{ deck: Deck; refresh: () => void }> = ({
   deck,
-  setDeck,
+  refresh,
 }) => {
   const [searchParams] = useSearchParams();
   const q = searchParams.get("q");
@@ -55,6 +55,10 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
         q ?? "",
         "" + selectedPage
       );
+      for (let card of cards.data) {
+        card.versions = card.reprint ? 2 : 1;
+        console.log(card.reprint ? 2 : 1);
+      }
       setCards(cards.data);
       setPages(cards.amount / cards.data.length);
       setIsLoading(false);
@@ -83,11 +87,10 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
       "mainboard",
       1
     );
-    const updatedDeck = await DeckService.shared.get(deck!.id);
-    setDeck(updatedDeck);
+    refresh();
   }
 
-  async function removeOnceFromDeck(card: MagicCard) {
+  async function removeOneFromDeck(card: MagicCard) {
     const quantity = deck!.mainboard.find(
       (c) => c.card.scryfallId === card.scryfallId
     )?.quantity;
@@ -98,8 +101,7 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
       "mainboard",
       quantity - 1
     );
-    const updatedDeck = await DeckService.shared.get(deck!.id);
-    setDeck(updatedDeck);
+    refresh();
   }
 
   const [selectedCard, setSelectedCard] = useState<MagicCard | null>(null);
@@ -128,7 +130,7 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
       oracleId: card.oracle_id,
       name: card.name,
       typeLine: card.type_line,
-      reprint: card.reprint,
+      versions: card.reprint ? 2 : 1,
       printsSearchUri: card.prints_search_uri,
       cardFaces: [],
       releasedAt: card.released_at,
@@ -248,11 +250,11 @@ const Sandbox: React.FC<{ deck: Deck; setDeck: (deck: Deck) => void }> = ({
                     <MinusCircleIcon
                       title="Remove from Deck"
                       className="h-8 w-8 text-red-700 cursor-pointer bg-gray-300 rounded-full hover:bg-gray-300 hover:text-red-500"
-                      onClick={() => removeOnceFromDeck(card)}
+                      onClick={() => removeOneFromDeck(card)}
                     />
                   </>
                 )}
-                {card.reprint && (
+                {card.versions > 1 && (
                   <Bars3Icon
                     title="View Printings"
                     className="h-8 w-8  border-white border-4 text-black cursor-pointer bg-white rounded-full hover:border-gray-200"

@@ -11,8 +11,8 @@ const DeckUpdateDialog: React.FC<{
   deck: Deck;
   folders: DeckFolder[];
   onClose: () => void;
-  update: () => Promise<void>;
-}> = ({ deck, onClose, update, folders }) => {
+  refresh: () => Promise<void>;
+}> = ({ deck, onClose, refresh, folders }) => {
   const navigator = useNavigate();
   const [error, setError] = useState<string | undefined>(undefined);
   const nameInputRef = useRef<HTMLInputElement>(null);
@@ -44,7 +44,7 @@ const DeckUpdateDialog: React.FC<{
     try {
       await DeckService.shared.updateDeck(deck, name, folderId);
       onClose();
-      await update();
+      await refresh();
     } catch (error: Error | any) {
       setError(error.message);
     }
@@ -52,7 +52,7 @@ const DeckUpdateDialog: React.FC<{
 
   async function toggleArchive() {
     await DeckService.shared.toggleArchive(deck);
-    await update();
+    await refresh();
   }
 
   function handleChangeFolder(event: React.ChangeEvent<HTMLSelectElement>) {

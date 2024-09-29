@@ -15,6 +15,7 @@ export class ImportController {
       settings.lastImportCards = Math.floor(Date.now() / 1000);
       await settings.save();
     }
+    await this.importService.updateVersions();
     return settings;
   }
 
@@ -40,7 +41,7 @@ export class ImportController {
     }
     return settings;
   }
-
+  
   @Get("status")
   async getStatus() {
     return await Settings.findOne();

@@ -326,7 +326,7 @@ export class MoxfieldService {
       oracleId: card.oracle_id,
       name: card.name,
       typeLine: card.type_line ?? "",
-      reprint: card.reprint,
+      versions: card.versions,
       printsSearchUri: "",
       cardFaces: cardFaces,
     };

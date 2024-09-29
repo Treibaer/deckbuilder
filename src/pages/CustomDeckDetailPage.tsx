@@ -15,9 +15,12 @@ import DeckService from "../Services/DeckService";
 import MagicHelper from "../Services/MagicHelper";
 import PlaytestService from "../Services/PlaytestService";
 import Sandbox from "./Sandbox";
+import { useSocket } from "../hooks/useSocket";
+import { EmitFunction } from "../models/websocket";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
+
 
 type HoveredType = {
   isPreviewCardFromDeck: boolean;
@@ -40,6 +43,30 @@ const CustomDeckDetailPage = () => {
   const [cardPreview, setCardPreview] = useState<MagicCard | null>(null);
   const [cardDetails, setCardDetails] = useState<MagicCard | null>(null);
   const [folders, setFolders] = useState<DeckFolder[]>([]);
+
+  const event = `update_${deck.id}`;
+  let update: EmitFunction = () => {};
+
+  if (Constants.deckLiveUpdatesEnabled) {
+    const { listenOn, listenOff, emit } = useSocket();
+    update = emit;
+    useEffect(() => {
+      listenOn("matches", event, (_) => {
+        loadDeck();
+      });
+      return () => {
+        listenOff("matches", event);
+      };
+    }, []);
+  }
+
+
+  async function refresh() {
+    await loadDeck();
+    if (Constants.deckLiveUpdatesEnabled) {
+      update("matches", event, {});
+    }
+  }
 
   useEffect(() => {
     if (showSandbox && deck.isLocked) {
@@ -71,7 +98,7 @@ const CustomDeckDetailPage = () => {
 
   async function addToDeck(card: MagicCard, zone: string) {
     await DeckService.shared.addCardToDeck(deck, card.scryfallId, zone);
-    await loadDeck();
+    await refresh();
   }
 
   async function updateCardAmount(
@@ -85,7 +112,7 @@ const CustomDeckDetailPage = () => {
       zone,
       amount
     );
-    await loadDeck();
+    await refresh();
     if (hovered.scryfallId === card.scryfallId && amount === 0) {
       setPreviewImage(null, 0);
     }
@@ -93,7 +120,7 @@ const CustomDeckDetailPage = () => {
 
   async function setPromoId(scryfallId: string) {
     await DeckService.shared.setPromoId(deck, scryfallId);
-    await loadDeck();
+    await refresh();
   }
 
   function setPreviewImage(card: MagicCard | null, faceSide: number = 0) {
@@ -118,12 +145,12 @@ const CustomDeckDetailPage = () => {
     destinationZone: string
   ) {
     await DeckService.shared.moveZone(deck, card, originZone, destinationZone);
-    await loadDeck();
+    await refresh();
   }
 
   async function setPrint(card: MagicCard, print: MagicCard) {
     await DeckService.shared.setPrint(deck, card, print);
-    await loadDeck();
+    await refresh();
     if (card.scryfallId === hovered?.scryfallId) {
       setPreviewImage(print, 0);
     }
@@ -137,7 +164,7 @@ const CustomDeckDetailPage = () => {
 
   async function toggleLock() {
     await DeckService.shared.toggleLock(deck);
-    await loadDeck();
+    await refresh();
   }
 
   return (
@@ -150,7 +177,7 @@ const CustomDeckDetailPage = () => {
     >
       {showSandbox && (
         <div className="top-0 left-0 py-4 px-2 z-10 w-1/2 h-full overflow-scroll border-r border-r-lightBlue">
-          <Sandbox deck={deck} setDeck={setDeck} />
+          <Sandbox deck={deck} refresh={refresh} />
         </div>
       )}
       <div
@@ -175,7 +202,7 @@ const CustomDeckDetailPage = () => {
             deck={deck}
             folders={folders}
             onClose={() => setShowUpdateDialog(false)}
-            update={loadDeck}
+            refresh={refresh}
           />
         )}
         <div className="deck-details-header flex flex-col sm:flex-row justify-center sm:justify-between mb-4">

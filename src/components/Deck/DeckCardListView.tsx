@@ -88,7 +88,7 @@ const DeckCardListView: React.FC<{
                                 onClick={() => handleRemoveFromDeck(card, key)}
                                 title="-"
                               />
-                              {card.card.reprint && (
+                              {card.card.versions > 1 && (
                                 <Button
                                   className="w-10"
                                   onClick={() => openPrintSelection(card.card)}

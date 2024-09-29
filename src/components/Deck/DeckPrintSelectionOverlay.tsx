@@ -29,6 +29,7 @@ const DeckPrintSelectionOverlay: React.FC<{
       resData.data[i].cardFaces = resData.data[i].card_faces ?? [];
       resData.data[i].scryfallId = resData.data[i].id;
       resData.data[i].oracleId = resData.data[i].oracle_id;
+      resData.data[i].printsSearchUri = resData.data[i].prints_search_uri;
     }
 
     setPrints(resData.data);
@@ -36,11 +37,11 @@ const DeckPrintSelectionOverlay: React.FC<{
   }
 
   useEffect(() => {
-    if (card.reprint) {
+    if (card.versions > 1) {
       loadPrints();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [card.reprint]);
+  }, [card.id]);
 
   prints.map((print: any) => {
     print.scryfallId = print.id;

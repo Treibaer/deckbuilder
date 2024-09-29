@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({
   if (disabled) {
     return (
       <button
-        className={`disabled bg-slate-600 px-3 text-nowrap inline rounded-custom-tb h-8 border-solid border border-slate-700`}
+        className={`${className} disabled bg-slate-600 px-3 text-nowrap inline rounded-custom-tb h-8 border-solid border border-slate-700`}
         disabled
       >
         {title}
