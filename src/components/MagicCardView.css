@@ -1,9 +1,12 @@
 
 .magicCard,
 .magicCard > .image-wrapper,
-.magicCard > .image-wrapper > img {
-  width: 180px;
-  height: 251px;
+.magicCard > .image-wrapper > img,
+.magicCard.small,
+.magicCard.small > .image-wrapper,
+.magicCard.small > .image-wrapper > img {
+  width: 174px;
+  height: 242px;
   border-radius: 12px;
   transition: width 0.3s, height 0.4s, transform 0.5s;
 }
@@ -19,16 +22,6 @@
   }
 }
 
-
-
-.magicCard.small,
-.magicCard.small > .image-wrapper,
-.magicCard.small > .image-wrapper > img {
-  width: 180px;
-  height: 251px;
-  border-radius: 12px;
-  transition: width 0.3s, height 0.4s, transform 0.5s;
-}
 
 .magicCard.large,
 .magicCard.large > .image-wrapper,

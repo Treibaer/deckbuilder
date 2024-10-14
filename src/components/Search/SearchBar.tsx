@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Button from "../Button";
+import useIsMobile from "../../hooks/useIsMobile";
 
 const SearchBar: React.FC<{
   handleSearch: () => void;
@@ -9,11 +10,17 @@ const SearchBar: React.FC<{
 }> = ({ handleSearch, setShowFilter, searchTerm, handleChange }) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  
+  const isMobile = useIsMobile();
+
   useEffect(() => {
-    setTimeout(() => {
-      inputRef.current?.focus();
-    }, 100);
-  }, []);
+    if (!isMobile) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+    }
+  }, [isMobile]);
+  
   return (
     <div className="flex gap-2 mt-2 justify-center items-center">
       <input
@@ -28,6 +35,7 @@ const SearchBar: React.FC<{
           }
         }}
       />
+      <div>{isMobile ? "is" : "not"}</div>
       <Button title="Search" onClick={handleSearch} />
       {setShowFilter && (
         <Button title="Advanced" onClick={() => setShowFilter(true)} />

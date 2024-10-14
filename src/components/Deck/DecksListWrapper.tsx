@@ -26,7 +26,7 @@ const DecksListWrapper: React.FC<{ decks: any[], type: "moxfield" | "custom" }> 
             key={deck.id}
             className="relative border border-black rounded-xl"
           >
-            <div className="relative w-[180px] h-[137px] md:w-[260px] md:h-[198px]">
+            <div className="relative w-[174px] h-[134px] md:w-[260px] md:h-[198px]">
               {deck.img && (
                 <img
                   src={deck.img}
