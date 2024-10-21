@@ -207,12 +207,12 @@ export class EventsGateway
 
     if (type === "gameState") {
       const data = wrapper.data as Wrapper<GameState>;
-      this.playtesterService.saveGameState(playtest, wrapper);
+      this.playtesterService.saveGameState(playtest, data);
       this.sendOthers(client.id, connection.playtestId, "legacy", data);
     }
     if (type == "settings") {
       const data = wrapper.data as Wrapper<SettingsDto>;
-      this.playtesterService.saveSettings(playtest, wrapper);
+      this.playtesterService.saveSettings(playtest, data);
       this.sendOthers(client.id, connection.playtestId, "legacy", data);
     }
     if (type == "fieldCard") {

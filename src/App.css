@@ -6,6 +6,11 @@ body {
   overscroll-behavior-y: none;
 }
 
+select {
+  background: black;
+  color: white;
+}
+
 :root {
   --color-primary-400: #fbd997;
   --color-primary-800: #fab833;
