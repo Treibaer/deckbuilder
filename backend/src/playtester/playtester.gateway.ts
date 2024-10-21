@@ -12,10 +12,10 @@ import { AccessToken } from "src/auth/entities/access-token";
 import { Playtest } from "src/decks/entities/playtest.entity";
 import { User } from "src/decks/entities/user.entity";
 import { GameCard, GameState } from "src/decks/playtests.service";
-import { PlaytesterService } from "./playtester.service";
 import { Connection } from "./models/connection";
-import { Wrapper } from "./models/wrapper";
 import { SettingsDto } from "./models/settings.dto";
+import { Wrapper } from "./models/wrapper";
+import { PlaytesterService } from "./playtester.service";
 
 @WebSocketGateway(3000, {
   cors: {
@@ -207,33 +207,17 @@ export class EventsGateway
 
     if (type === "gameState") {
       const data = wrapper.data as Wrapper<GameState>;
-      playtest.game = JSON.stringify(data.data);
-      playtest.save();
+      this.playtesterService.saveGameState(playtest, wrapper);
       this.sendOthers(client.id, connection.playtestId, "legacy", data);
     }
     if (type == "settings") {
       const data = wrapper.data as Wrapper<SettingsDto>;
-      const game: GameState = JSON.parse(playtest.game);
-      game.life = data.data.life;
-      game.counters.energy = data.data.counters.energy;
-      game.counters.poison = data.data.counters.poison;
-      game.counters.commanderDamage = data.data.counters.commanderDamage;
-      playtest.game = JSON.stringify(game);
-      playtest.save();
+      this.playtesterService.saveSettings(playtest, wrapper);
       this.sendOthers(client.id, connection.playtestId, "legacy", data);
     }
     if (type == "fieldCard") {
       const data = wrapper.data as Wrapper<GameCard>;
-
-      const game: GameState = JSON.parse(playtest.game);
-      for (let i = 0; i < game.field.length; i++) {
-        if (game.field[i].id === data.data.id) {
-          game.field[i] = data.data;
-          break;
-        }
-      }
-      playtest.game = JSON.stringify(game);
-      playtest.save();
+      this.playtesterService.saveFieldCard(playtest, data);
       this.sendOthers(client.id, connection.playtestId, "legacy", data);
     }
   }
@@ -246,7 +230,6 @@ export class EventsGateway
   ) {
     for (const [id, client] of this.clients) {
       const connection = this.connections.get(id);
-
       if (
         id === clientId ||
         !connection ||

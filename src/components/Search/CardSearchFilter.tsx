@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useState } from "react";
 import Helper from "../../Services/Helper";
 import MagicHelper from "../../Services/MagicHelper";
 import { CardSet } from "../../models/dtos";
@@ -57,6 +57,27 @@ const CardSearchFilter: React.FC<{
     onSubmit(query);
   }
 
+  const formRef = createRef<HTMLFormElement>();
+
+  function handleReset() {
+    formRef.current?.reset();
+    setFilter({
+      cardName: "",
+      type: "",
+      manaValue: "",
+      power: "",
+      toughness: "",
+      rarity: "",
+      set: "",
+      format: "",
+      oracle: "",
+      colors: [],
+      unique: undefined,
+      is: undefined,
+      order: "name",
+    });
+  }
+
   return (
     <div
       className={`blurredBackground filterView ${showFilter ? "active" : ""}`}
@@ -70,7 +91,7 @@ const CardSearchFilter: React.FC<{
           <div className="text-xl">Filter</div>
           <Button onClick={() => setShowFilter(false)} title="X" />
         </div>
-        <div className="flex flex-col gap-2 mt-4">
+        <form className="flex flex-col gap-2 mt-4" ref={formRef}>
           <div className="flex items-center gap-2">
             <label htmlFor="name" className="w-40">
               Name
@@ -318,10 +339,11 @@ const CardSearchFilter: React.FC<{
               <option value="released">Released</option>
             </Select>
           </div>
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            <Button title="Reset" onClick={handleReset} />
             <Button title="Submit" onClick={handleSubmit} />
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  overscroll-behavior-y: none;
+}
+
 :root {
   --color-primary-400: #fbd997;
   --color-primary-800: #fab833;
@@ -100,7 +104,7 @@ button.selected {
 .list a {
   text-decoration: none;
   /* color: var(--color-primary-400); */
-  color: rgb(153,156,174);
+  color: rgb(153, 156, 174);
 }
 
 .list a:hover,

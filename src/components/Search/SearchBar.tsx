@@ -35,7 +35,6 @@ const SearchBar: React.FC<{
           }
         }}
       />
-      <div>{isMobile ? "is" : "not"}</div>
       <Button title="Search" onClick={handleSearch} />
       {setShowFilter && (
         <Button title="Advanced" onClick={() => setShowFilter(true)} />

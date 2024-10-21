@@ -27,6 +27,7 @@ const Button: React.FC<ButtonProps> = ({
   }
   return (
     <button
+      type="button"
       className={`${className} ${
         active ? "border-brightBlue" : "border-slate-700"
       } bg-customBlue px-3 text-nowrap inline rounded-custom-tb h-8 border-solid border hover:bg-lightBlue`}
