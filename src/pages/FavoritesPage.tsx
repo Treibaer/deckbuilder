@@ -6,6 +6,7 @@ import MagicCardView from "../components/MagicCardView";
 import { FavoritesDto, MagicCard } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import Client from "../Services/Client";
+import { AnimatePresence } from "framer-motion";
 
 const FavoritesPage = () => {
   const loaderData = useLoaderData() as FavoritesDto;
@@ -22,13 +23,15 @@ const FavoritesPage = () => {
 
   return (
     <div className="mx-auto">
-      {selectedCard && (
-        <CardPeekView
-          card={selectedCard}
-          onClose={() => setSelectedCard(null)}
-          updateFavorite={refresh}
-        />
-      )}
+      <AnimatePresence>
+        {selectedCard && (
+          <CardPeekView
+            card={selectedCard}
+            onClose={() => setSelectedCard(null)}
+            updateFavorite={refresh}
+          />
+        )}
+      </AnimatePresence>
       <div className="flex justify-center text-3xl font-semibold m-2 mb-8">
         Favorite Decks
       </div>

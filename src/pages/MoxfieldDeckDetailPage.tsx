@@ -12,6 +12,7 @@ import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpin
 import DeckCardGridView from "../components/Deck/DeckCardGridView";
 import DeckCardListView from "../components/Deck/DeckCardListView";
 import { Deck, MagicCard } from "../models/dtos";
+import { AnimatePresence } from "framer-motion";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;
@@ -84,12 +85,14 @@ const MoxfieldDeckDetailPage = () => {
   return (
     <div id="magic-deck-view">
       {isLoading && <FullscreenLoadingSpinner />}
-      {cardPreview && (
-        <CardPeekView
-          card={cardPreview}
-          onClose={setCardPreview.bind(null, null)}
-        />
-      )}
+      <AnimatePresence>
+        {cardPreview && (
+          <CardPeekView
+            card={cardPreview}
+            onClose={setCardPreview.bind(null, null)}
+          />
+        )}
+      </AnimatePresence>
       <div className="items-center flex flex-col sm:flex-row justify-center sm:justify-between mb-2">
         <div className="flex gap-2 items-center">
           <Button
@@ -127,7 +130,11 @@ const MoxfieldDeckDetailPage = () => {
 
       <div className="flex gap-4 relative">
         <div className="image-stats hidden sm:block relative flex-shrink-0">
-          <img className="absolute backside magicCard large" src={backside} alt=" " />
+          <img
+            className="absolute backside magicCard large"
+            src={backside}
+            alt=" "
+          />
           <img className="magicCard large" src={image} alt=" " />
           <div>Cards: {deck.cardCount}</div>
         </div>

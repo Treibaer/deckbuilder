@@ -13,6 +13,7 @@ import Button from "../Button";
 import DelayedLoadingSpinner from "../Common/DelayedLoadingSpinner";
 import AddCardToDeckDialog from "./AddCardToDeckDialog";
 import "./CardPeekView.css";
+import { motion } from "framer-motion";
 
 const CardPeekView: React.FC<{
   card: MagicCard;
@@ -55,7 +56,14 @@ const CardPeekView: React.FC<{
     updateFavorite && updateFavorite();
   }
   return (
-    <div id="peekCardView">
+    <motion.div
+      id="peekCardView"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ delay: 0, duration: 0.3 }}
+    >
+      <div className="background" onClick={onClose}></div>
       {showAddToDeck && (
         <AddCardToDeckDialog
           onClose={() => setShowAddToDeck(false)}
@@ -80,7 +88,6 @@ const CardPeekView: React.FC<{
           </Button>
         </Link>
       </div>
-      <div className="background" onClick={onClose}></div>
       <div className="relative-wrapper">
         <div
           className={`image-wrapper ${faceSide === 0 ? "normal" : "flipped"}`}
@@ -100,7 +107,7 @@ const CardPeekView: React.FC<{
           />
         )}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -17,6 +17,7 @@ import PlaytestService from "../Services/PlaytestService";
 import Sandbox from "./Sandbox";
 import { useSocket } from "../hooks/useSocket";
 import { EmitFunction } from "../models/websocket";
+import { AnimatePresence } from "framer-motion";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
@@ -183,12 +184,14 @@ const CustomDeckDetailPage = () => {
       <div
         className={showSandbox ? "w-1/2 h-full p-2 overflow-scroll" : "w-full"}
       >
+        <AnimatePresence>
         {cardPreview && (
           <CardPeekView
             card={cardPreview}
             onClose={() => setCardPreview(null)}
           />
         )}
+        </AnimatePresence>
 
         {cardDetails && (
           <DeckPrintSelectionOverlay

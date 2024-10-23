@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Helper from "../Services/Helper";
-import MagicCardView from "./MagicCardView";
-import Button from "./Button";
 import { CardSize, CardStyle } from "../models/structure";
+import Helper from "../Services/Helper";
+import Button from "./Button";
 import CardPeekView from "./Card/CardPeekView";
-
+import MagicCardView from "./MagicCardView";
+import { AnimatePresence } from "framer-motion";
 const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
   let [style, setStyle] = useState(CardStyle.cards);
   let [size, setSize] = useState(CardSize.normal);
@@ -12,12 +12,14 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
 
   return (
     <div id="magic-card-list" className="flex flex-col items-center">
+      <AnimatePresence>
       {selectedCard && (
-        <CardPeekView
-          card={selectedCard}
-          onClose={() => setSelectedCard(null)}
-        />
+          <CardPeekView
+            card={selectedCard}
+            onClose={() => setSelectedCard(null)}
+          />
       )}
+      </AnimatePresence>
       <div className="styleSelection gap-24 items-center mt-2 flex">
         <div className="w-64 gap-2 hidden md:flex">
           {style === CardStyle.cards &&
