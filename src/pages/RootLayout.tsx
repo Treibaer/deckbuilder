@@ -53,7 +53,7 @@ const RootLayout = () => {
       {navigation.state === "loading" && <DelayedLoadingView />}
       {isLoggedIn && (
         <main className="flex flex-col relative">
-          {shouldImport && (
+          {Constants.beta && shouldImport && (
             <div className="absolute right-2 top-2 text-red-400">
               {lastImportSecondsAgo === null
                 ? "Never imported"

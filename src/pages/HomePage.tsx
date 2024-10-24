@@ -9,6 +9,7 @@ import { Deck, Playtest } from "../models/dtos";
 import CardService from "../Services/CardService";
 import DeckService from "../Services/DeckService";
 import PlaytestService from "../Services/PlaytestService";
+import Constants from "../Services/Constants";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -93,7 +94,7 @@ const HomePage = () => {
           </div>
         </>
       )}
-      {playtests.length > 0 && (
+      {Constants.beta && playtests.length > 0 && (
         <>
           <div className="flex justify-center items-center gap-4 my-4">
             <div className="cursor-default text-3xl font-semibold m-2 text-center">
