@@ -72,7 +72,13 @@ const DeckCardGridView: React.FC<{
                         className="relative cursor-pointer"
                         key={card.card.scryfallId}
                       >
-                        <motion.div whileHover={{ scale: 1.05 }}>
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ delay: 0, duration: 0.3 }}
+                        >
                           <MagicCardView
                             card={card.card}
                             onTap={() => showCardPreview(card.card)}

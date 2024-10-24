@@ -108,6 +108,7 @@ import { FavoritesService } from "./favorites/favorites.service";
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     // consumer.apply(logger).forRoutes(DecksController);
+    return;
     Settings.sync({ alter: true });
     FavoriteDeck.sync({ alter: true });
     User.sync({ alter: true });
