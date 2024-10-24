@@ -198,6 +198,9 @@ export class DecksService {
     }
     if (deckDto.isArchived !== undefined) {
       deck.isArchived = deckDto.isArchived;
+      if (deck.isArchived) {
+        (deck as any).folder_id = null;
+      }
     }
     if (!deckDto.isLocked === undefined && !deckDto.isArchived === undefined) {
       deck.updatedAt = Math.floor(Date.now() / 1000);

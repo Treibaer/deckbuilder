@@ -1,4 +1,5 @@
 import Button from "../Button";
+import { motion } from "framer-motion";
 
 const Dialog: React.FC<{
   title: string;
@@ -18,7 +19,13 @@ const Dialog: React.FC<{
   disabledButton,
 }) => {
   return (
-    <div className="blurredBackground select-none" onClick={onClose}>
+    <motion.div
+      className="blurredBackground select-none"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
       {error && (
         <div className="bg-red-300 w-1/2 mx-auto p-1 m-1 rounded text-slate-800 z-10 relative">
           {error}
@@ -41,7 +48,7 @@ const Dialog: React.FC<{
           />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -9,6 +9,7 @@ import MatchCreationDialog from "../components/Matches/MatchCreationDialog";
 import MatchListItem from "../components/Matches/MatchListItem";
 import { Deck, Match, User } from "../models/dtos";
 import { useSocket } from "../hooks/useSocket";
+import { AnimatePresence } from "framer-motion";
 
 const matchService = MatchService.shared;
 const deckService = DeckService.shared;
@@ -37,7 +38,6 @@ const MatchesListPage = () => {
     await loadMatches();
     emit("matches", "update", {});
   }
-
 
   // vars for deck selection
   const [selectedPlayerPosition, setSelectedPlayerPosition] = useState(0);
@@ -110,21 +110,25 @@ const MatchesListPage = () => {
   return (
     <div className="mb-8 mx-auto">
       {isLoading && <DelayedLoadingSpinner />}
-      {isCreatingMatch && (
-        <MatchCreationDialog
-          users={users}
-          onClose={close}
-          onSubmit={createMatch}
-          setEnemyId={setEnemyId}
-        />
-      )}
-      {isSelectingDeck && (
-        <DeckSelectionDialog
-          decks={decks}
-          onClose={close}
-          onSubmit={selectDeck}
-        />
-      )}
+      <AnimatePresence>
+        {isCreatingMatch && (
+          <MatchCreationDialog
+            users={users}
+            onClose={close}
+            onSubmit={createMatch}
+            setEnemyId={setEnemyId}
+          />
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isSelectingDeck && (
+          <DeckSelectionDialog
+            decks={decks}
+            onClose={close}
+            onSubmit={selectDeck}
+          />
+        )}
+      </AnimatePresence>
       <TitleView title="Matches" openDialog={openCreateMatchForm} />
       <table className="mt-4 text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 select-none">
         <thead className="text-xs text-gray-700 uppercase bg-mediumBlue dark:text-gray-400">

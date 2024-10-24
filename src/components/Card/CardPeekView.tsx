@@ -13,7 +13,7 @@ import Button from "../Button";
 import DelayedLoadingSpinner from "../Common/DelayedLoadingSpinner";
 import AddCardToDeckDialog from "./AddCardToDeckDialog";
 import "./CardPeekView.css";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const CardPeekView: React.FC<{
   card: MagicCard;
@@ -64,13 +64,15 @@ const CardPeekView: React.FC<{
       transition={{ delay: 0, duration: 0.3 }}
     >
       <div className="background" onClick={onClose}></div>
-      {showAddToDeck && (
-        <AddCardToDeckDialog
-          onClose={() => setShowAddToDeck(false)}
-          card={card}
-          setIsLoading={setIsLoading}
-        />
-      )}
+      <AnimatePresence>
+        {showAddToDeck && (
+          <AddCardToDeckDialog
+            onClose={() => setShowAddToDeck(false)}
+            card={card}
+            setIsLoading={setIsLoading}
+          />
+        )}
+      </AnimatePresence>
       {isLoading && <DelayedLoadingSpinner />}
       <div className="flex gap-2">
         <Button title="Close" onClick={onClose} />

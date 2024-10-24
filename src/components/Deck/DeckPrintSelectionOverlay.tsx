@@ -3,6 +3,7 @@ import { MagicCard } from "../../models/dtos";
 import { CardSize } from "../../models/structure";
 import Button from "../Button";
 import MagicCardView from "../MagicCardView";
+import { motion } from "framer-motion";
 
 const DeckPrintSelectionOverlay: React.FC<{
   closeOverlay: () => void;
@@ -49,7 +50,10 @@ const DeckPrintSelectionOverlay: React.FC<{
   });
 
   return (
-    <div className="blurredBackground" onClick={closeOverlay}>
+    <motion.div className="blurredBackground" 
+    
+    exit={{ opacity: 0 }}
+    onClick={closeOverlay}>
       <div
         className="backdrop-blur-xl bg-transparent w-full sm:w-[calc(100vw-16px)] border border-lightBlue overflow-y-scroll max-h-[calc(100%-32px)] max-w-[500px] sm:max-w-[500px] md:max-w-[1024px] sm:p-2 rounded shadow-lg absolute top-4 left-1/2 transform -translate-x-1/2"
         onClick={(event) => event.stopPropagation()}
@@ -60,9 +64,30 @@ const DeckPrintSelectionOverlay: React.FC<{
         <div className="flex flex-col h-full overflow-y-scroll">
           {isLoading && <div>Loading...</div>}
           {!isLoading && (
-            <div className="card-detail-overlay-prints flex flex-wrap gap-2 justify-center mt-2 sm:mx-8">
+            <motion.div
+              className="card-detail-overlay-prints flex flex-wrap gap-2 justify-center mt-2 sm:mx-8"
+              initial="hidden"
+              animate="visible"
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0, duration: 0.3 }}
+              variants={{
+                hidden: { opacity: 0 },
+                visible: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: prints.length > 30 ? 0.025 : 0.05,
+                  },
+                },
+              }}
+            >
               {prints.map((print: any) => (
-                <div
+                <motion.div
+                  variants={{
+                    hidden: { opacity: 0, scale: 1 },
+                    visible: { opacity: 1, scale: 1 },
+                  }}
+                  exit={{ opacity: 1, scale: 1 }}
+                  transition={{ type: "spring" }}
                   key={print.scryfallId}
                   className={
                     card.scryfallId === print.scryfallId
@@ -85,13 +110,13 @@ const DeckPrintSelectionOverlay: React.FC<{
                     )}
                   </div>
                   <MagicCardView card={print} size={CardSize.small} />
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

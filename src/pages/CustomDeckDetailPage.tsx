@@ -22,7 +22,6 @@ import { AnimatePresence } from "framer-motion";
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
 
-
 type HoveredType = {
   isPreviewCardFromDeck: boolean;
   scryfallId: string | null;
@@ -60,7 +59,6 @@ const CustomDeckDetailPage = () => {
       };
     }, []);
   }
-
 
   async function refresh() {
     await loadDeck();
@@ -185,29 +183,33 @@ const CustomDeckDetailPage = () => {
         className={showSandbox ? "w-1/2 h-full p-2 overflow-scroll" : "w-full"}
       >
         <AnimatePresence>
-        {cardPreview && (
-          <CardPeekView
-            card={cardPreview}
-            onClose={() => setCardPreview(null)}
-          />
-        )}
+          {cardPreview && (
+            <CardPeekView
+              card={cardPreview}
+              onClose={() => setCardPreview(null)}
+            />
+          )}
         </AnimatePresence>
 
-        {cardDetails && (
-          <DeckPrintSelectionOverlay
-            card={cardDetails}
-            closeOverlay={setCardDetails.bind(null, null)}
-            setPrint={setPrint}
-          />
-        )}
-        {showUpdateDialog && (
-          <DeckUpdateDialog
-            deck={deck}
-            folders={folders}
-            onClose={() => setShowUpdateDialog(false)}
-            refresh={refresh}
-          />
-        )}
+        <AnimatePresence>
+          {cardDetails && (
+            <DeckPrintSelectionOverlay
+              card={cardDetails}
+              closeOverlay={setCardDetails.bind(null, null)}
+              setPrint={setPrint}
+            />
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {showUpdateDialog && (
+            <DeckUpdateDialog
+              deck={deck}
+              folders={folders}
+              onClose={() => setShowUpdateDialog(false)}
+              refresh={refresh}
+            />
+          )}
+        </AnimatePresence>
         <div className="deck-details-header flex flex-col sm:flex-row justify-center sm:justify-between mb-4">
           <div className="flex gap-2">
             <Link to=".." relative="path" title="Back">

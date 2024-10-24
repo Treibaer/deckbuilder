@@ -12,6 +12,7 @@ import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpin
 import MagicCardView from "../components/MagicCardView";
 import { CardDetailWithPrintings } from "../models/dtos";
 import { CardSize } from "../models/structure";
+import { AnimatePresence } from "framer-motion";
 
 const CardDetailPage: React.FC<{}> = () => {
   const { card, printings } = useLoaderData() as CardDetailWithPrintings;
@@ -35,13 +36,15 @@ const CardDetailPage: React.FC<{}> = () => {
   return (
     <>
       {isLoading && <FullscreenLoadingSpinner />}
-      {showAddToDeck && (
-        <AddCardToDeckDialog
-          onClose={() => setShowAddToDeck(false)}
-          card={card}
-          setIsLoading={setIsLoading}
-        />
-      )}
+      <AnimatePresence>
+        {showAddToDeck && (
+          <AddCardToDeckDialog
+            onClose={() => setShowAddToDeck(false)}
+            card={card}
+            setIsLoading={setIsLoading}
+          />
+        )}
+      </AnimatePresence>
       <div className="text-3xl font-semibold text-center mx-auto md:mx-0 max-w-[350px]">
         {card.name}
       </div>
@@ -63,9 +66,7 @@ const CardDetailPage: React.FC<{}> = () => {
           <div className="border border-lightBlue p-2 rounded-lg">
             {card.oracleText}
           </div>
-          {printings && (
-            <CardPrintingsList cardDetails={{ card, printings }} />
-          )}
+          {printings && <CardPrintingsList cardDetails={{ card, printings }} />}
         </div>
         <div className="flex flex-row sm:flex-col gap-2 mb-8">
           <Button onClick={toggleFavorite} className="flex justify-center">

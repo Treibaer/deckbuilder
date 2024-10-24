@@ -4,7 +4,8 @@ import Helper from "../Services/Helper";
 import Button from "./Button";
 import CardPeekView from "./Card/CardPeekView";
 import MagicCardView from "./MagicCardView";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+
 const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
   let [style, setStyle] = useState(CardStyle.cards);
   let [size, setSize] = useState(CardSize.normal);
@@ -13,12 +14,12 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
   return (
     <div id="magic-card-list" className="flex flex-col items-center">
       <AnimatePresence>
-      {selectedCard && (
+        {selectedCard && (
           <CardPeekView
             card={selectedCard}
             onClose={() => setSelectedCard(null)}
           />
-      )}
+        )}
       </AnimatePresence>
       <div className="styleSelection gap-24 items-center mt-2 flex">
         <div className="w-64 gap-2 hidden md:flex">
@@ -60,13 +61,14 @@ const MagicCardList: React.FC<{ cards: any[] }> = ({ cards }) => {
           className="flex flex-wrap justify-center gap-2 mt-4"
         >
           {cards.map((card, _) => (
-            <MagicCardView
-              key={card.scryfallId}
-              size={size}
-              card={card}
-              onTap={() => setSelectedCard(card)}
-              hoverable={true}
-            />
+            <motion.div key={card.scryfallId} whileHover={{ scale: 1.05 }}>
+              <MagicCardView
+                size={size}
+                card={card}
+                onTap={() => setSelectedCard(card)}
+                hoverable={true}
+              />
+            </motion.div>
           ))}
         </div>
       )}

@@ -88,7 +88,7 @@ const DeckSelectionDialog: React.FC<{
     }
     searchTimer.current = setTimeout(() => {
       loadMoxFieldDeck(event.target.value);
-    }, 500);
+    }, 300);
   }
 
   return (
@@ -100,7 +100,8 @@ const DeckSelectionDialog: React.FC<{
       disabledButton={
         isLoading ||
         (tab === "myDeck" && !deck) ||
-        (tab === "moxfield" && !moxfieldDeck)
+        (tab === "moxfield" && !moxfieldDeck) ||
+        (tab === "favorites" && !favoriteDeck)
       }
     >
       <div className="flex gap-2">

@@ -16,6 +16,7 @@ import { Deck, MagicCard } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import CardService from "../Services/CardService";
 import DeckService from "../Services/DeckService";
+import { AnimatePresence } from "framer-motion";
 
 const Sandbox: React.FC<{ deck: Deck; refresh: () => void }> = ({
   deck,
@@ -177,15 +178,17 @@ const Sandbox: React.FC<{ deck: Deck; refresh: () => void }> = ({
       <div className="cursor-default text-3xl font-semibold m-2 text-center">
         Sandbox
       </div>
-      {selectedCard && (
-        <div className="fixed z-30">
-          <DeckPrintSelectionOverlay
-            closeOverlay={() => setSelectedCard(null)}
-            card={selectedCard}
-            setPrint={overrideCard}
-          />
-        </div>
-      )}
+      <AnimatePresence>
+        {selectedCard && (
+          <div className="fixed z-30">
+            <DeckPrintSelectionOverlay
+              closeOverlay={() => setSelectedCard(null)}
+              card={selectedCard}
+              setPrint={overrideCard}
+            />
+          </div>
+        )}
+      </AnimatePresence>
       <SearchBar
         handleSearch={handleSearch}
         searchTerm={searchTerm}

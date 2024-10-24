@@ -6,7 +6,7 @@ import MagicCardView from "../components/MagicCardView";
 import { FavoritesDto, MagicCard } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import Client from "../Services/Client";
-import { AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 
 const FavoritesPage = () => {
   const loaderData = useLoaderData() as FavoritesDto;
@@ -43,13 +43,17 @@ const FavoritesPage = () => {
       </div>
       <div className="flex flex-wrap gap-4 justify-center">
         {favoriteCards.map((card) => (
-          <div key={card.scryfallId} className="cursor-pointer">
+          <motion.div
+            key={card.scryfallId}
+            className="cursor-pointer"
+            whileHover={{ scale: 1.05 }}
+          >
             <MagicCardView
               card={card}
               size={CardSize.normal}
               onTap={() => setSelectedCard(card)}
             />
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>

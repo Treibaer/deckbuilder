@@ -5,6 +5,7 @@ import TitleView from "../components/Common/TitleView";
 import DraftCreateView from "../components/DraftCreateView";
 import { CardSet } from "../models/dtos";
 import CardService from "../Services/CardService";
+import { AnimatePresence } from "framer-motion";
 
 const cardService = CardService.shared;
 
@@ -20,13 +21,19 @@ const DraftView = () => {
     <div>
       <TitleView title="Drafts" openDialog={() => setIsCreatingDraft(true)} />
 
-      {isCreatingDraft && (
-        <DraftCreateView closeDialog={closeDialog} sets={sets} />
-      )}
+      <AnimatePresence>
+        {isCreatingDraft && (
+          <DraftCreateView closeDialog={closeDialog} sets={sets} />
+        )}
+      </AnimatePresence>
 
       <div className="flex flex-col gap-4">
         {drafts.map((draft) => (
-          <Link to={`/drafts/${draft.id}`} key={draft.id} className="flex gap-2 items-center">
+          <Link
+            to={`/drafts/${draft.id}`}
+            key={draft.id}
+            className="flex gap-2 items-center"
+          >
             <div>{draft.id}</div>
             <Button title="Join" />
           </Link>

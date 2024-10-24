@@ -3,8 +3,12 @@ import Helper from "../../Services/Helper";
 import cardStackImage from "../../assets/cardstack.svg";
 import viewsImage from "../../assets/views.svg";
 import MagicHelper from "../../Services/MagicHelper";
+import { motion } from "framer-motion";
 
-const DecksListWrapper: React.FC<{ decks: any[], type: "moxfield" | "custom" }> = ({ decks, type }) => {
+const DecksListWrapper: React.FC<{
+  decks: any[];
+  type: "moxfield" | "custom";
+}> = ({ decks, type }) => {
   for (const deck of decks) {
     if (!deck.img) {
       deck.img = deck.promoId
@@ -26,7 +30,10 @@ const DecksListWrapper: React.FC<{ decks: any[], type: "moxfield" | "custom" }> 
             key={deck.id}
             className="relative border border-black rounded-xl"
           >
-            <div className="relative w-[174px] h-[134px] md:w-[260px] md:h-[198px]">
+            <motion.div
+              className="relative w-[174px] h-[134px] md:w-[260px] md:h-[198px]"
+              whileHover={{ scale: 1.05 }}
+            >
               {deck.img && (
                 <img
                   src={deck.img}
@@ -35,7 +42,7 @@ const DecksListWrapper: React.FC<{ decks: any[], type: "moxfield" | "custom" }> 
                 />
               )}
               <div className="tb-inner-shadow absolute top-0 left-0 w-full h-full shadow-2xl rounded-xl"></div>
-            </div>
+            </motion.div>
             <div className="absolute bottom-[28px] left-1 w-3/5 text-ellipsis overflow-x-hidden text-nowrap">
               {deck.format}
             </div>

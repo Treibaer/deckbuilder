@@ -15,6 +15,7 @@ import DeckList from "../components/Deck/DecksListWrapper";
 import EditButton from "../components/EditButton";
 import { Deck } from "../models/dtos";
 import DeckService from "../Services/DeckService";
+import { AnimatePresence, motion } from "framer-motion";
 
 const deckService = DeckService.shared;
 
@@ -165,64 +166,79 @@ const CustomDecksListPage = () => {
 
   return (
     <div>
-      {isCreatingDeck && (
-        <DeckCreationDialog
-          folders={folders}
-          onSubmit={createDeck}
-          currentFolderId={folderId}
-          onClose={() => setIsCreatingDeck(false)}
-        />
-      )}
-      {isCreatingFolder && (
-        <Dialog
-          title="Create Folder"
-          onClose={() => setIsCreatingFolder(false)}
-          onSubmit={createFolder}
-          error={error}
-        >
-          <label htmlFor="name">Name</label>
-          <input
-            autoComplete="off"
-            ref={folderInputRef}
-            className="tb-input mb-10"
-            type="text"
+      <AnimatePresence>
+        {isCreatingDeck && (
+          <DeckCreationDialog
+            folders={folders}
+            onSubmit={createDeck}
+            currentFolderId={folderId}
+            onClose={() => setIsCreatingDeck(false)}
           />
-        </Dialog>
-      )}
-      {isUpdatingFolder && (
-        <Dialog
-          title="Update Folder"
-          submitTitle="Update"
-          onClose={() => setIsUpdatingFolder(false)}
-          onSubmit={updateFolder}
-          error={error}
-        >
-          <label htmlFor="name">Name</label>
-          <input
-            autoComplete="off"
-            ref={editFolderInputRef}
-            className="tb-input mb-10"
-            type="text"
-            defaultValue={title}
-          />
-          <Button
-            className="w-32 text-red-300"
-            title="Delete"
-            onClick={() => setShowDeletionConfirmation(true)}
-          />
-        </Dialog>
-      )}
-      {showDeletionConfirmation && (
-        <div className="fullscreenBlurWithLoading">
-          <ConfirmationDialog
-            onCancel={() => setShowDeletionConfirmation(false)}
-            onConfirm={deleteFolder}
-          />
-        </div>
-      )}
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isCreatingFolder && (
+          <Dialog
+            title="Create Folder"
+            onClose={() => setIsCreatingFolder(false)}
+            onSubmit={createFolder}
+            error={error}
+          >
+            <label htmlFor="name">Name</label>
+            <input
+              autoComplete="off"
+              ref={folderInputRef}
+              className="tb-input mb-10"
+              type="text"
+            />
+          </Dialog>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {isUpdatingFolder && (
+          <Dialog
+            title="Update Folder"
+            submitTitle="Update"
+            onClose={() => setIsUpdatingFolder(false)}
+            onSubmit={updateFolder}
+            error={error}
+          >
+            <label htmlFor="name">Name</label>
+            <input
+              autoComplete="off"
+              ref={editFolderInputRef}
+              className="tb-input mb-10"
+              type="text"
+              defaultValue={title}
+            />
+            <Button
+              className="w-32 text-red-300"
+              title="Delete"
+              onClick={() => setShowDeletionConfirmation(true)}
+            />
+          </Dialog>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showDeletionConfirmation && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fullscreenBlurWithLoading"
+          >
+            <ConfirmationDialog
+              onCancel={() => setShowDeletionConfirmation(false)}
+              onConfirm={deleteFolder}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
       {isUpdating && <DelayedLoadingSpinner />}
       <div className="flex gap-2 flex-wrap items-center flex-row justify-center mb-4">
-        <div className="text-3xl font-semibold text-nowrap text-ellipsis overflow-hidden text-center">{title}</div>
+        <div className="text-3xl font-semibold text-nowrap text-ellipsis overflow-hidden text-center">
+          {title}
+        </div>
         {folderId !== null && folderId !== 0 && (
           <EditButton onClick={showFolderEditForm} />
         )}

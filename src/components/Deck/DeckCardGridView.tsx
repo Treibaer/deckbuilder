@@ -2,6 +2,7 @@ import { DeckCard, MagicCard } from "../../models/dtos";
 import { CardSize, DeckStructure } from "../../models/structure";
 import Button from "../Button";
 import MagicCardView from "../MagicCardView";
+import { motion } from "framer-motion";
 
 const DeckCardGridView: React.FC<{
   structure: DeckStructure;
@@ -51,7 +52,8 @@ const DeckCardGridView: React.FC<{
     }
   };
 
-  const canEdit = addToDeck && updateCardAmount && openPrintSelection && !isLocked;
+  const canEdit =
+    addToDeck && updateCardAmount && openPrintSelection && !isLocked;
 
   return (
     <div className="select-none overflow-y-scroll h-full w-full flex flex-col gap-2">
@@ -61,20 +63,29 @@ const DeckCardGridView: React.FC<{
             <div key={index + 200}>
               {key !== "Hide" && (
                 <>
-                  <div className="text-lg font-semibold text-gray-300">{formatTitle(key, structure[key])}</div>
+                  <div className="text-lg font-semibold text-gray-300">
+                    {formatTitle(key, structure[key])}
+                  </div>
                   <div className="flex flex-wrap gap-1 w-full">
                     {structure[key].map((card: DeckCard) => (
-                      <div className="relative cursor-pointer" key={card.card.scryfallId}>
-                        <MagicCardView
-                          card={card.card}
-                          onTap={() => showCardPreview(card.card)}
-                          onMouseOver={(faceSide) => {
-                            setPreviewImage(card.card, faceSide);
-                          }}
-                          size={CardSize.small}
-                        />
+                      <div
+                        className="relative cursor-pointer"
+                        key={card.card.scryfallId}
+                      >
+                        <motion.div whileHover={{ scale: 1.05 }}>
+                          <MagicCardView
+                            card={card.card}
+                            onTap={() => showCardPreview(card.card)}
+                            onMouseOver={(faceSide) => {
+                              setPreviewImage(card.card, faceSide);
+                            }}
+                            size={CardSize.small}
+                          />
+                        </motion.div>
                         {card.quantity > 1 && (
-                          <div className="absolute cursor-default top-6 right-3 bg-mediumBlue py-2 px-3 rounded-md">x{card.quantity}</div>
+                          <div className="absolute cursor-default top-6 right-3 bg-mediumBlue py-2 px-3 rounded-md">
+                            x{card.quantity}
+                          </div>
                         )}
 
                         {canEdit && (
@@ -91,14 +102,14 @@ const DeckCardGridView: React.FC<{
                             />
                             {card.card.versions > 1 && (
                               <Button
-                              className="w-10"
+                                className="w-10"
                                 title="P"
                                 onClick={() => openPrintSelection(card.card)}
                               />
                             )}
                             {card.card.typeLine.includes("Legendary") && (
                               <Button
-                              className="w-10 h-10"
+                                className="w-10 h-10"
                                 title="C"
                                 onClick={() => handleMoveZone(card.card, key)}
                               />
