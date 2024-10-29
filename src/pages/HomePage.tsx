@@ -32,7 +32,7 @@ const HomePage = () => {
       decks.sort((a, b) => {
         return a.updatedAt > b.updatedAt ? -1 : 1;
       });
-      decks.length = 3;
+      decks.length = decks.length > 3 ? 3 : decks.length;
       setMyDecks(decks);
     }
     async function fetchSets() {
