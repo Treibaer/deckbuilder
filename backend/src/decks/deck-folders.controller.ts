@@ -8,12 +8,12 @@ import {
   Post,
 } from "@nestjs/common";
 import { DeckTransformer } from "./deck.transformer";
-import { DecksService } from "./decks.service";
-import { DeckFoldersService } from "./deck-folders.service";
+import { DeckService } from "./deck.service";
+import { DeckFolderService } from "./deck-folder.service";
 
 @Controller("api/v1/decks/folders")
 export class DeckFoldersController {
-  constructor(private readonly deckFoldersService: DeckFoldersService) {}
+  constructor(private readonly deckFoldersService: DeckFolderService) {}
 
   @Post()
   createFolder(@Body() folder: { name: string }) {

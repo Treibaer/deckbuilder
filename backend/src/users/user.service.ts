@@ -4,7 +4,7 @@ import { Request } from "express";
 import { User } from "src/decks/entities/user.entity";
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(@Inject(REQUEST) private readonly request: Request) {}
 
   get user() {
@@ -17,5 +17,9 @@ export class UsersService {
         username,
       },
     });
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return await User.findAll();
   }
 }

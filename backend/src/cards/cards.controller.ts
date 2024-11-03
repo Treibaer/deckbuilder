@@ -1,12 +1,12 @@
 import { Controller, Get, Param, Query, UseFilters } from "@nestjs/common";
 import { CardDetailDto } from "../decks/dto/card-detail.dto";
 import { HttpExceptionFilter } from "../utils/http-exception.filter";
-import { CardsService } from "./cards.service";
+import { CardService } from "./card.service";
 
 @Controller("api/v1/cards")
 @UseFilters(HttpExceptionFilter)
 export class CardController {
-  constructor(private readonly cardService: CardsService) {}
+  constructor(private readonly cardService: CardService) {}
 
   @Get("random")
   async random(): Promise<any> {

@@ -7,7 +7,7 @@ import { RelatedCardDto } from "./dto/related-card.dto";
 import { Card } from "./entities/card.entity";
 
 @Injectable()
-export class PlaytestsService {
+export class PlaytestService {
   private createNewGame(): GameState {
     return {
       hand: [],

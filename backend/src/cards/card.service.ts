@@ -4,13 +4,13 @@ import { CardDetailDto } from "src/decks/dto/card-detail.dto";
 import { Card } from "src/decks/entities/card.entity";
 import { FavoriteCard } from "src/decks/entities/favorite-card";
 import { MoxFieldMapping } from "src/decks/entities/moxfield-mapping.entity";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 import { UrlService } from "src/utils/urlservice";
 
 @Injectable()
-export class CardsService {
+export class CardService {
   constructor(
-    private userService: UsersService,
+    private userService: UserService,
     private urlService: UrlService,
   ) {}
 

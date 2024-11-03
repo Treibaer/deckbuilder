@@ -9,21 +9,21 @@ import {
   Post,
 } from "@nestjs/common";
 import { MoxfieldService } from "src/moxfield/moxfield.service";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 import { DeckDto } from "./dto/deck.dto";
 import { PlaytestDto } from "./dto/playtest.dto";
 import { Card } from "./entities/card.entity";
 import { DeckCard } from "./entities/deck-card.entity";
 import { Deck } from "./entities/deck.entity";
 import { Playtest } from "./entities/playtest.entity";
-import { GameState, PlaytestsService } from "./playtests.service";
+import { GameState, PlaytestService } from "./playtest.service";
 
 @Controller("api/v1/playtests")
 export class PlayTestsContoller {
   constructor(
-    private readonly userService: UsersService,
+    private readonly userService: UserService,
     private readonly moxfieldService: MoxfieldService,
-    private readonly playtestService: PlaytestsService,
+    private readonly playtestService: PlaytestService,
   ) {}
 
   @Get()

@@ -9,11 +9,11 @@ export default class DeckService {
 
   async getAll(folderId: number | null = null) {
     const folderIdQuery = folderId !== null ? `?folderId=${folderId}` : "";
-    return this.client.get<Deck[]>(`/decks${folderIdQuery}`, true);
+    return this.client.get<Deck[]>(`/decks${folderIdQuery}`);
   }
 
   async get(deckId: number) {
-    const deck = await this.client.get<Deck>(`/decks/${deckId}`, true);
+    const deck = await this.client.get<Deck>(`/decks/${deckId}`);
     deck.mainboard = deck.mainboard.sort((a, b) =>
       a.card.name.localeCompare(b.card.name)
     );
@@ -21,27 +21,23 @@ export default class DeckService {
   }
 
   async create(name: string, folder_id: number | null) {
-    return await this.client.post(`/decks`, { name, folder_id }, true);
+    return await this.client.post(`/decks`, { name, folder_id });
   }
 
   async createFolder(name: string) {
-    return await this.client.post(`/decks/folders`, { name }, true);
+    return await this.client.post(`/decks/folders`, { name });
   }
 
   async updateFolder(folderId: number, name: string) {
-    return await this.client.patch(
-      `/decks/folders/${folderId}`,
-      { name },
-      true
-    );
+    return await this.client.patch(`/decks/folders/${folderId}`, { name });
   }
 
   async deleteFolder(folderId: number) {
-    return await this.client.delete(`/decks/folders/${folderId}`, true);
+    return await this.client.delete(`/decks/folders/${folderId}`);
   }
 
   async getFolders() {
-    return await this.client.get<DeckFolder[]>(`/decks/folders`, true);
+    return await this.client.get<DeckFolder[]>(`/decks/folders`);
   }
 
   async addCardToDeck(
@@ -57,7 +53,7 @@ export default class DeckService {
       zone: zone,
       action: "add",
     };
-    return await this.client.post(path, cardObject, true);
+    return await this.client.post(path, cardObject);
   }
 
   async updateDeck(deck: Deck, name: string, folderId: number | null) {
@@ -66,7 +62,7 @@ export default class DeckService {
       name,
       folderId,
     };
-    return await this.client.patch(url, data, true);
+    return await this.client.patch(url, data);
   }
 
   async toggleArchive(deck: Deck) {
@@ -74,7 +70,7 @@ export default class DeckService {
     const cardObject = {
       isArchived: !deck.isArchived,
     };
-    return await this.client.patch(url, cardObject, true);
+    return await this.client.patch(url, cardObject);
   }
 
   async toggleLock(deck: Deck) {
@@ -82,7 +78,7 @@ export default class DeckService {
     const cardObject = {
       isLocked: !deck.isLocked,
     };
-    return await this.client.patch(url, cardObject, true);
+    return await this.client.patch(url, cardObject);
   }
 
   async setPromoId(deck: Deck, promoId: string) {
@@ -90,7 +86,7 @@ export default class DeckService {
     const cardObject = {
       promoId,
     };
-    return await this.client.patch(url, cardObject, true);
+    return await this.client.patch(url, cardObject);
   }
 
   async updateCardAmount(
@@ -106,7 +102,7 @@ export default class DeckService {
       zone: zone,
       action: "modify",
     };
-    return await this.client.post(path, cardObject, true);
+    return await this.client.post(path, cardObject);
   }
 
   async setPrint(deck: Deck, card: MagicCard, print: MagicCard) {
@@ -116,7 +112,7 @@ export default class DeckService {
       oldId: card.scryfallId,
       newId: print.scryfallId,
     };
-    return await this.client.put(path, data, true);
+    return await this.client.put(path, data);
   }
 
   async moveZone(
@@ -132,11 +128,11 @@ export default class DeckService {
       originZone: originZone,
       destinationZone: destinationZone,
     };
-    return await this.client.put(path, data, true);
+    return await this.client.put(path, data);
   }
 
   async deleteDeck(deck: Deck) {
-    return await this.client.delete(`/decks/${deck.id}`, true);
+    return await this.client.delete(`/decks/${deck.id}`);
   }
 
   cardCount(deck: Deck) {

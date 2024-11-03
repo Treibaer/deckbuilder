@@ -1,13 +1,12 @@
 import {
   Injectable,
-  NotImplementedException,
   UnauthorizedException
 } from "@nestjs/common";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 
 @Injectable()
-export class DraftsService {
-  constructor(private readonly userService: UsersService) {}
+export class DraftService {
+  constructor(private readonly userService: UserService) {}
 
   private get userId() {
     if (!this.userService.user) {

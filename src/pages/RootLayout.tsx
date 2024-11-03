@@ -19,7 +19,7 @@ const RootLayout = () => {
         return;
       }
 
-      const result = await fetch(`${Constants.newBackendUrl}/api/v1/app`, {
+      const result = await fetch(`${Constants.backendUrl}/api/v1/app`, {
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",

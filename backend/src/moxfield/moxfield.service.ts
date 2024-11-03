@@ -8,7 +8,7 @@ import { MagicCardDto } from "src/decks/dto/magic-card.dto";
 import { Deck } from "src/decks/entities/deck.entity";
 import { FavoriteDeck } from "src/decks/entities/favorite-deck";
 import { MoxFieldMapping } from "src/decks/entities/moxfield-mapping.entity";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 import { Card } from "../decks/entities/card.entity";
 import { DeckCard } from "../decks/entities/deck-card.entity";
 
@@ -33,7 +33,7 @@ class ConfigDto {
 export class MoxfieldService {
   private cachePath = path.join(__dirname, "../../cache/moxfield");
 
-  constructor(private readonly userService: UsersService) {}
+  constructor(private readonly userService: UserService) {}
 
   async fetchDecksFromApi(config: ConfigDto) {
     config.format = formats.includes(config.format) ? config.format : "all";

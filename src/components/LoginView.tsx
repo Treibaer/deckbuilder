@@ -19,7 +19,7 @@ const LoginView: React.FC<{
     // wait 300ms
     await new Promise((resolve) => setTimeout(resolve, 300));
 
-    const response = await fetch(`${Constants.newBackendUrl}/api/v1/login`, {
+    const response = await fetch(`${Constants.backendUrl}/api/v1/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

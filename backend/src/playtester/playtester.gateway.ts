@@ -11,7 +11,7 @@ import { Server, Socket } from "socket.io";
 import { AccessToken } from "src/auth/entities/access-token";
 import { Playtest } from "src/decks/entities/playtest.entity";
 import { User } from "src/decks/entities/user.entity";
-import { GameCard, GameState } from "src/decks/playtests.service";
+import { GameCard, GameState } from "src/decks/playtest.service";
 import { Connection } from "./models/connection";
 import { SettingsDto } from "./models/settings.dto";
 import { Wrapper } from "./models/wrapper";
@@ -149,7 +149,9 @@ export class EventsGateway
     wrapper: any & { data: { type: string } },
   ) {
     const type = wrapper.data.type;
-    this.log("Legacy message received from client: " + type);
+    if (type !== "fieldCard") {
+      this.log("Legacy message received from client: " + type);
+    }
     const connection = this.connections.get(client.id);
     if (!connection) {
       // ignore not authenticated connections

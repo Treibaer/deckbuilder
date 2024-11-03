@@ -7,14 +7,11 @@ export default class CardService {
   private constructor() {}
 
   async getSets(setType: string = "default") {
-    return this.client.get<CardSet[]>(`/sets?setType=${setType}`, true);
+    return this.client.get<CardSet[]>(`/sets?setType=${setType}`);
   }
 
   async getWithPrintings(scryfallId: string) {
-    return this.client.get<CardDetailWithPrintings>(
-      `/cards/${scryfallId}`,
-      true
-    );
+    return this.client.get<CardDetailWithPrintings>(`/cards/${scryfallId}`);
   }
 
   async searchCards(q: string, page: string | null) {

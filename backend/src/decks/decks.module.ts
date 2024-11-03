@@ -3,23 +3,23 @@ import { ConfigService } from "@nestjs/config";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { MoxfieldService } from "src/moxfield/moxfield.service";
 import { UsersModule } from "src/users/users.module";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 import { UrlService } from "src/utils/urlservice";
 import { DeckFoldersController } from "./deck-folders.controller";
 import { DeckTransformer } from "./deck.transformer";
 import { DecksController } from "./decks.controller";
-import { DecksService } from "./decks.service";
+import { DeckService } from "./deck.service";
 import { Card } from "./entities/card.entity";
 import { DeckCard } from "./entities/deck-card.entity";
 import { Deck } from "./entities/deck.entity";
 import { MoxFieldMapping } from "./entities/moxfield-mapping.entity";
 import { User } from "./entities/user.entity";
 import { PlayTestsContoller } from "./playtests.controller";
-import { PlaytestsService } from "./playtests.service";
+import { PlaytestService } from "./playtest.service";
 import { SetsController } from "./sets.controller";
-import { DeckFoldersService } from "./deck-folders.service";
+import { DeckFolderService } from "./deck-folder.service";
 import { DraftsController } from "./drafts.controller";
-import { DraftsService } from "./drafts.service";
+import { DraftService } from "./draft.service";
 
 @Module({
   imports: [
@@ -34,15 +34,15 @@ import { DraftsService } from "./drafts.service";
     DraftsController,
   ],
   providers: [
-    DecksService,
+    DeckService,
     DeckTransformer,
     ConfigService,
     UrlService,
-    UsersService,
+    UserService,
     MoxfieldService,
-    PlaytestsService,
-    DeckFoldersService,
-    DraftsService,
+    PlaytestService,
+    DeckFolderService,
+    DraftService,
   ],
   exports: [
     SequelizeModule,

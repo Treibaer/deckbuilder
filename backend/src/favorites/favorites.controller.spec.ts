@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FavoritesController } from './favorites.controller';
-import { UsersService } from '../users/users.service';
+import { UserService } from '../users/user.service';
 import { MoxfieldService } from '../moxfield/moxfield.service';
 
 describe('FavoritesController', () => {
@@ -9,7 +9,7 @@ describe('FavoritesController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [FavoritesController],
-      providers: [UsersService, MoxfieldService],
+      providers: [UserService, MoxfieldService],
     }).compile();
 
     controller = module.get<FavoritesController>(FavoritesController);

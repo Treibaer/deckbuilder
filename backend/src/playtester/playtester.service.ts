@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Playtest } from "src/decks/entities/playtest.entity";
-import { GameCard, GameState } from "src/decks/playtests.service";
+import { GameCard, GameState } from "src/decks/playtest.service";
 import { SettingsDto } from "./models/settings.dto";
 import { Wrapper } from "./models/wrapper";
 

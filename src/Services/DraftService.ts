@@ -8,14 +8,14 @@ export default class DraftService {
 
   async getAll(folderId: number | null = null) {
     const folderIdQuery = folderId !== null ? `?folderId=${folderId}` : "";
-    return this.client.get<Deck[]>(`/decks${folderIdQuery}`, true);
+    return this.client.get<Deck[]>(`/decks${folderIdQuery}`);
   }
 
   async get(draftId: number) {
-    return await this.client.get<Deck>(`/drafts/${draftId}`, true);
+    return await this.client.get<Deck>(`/drafts/${draftId}`);
   }
 
   async create(name: string, folder_id: number | null) {
-    return await this.client.post(`/decks`, { name, folder_id }, true);
+    return await this.client.post(`/decks`, { name, folder_id });
   }
 }

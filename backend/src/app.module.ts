@@ -6,7 +6,7 @@ import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { AccessToken } from "./auth/entities/access-token";
 import { CardController } from "./cards/cards.controller";
-import { CardsService } from "./cards/cards.service";
+import { CardService } from "./cards/card.service";
 import { DecksModule } from "./decks/decks.module";
 import { CardSet } from "./decks/entities/card-set.entity";
 import { Card } from "./decks/entities/card.entity";
@@ -18,20 +18,20 @@ import { Game } from "./decks/entities/game.entity";
 import { Playtest } from "./decks/entities/playtest.entity";
 import { Settings } from "./decks/entities/settings.entity";
 import { User } from "./decks/entities/user.entity";
-import { PlaytestsService } from "./decks/playtests.service";
+import { PlaytestService } from "./decks/playtest.service";
 import { FavoritesController } from "./favorites/favorites.controller";
 import { ImageModule } from "./image/image.module";
 import { ImportController } from "./import/import.controller";
 import { ImportService } from "./import/import.service";
 import { MatchesController } from "./matches/matches.controller";
-import { MatchesService } from "./matches/matches.service";
+import { MatchService } from "./matches/match.service";
 import { MoxfieldController } from "./moxfield/moxfield.controller";
 import { MoxfieldService } from "./moxfield/moxfield.service";
 import { EventsModule } from "./playtester/playtester.module";
 import { UsersModule } from "./users/users.module";
 import { UrlService } from "./utils/urlservice";
 import { DeckFolder } from "./decks/entities/deck-folder.entity";
-import { FavoritesService } from "./favorites/favorites.service";
+import { FavoriteService } from "./favorites/favorite.service";
 
 @Module({
   imports: [
@@ -97,12 +97,12 @@ import { FavoritesService } from "./favorites/favorites.service";
     AppService,
     ConfigService,
     MoxfieldService,
-    MatchesService,
-    PlaytestsService,
+    MatchService,
+    PlaytestService,
     ImportService,
-    CardsService,
+    CardService,
     UrlService,
-    FavoritesService,
+    FavoriteService,
   ],
 })
 export class AppModule implements NestModule {

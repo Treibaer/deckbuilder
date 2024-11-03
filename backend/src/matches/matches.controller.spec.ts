@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MatchesController } from './matches.controller';
-import { UsersService } from 'src/users/users.service';
-import { PlaytestsService } from 'src/decks/playtests.service';
+import { UserService } from 'src/users/user.service';
+import { PlaytestService } from 'src/decks/playtest.service';
 import { MoxfieldService } from 'src/moxfield/moxfield.service';
 
 describe('MatchesController', () => {
@@ -10,7 +10,7 @@ describe('MatchesController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [MatchesController],
-      providers: [UsersService, PlaytestsService, MoxfieldService],
+      providers: [UserService, PlaytestService, MoxfieldService],
     }).compile();
 
     controller = module.get<MatchesController>(MatchesController);

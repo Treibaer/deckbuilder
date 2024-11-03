@@ -28,10 +28,7 @@ const DeckSelectionDialog: React.FC<{
 
   useEffect(() => {
     async function loadFavorites() {
-      const favorites = await Client.shared.get<FavoritesDto>(
-        "/favorites",
-        true
-      );
+      const favorites = await Client.shared.get<FavoritesDto>("/favorites");
       setFavoriteDecks(favorites.moxfieldDecks);
     }
     loadFavorites();

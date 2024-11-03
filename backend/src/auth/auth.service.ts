@@ -2,7 +2,7 @@ import { ConflictException, Injectable, UnauthorizedException } from "@nestjs/co
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 import { User } from "src/decks/entities/user.entity";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 import { AccessToken } from "./entities/access-token";
 import { AuthDto } from "./dto/auth.dto";
 
@@ -10,7 +10,7 @@ import { AuthDto } from "./dto/auth.dto";
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
-    private readonly userService: UsersService,
+    private readonly userService: UserService,
   ) {}
 
   async signIn({ username, password, client }: AuthDto) {

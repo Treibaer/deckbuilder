@@ -7,15 +7,14 @@ import Constants from "./Constants";
 export default class Client {
   static shared = new Client();
   private api = `${Constants.backendUrl}/api/v1`;
-  private newApi = `${Constants.newBackendUrl}/api/v1`;
 
   /**
    * Makes a GET request to the specified URL.
    * @param url - The endpoint URL (relative to the API base).
    * @returns A promise that resolves to the response data.
    */
-  async get<T>(url: string, newBackend: boolean) {
-    return this.request<T>(url, newBackend, { method: "GET" });
+  async get<T>(url: string) {
+    return this.request<T>(url, { method: "GET" });
   }
 
   /**
@@ -24,8 +23,8 @@ export default class Client {
    * @param data - The data to send in the request body.
    * @returns A promise that resolves to the response data.
    */
-  async post<T>(url: string, data: any, newBackend = false) {
-    return this.request<T>(url, newBackend, {
+  async post<T>(url: string, data: any) {
+    return this.request<T>(url, {
       method: "POST",
       body: JSON.stringify(data),
     });
@@ -37,8 +36,8 @@ export default class Client {
    * @param data - The data to send in the request body.
    * @returns A promise that resolves to the response data.
    */
-  async patch<T>(url: string, data: any, newBackend = false) {
-    return this.request<T>(url, newBackend, {
+  async patch<T>(url: string, data: any) {
+    return this.request<T>(url, {
       method: "PATCH",
       body: JSON.stringify(data),
     });
@@ -50,8 +49,8 @@ export default class Client {
    * @param data - The data to send in the request body.
    * @returns A promise that resolves to the response data.
    */
-  async put(url: string, data: any, newBackend = false): Promise<any> {
-    return this.request(url, newBackend, {
+  async put(url: string, data: any): Promise<any> {
+    return this.request(url, {
       method: "PUT",
       body: JSON.stringify(data),
     });
@@ -63,8 +62,8 @@ export default class Client {
    * @returns A promise that resolves to the response data.
    */
 
-  async delete(url: string, newBackend = false): Promise<any> {
-    return this.request(url, newBackend, { method: "DELETE" });
+  async delete(url: string): Promise<any> {
+    return this.request(url, { method: "DELETE" });
   }
 
   /**
@@ -81,23 +80,16 @@ export default class Client {
    * @param options - The options for the Fetch request, including method and body.
    * @returns A promise that resolves to the response data.
    */
-  private async request<T>(
-    url: string,
-    newBackend: boolean,
-    options: RequestInit
-  ): Promise<T> {
-    const response = await fetch(
-      newBackend ? `${this.newApi}${url}` : `${this.api}${url}`,
-      {
-        ...options,
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Bearer ${this.getAuthToken()}`,
-          ...options.headers,
-        },
-      }
-    );
+  private async request<T>(url: string, options: RequestInit): Promise<T> {
+    const response = await fetch(`${this.api}${url}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${this.getAuthToken()}`,
+        ...options.headers,
+      },
+    });
     if (options.method === "DELETE") {
       if (!response.ok) {
         let message: string | null = null;

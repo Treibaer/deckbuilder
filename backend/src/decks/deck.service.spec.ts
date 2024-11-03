@@ -1,17 +1,17 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { DecksService } from "./decks.service";
+import { DeckService } from "./deck.service";
 import { DeckTransformer } from "./deck.transformer";
-import { UsersService } from "../users/users.service";
+import { UserService } from "../users/user.service";
 
-describe("DecksService", () => {
-  let service: DecksService;
+describe("DeckService", () => {
+  let service: DeckService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
-        DecksService,
+        DeckService,
         DeckTransformer,
-        UsersService,
+        UserService,
         {
           provide: "DeckRepository", // Mocking DeckRepository
           useValue: {
@@ -26,7 +26,7 @@ describe("DecksService", () => {
       ],
     }).compile();
 
-    service = module.get<DecksService>(DecksService);
+    service = module.get<DeckService>(DeckService);
   });
 
   it("should be defined", () => {

@@ -13,7 +13,7 @@ import {
 } from "@nestjs/common";
 import { HttpExceptionFilter } from "../utils/http-exception.filter";
 import { DeckTransformer } from "./deck.transformer";
-import { DecksService } from "./decks.service";
+import { DeckService } from "./deck.service";
 import { DeckDto } from "./dto/deck.dto";
 import { PatchDeckDto } from "./dto/patch-deck.dto";
 import { PostDeckCardsDto } from "./dto/post-deck-cards.dt";
@@ -22,7 +22,7 @@ import { PostDeckCardsDto } from "./dto/post-deck-cards.dt";
 @UseFilters(HttpExceptionFilter)
 export class DecksController {
   constructor(
-    private readonly decksService: DecksService,
+    private readonly decksService: DeckService,
     private readonly deckTransformer: DeckTransformer,
   ) {}
 

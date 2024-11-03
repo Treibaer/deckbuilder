@@ -1,8 +1,6 @@
 import { DeckCard, MagicCard, SearchFilter, Structure } from "../models/dtos";
 import Constants from "./Constants";
 
-// const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
-
 export default class MagicHelper {
   static getDeckStructureFromCards(cards: DeckCard[]): Structure {
     // MagicHelper.determineCardType(newCard)
@@ -97,7 +95,7 @@ export default class MagicHelper {
     // proxying is allowed per api guidelines
     const type = config?.type ?? "normal";
     const faceSide = config?.faceSide ?? 0;
-    return `${Constants.newBackendUrl}/image/card/${type}/${scryfallId}${
+    return `${Constants.backendUrl}/image/card/${type}/${scryfallId}${
       faceSide > 0 ? "?faceSide=1" : ""
     }`;
   }

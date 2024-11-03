@@ -6,7 +6,7 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/sequelize";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 import { DeckDto } from "./dto/deck.dto";
 import { PatchDeckDto } from "./dto/patch-deck.dto";
 import { PostDeckCardsDto } from "./dto/post-deck-cards.dt";
@@ -16,10 +16,10 @@ import { Deck } from "./entities/deck.entity";
 import { User } from "./entities/user.entity";
 
 @Injectable()
-export class DecksService {
+export class DeckService {
   constructor(
     @InjectModel(Deck) private deckModel: typeof Deck,
-    private readonly userService: UsersService,
+    private readonly userService: UserService,
     // private readonly sequelize: Sequelize,
   ) {}
 

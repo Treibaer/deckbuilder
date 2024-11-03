@@ -7,14 +7,14 @@ import {
   Param,
   Post,
 } from "@nestjs/common";
-import { UsersService } from "src/users/users.service";
-import { FavoritesService } from "./favorites.service";
+import { UserService } from "src/users/user.service";
+import { FavoriteService } from "./favorite.service";
 
 @Controller("api/v1/favorites")
 export class FavoritesController {
   constructor(
-    private readonly userService: UsersService,
-    private readonly favoritesService: FavoritesService,
+    private readonly userService: UserService,
+    private readonly favoritesService: FavoriteService,
   ) {}
 
   @Get()

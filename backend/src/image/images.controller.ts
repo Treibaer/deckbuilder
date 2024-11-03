@@ -16,7 +16,7 @@ import * as https from "https";
 
 @Public()
 @Controller("image")
-export class ImageController {
+export class ImagesController {
   constructor(private readonly imageService: ImageService) {}
 
   @Get("card/backside.jpg")

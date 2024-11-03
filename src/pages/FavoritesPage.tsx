@@ -16,7 +16,7 @@ const FavoritesPage = () => {
   const [selectedCard, setSelectedCard] = useState<MagicCard | null>(null);
 
   async function refresh() {
-    const favorites = await Client.shared.get<FavoritesDto>("/favorites", true);
+    const favorites = await Client.shared.get<FavoritesDto>("/favorites");
     setFavoriteDecks(favorites.moxfieldDecks);
     setFavoriteCards(favorites.cards);
   }
@@ -63,5 +63,5 @@ const FavoritesPage = () => {
 export default FavoritesPage;
 
 export const loader: LoaderFunction = async () => {
-  return await Client.shared.get("/favorites", true);
+  return await Client.shared.get("/favorites");
 };

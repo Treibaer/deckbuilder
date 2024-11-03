@@ -4,13 +4,13 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 import { DeckFolder } from "./entities/deck-folder.entity";
 import { Deck } from "./entities/deck.entity";
 
 @Injectable()
-export class DeckFoldersService {
-  constructor(private readonly userService: UsersService) {}
+export class DeckFolderService {
+  constructor(private readonly userService: UserService) {}
 
   private get userId() {
     if (!this.userService.user) {

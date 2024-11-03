@@ -36,7 +36,7 @@ const Imports = () => {
   async function rawImport(path: string) {
     setIsLoading(true);
     try {
-      const settings = await Client.shared.get<any>(path, true);
+      const settings = await Client.shared.get<any>(path);
       setSettings(settings);
     } catch (e) {
       console.error(e);
@@ -89,5 +89,5 @@ const Imports = () => {
 export default Imports;
 
 export const loader: LoaderFunction = async () => {
-  return await Client.shared.get<any>("/import/status", true);
+  return await Client.shared.get<any>("/import/status");
 };

@@ -1,8 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 import { DeckTransformer } from "./deck.transformer";
 import { DecksController } from "./decks.controller";
-import { DecksService } from "./decks.service";
+import { DeckService } from "./deck.service";
 
 describe("DecksController", () => {
   let controller: DecksController;
@@ -11,9 +11,9 @@ describe("DecksController", () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [DecksController],
       providers: [
-        DecksService,
+        DeckService,
         DeckTransformer,
-        UsersService,
+        UserService,
         {
           provide: "DeckRepository", // Mocking DeckRepository
           useValue: {

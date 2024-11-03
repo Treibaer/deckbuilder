@@ -1,17 +1,17 @@
 import { Injectable, UnauthorizedException } from "@nestjs/common";
-import { CardsService } from "src/cards/cards.service";
+import { CardService } from "src/cards/card.service";
 import { Card } from "src/decks/entities/card.entity";
 import { FavoriteCard } from "src/decks/entities/favorite-card";
 import { FavoriteDeck } from "src/decks/entities/favorite-deck";
 import { MoxfieldService } from "src/moxfield/moxfield.service";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 
 @Injectable()
-export class FavoritesService {
+export class FavoriteService {
   constructor(
-    private readonly userService: UsersService,
+    private readonly userService: UserService,
     private readonly moxfieldService: MoxfieldService,
-    private readonly cardService: CardsService,
+    private readonly cardService: CardService,
   ) {}
 
   private get userId() {

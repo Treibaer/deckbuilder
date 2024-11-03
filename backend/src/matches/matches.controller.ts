@@ -15,15 +15,15 @@ import { Deck } from "src/decks/entities/deck.entity";
 import { Game } from "src/decks/entities/game.entity";
 import { Playtest } from "src/decks/entities/playtest.entity";
 import { User } from "src/decks/entities/user.entity";
-import { GameState, PlaytestsService } from "src/decks/playtests.service";
+import { GameState, PlaytestService } from "src/decks/playtest.service";
 import { MoxfieldService } from "src/moxfield/moxfield.service";
-import { UsersService } from "src/users/users.service";
+import { UserService } from "src/users/user.service";
 
 @Controller("api/v1/matches")
 export class MatchesController {
   constructor(
-    private readonly userService: UsersService,
-    private readonly playtestService: PlaytestsService,
+    private readonly userService: UserService,
+    private readonly playtestService: PlaytestService,
     private readonly moxfieldService: MoxfieldService,
   ) {}
 
