@@ -18,6 +18,7 @@ import Sandbox from "./Sandbox";
 import { useSocket } from "../hooks/useSocket";
 import { EmitFunction } from "../models/websocket";
 import { AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const viewStyles = ["list", "grid"];
@@ -174,6 +175,7 @@ const CustomDeckDetailPage = () => {
           : undefined
       }
     >
+      <Helmet title={deck.name} />
       {showSandbox && (
         <div className="top-0 left-0 py-4 px-2 z-10 w-1/2 h-full overflow-scroll border-r border-r-lightBlue">
           <Sandbox deck={deck} refresh={refresh} />

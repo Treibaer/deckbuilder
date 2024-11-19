@@ -13,6 +13,7 @@ import DeckCardGridView from "../components/Deck/DeckCardGridView";
 import DeckCardListView from "../components/Deck/DeckCardListView";
 import { Deck, MagicCard } from "../models/dtos";
 import { AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 const backside = `${Constants.backendUrl}/image/card/backside.jpg`;
 const moxfieldService = MoxfieldService.shared;
@@ -84,6 +85,7 @@ const MoxfieldDeckDetailPage = () => {
 
   return (
     <div id="magic-deck-view">
+      <Helmet title={deck.name} />
       {isLoading && <FullscreenLoadingSpinner />}
       <AnimatePresence>
         {cardPreview && (

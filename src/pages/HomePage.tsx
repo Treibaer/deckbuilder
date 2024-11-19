@@ -10,6 +10,7 @@ import CardService from "../Services/CardService";
 import DeckService from "../Services/DeckService";
 import PlaytestService from "../Services/PlaytestService";
 import Constants from "../Services/Constants";
+import { Helmet } from "react-helmet-async";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -55,6 +56,7 @@ const HomePage = () => {
 
   return (
     <div className="mx-auto w-full select-none">
+      <Helmet title="Home" />
       <div className="cursor-default text-3xl font-semibold m-2 text-center">
         Welcome!
       </div>

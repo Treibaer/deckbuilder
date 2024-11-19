@@ -6,6 +6,7 @@ import DraftCreateView from "../components/DraftCreateView";
 import { CardSet } from "../models/dtos";
 import CardService from "../Services/CardService";
 import { AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 const cardService = CardService.shared;
 
@@ -19,6 +20,7 @@ const DraftView = () => {
   }
   return (
     <div>
+      <Helmet title="Drafts" />
       <TitleView title="Drafts" openDialog={() => setIsCreatingDraft(true)} />
 
       <AnimatePresence>

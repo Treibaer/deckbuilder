@@ -4,6 +4,7 @@ import DeckPreview from "../components/Deck/DeckPreview";
 import { Playtest } from "../models/dtos";
 import PlaytestService from "../Services/PlaytestService";
 import { FormatType, formatUnixTimestamp } from "../utils/dataUtils";
+import { Helmet } from "react-helmet-async";
 
 const playtestService = PlaytestService.shared;
 
@@ -16,6 +17,7 @@ const PlaytestsListPage = () => {
 
   return (
     <div className="mx-auto">
+      <Helmet title="Playtests" />
       <div className="text-3xl font-semibold m-2 text-center mb-8 select-none">
         Playtest History
       </div>

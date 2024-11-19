@@ -5,6 +5,7 @@ import CardSearchFilter from "../components/Search/CardSearchFilter";
 import SearchBar from "../components/Search/SearchBar";
 import SearchPagination from "../components/Search/SearchPagination";
 import CardService from "../Services/CardService";
+import { Helmet } from "react-helmet-async";
 
 const CardSearchPage: React.FC = () => {
   /*
@@ -68,6 +69,7 @@ const CardSearchPage: React.FC = () => {
 
   return (
     <div className="w-full">
+      <Helmet title="Search" />
       {data.data.length === 0 && (
         <div className="cursor-default text-3xl font-semibold m-2 text-center">
           Search

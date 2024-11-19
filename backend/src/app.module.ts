@@ -40,7 +40,7 @@ import { FavoriteService } from "./favorites/favorite.service";
       envFilePath: [
         ".env.local",
         ".env",
-        "/projects/magic/deckbuilder/backend/.env",
+        "/projects/react/deckbuilder/backend/.env",
       ],
     }),
     DecksModule,

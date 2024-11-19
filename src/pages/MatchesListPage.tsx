@@ -10,6 +10,7 @@ import MatchListItem from "../components/Matches/MatchListItem";
 import { Deck, Match, User } from "../models/dtos";
 import { useSocket } from "../hooks/useSocket";
 import { AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 const matchService = MatchService.shared;
 const deckService = DeckService.shared;
@@ -109,6 +110,7 @@ const MatchesListPage = () => {
 
   return (
     <div className="mb-8 mx-auto">
+      <Helmet title="Matches" />
       {isLoading && <DelayedLoadingSpinner />}
       <AnimatePresence>
         {isCreatingMatch && (

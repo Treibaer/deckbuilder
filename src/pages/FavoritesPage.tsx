@@ -7,6 +7,7 @@ import { FavoritesDto, MagicCard } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import Client from "../Services/Client";
 import { AnimatePresence, motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 const FavoritesPage = () => {
   const loaderData = useLoaderData() as FavoritesDto;
@@ -23,6 +24,7 @@ const FavoritesPage = () => {
 
   return (
     <div className="mx-auto">
+      <Helmet title="Favorites" />
       <AnimatePresence>
         {selectedCard && (
           <CardPeekView

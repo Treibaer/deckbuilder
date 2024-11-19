@@ -2,6 +2,7 @@ import { LoaderFunction } from "react-router-dom";
 import DraftService from "../Services/DraftService";
 import MagicHelper from "../Services/MagicHelper";
 import { useState } from "react";
+import { Helmet } from "react-helmet-async";
 
 type Draft = {
   id: number;
@@ -125,6 +126,7 @@ const DraftDetailView = () => {
 
   return (
     <div>
+      <Helmet title="Draft" />
       <div>
         <div>Draft Detail View {draft.id}</div>
         <div> Current round {state.currentRound}</div>

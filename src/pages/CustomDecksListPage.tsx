@@ -16,6 +16,7 @@ import EditButton from "../components/EditButton";
 import { Deck } from "../models/dtos";
 import DeckService from "../Services/DeckService";
 import { AnimatePresence, motion } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 const deckService = DeckService.shared;
 
@@ -166,6 +167,7 @@ const CustomDecksListPage = () => {
 
   return (
     <div>
+      <Helmet title="My Decks" />
       <AnimatePresence>
         {isCreatingDeck && (
           <DeckCreationDialog

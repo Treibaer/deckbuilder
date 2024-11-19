@@ -1,12 +1,14 @@
 import { useLoaderData } from "react-router-dom";
 import MatchService from "../Services/MatchService";
 import { User } from "../models/dtos";
+import { Helmet } from "react-helmet-async";
 
 const Users = () => {
   const users = useLoaderData() as User[];
 
   return (
     <div>
+      <Helmet title="Users" />
       <div className="text-4xl">Users</div>
       <div className="flex gap-2 my-2">
         {users.map((user) => (

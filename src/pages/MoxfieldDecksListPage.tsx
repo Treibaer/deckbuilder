@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import DeckList from "../components/Deck/DecksListWrapper";
 import { Deck } from "../models/dtos";
 import Select from "../components/Select";
+import { Helmet } from "react-helmet-async";
 
 const moxfieldService = MoxfieldService.shared;
 
@@ -56,6 +57,7 @@ const MoxfieldDecksListPage = () => {
 
   return (
     <>
+    <Helmet title="Moxfield Decks" />
       <div className="flex flex-col md:flex-row justify-center items-center gap-4 select-none">
         {!data.referenceCard && (
           <div className="text-3xl font-semibold">Moxfield Decks</div>

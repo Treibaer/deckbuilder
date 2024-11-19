@@ -3,6 +3,7 @@ import CardService from "../Services/CardService";
 import CardSetItem from "../components/CardSetItem";
 import { CardSet } from "../models/dtos";
 import Select from "../components/Select";
+import { Helmet } from "react-helmet-async";
 const cardService = CardService.shared;
 
 const CardSetsListPage = () => {
@@ -18,6 +19,7 @@ const CardSetsListPage = () => {
 
   return (
     <>
+      <Helmet title="Magic Card Sets" />
       <div className="flex justify-center gap-5 m-2">
         <div className="text-3xl font-semibold items-center">
           Magic Card Sets

@@ -13,6 +13,7 @@ import MagicCardView from "../components/MagicCardView";
 import { CardDetailWithPrintings } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import { AnimatePresence } from "framer-motion";
+import { Helmet } from "react-helmet-async";
 
 const CardDetailPage: React.FC<{}> = () => {
   const { card, printings } = useLoaderData() as CardDetailWithPrintings;
@@ -35,6 +36,7 @@ const CardDetailPage: React.FC<{}> = () => {
 
   return (
     <>
+      <Helmet title={card.name} />
       {isLoading && <FullscreenLoadingSpinner />}
       <AnimatePresence>
         {showAddToDeck && (

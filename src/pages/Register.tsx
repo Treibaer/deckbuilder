@@ -3,6 +3,7 @@ import Constants from "../Services/Constants";
 import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const Register: React.FC = () => {
   const [user, setUser] = useState({
@@ -58,6 +59,7 @@ const Register: React.FC = () => {
 
   return (
     <div>
+      <Helmet title="Register" />
       {isSubmitting && <FullscreenLoadingSpinner />}
       <div className="flex flex-col gap-2 w-[calc(100vw-16px)] border border-lightBlue max-w-[500px] sm:max-w-[500px] md:max-w-[600px] p-2 rounded shadow-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ">
         <h1 className="mb-4">Register</h1>

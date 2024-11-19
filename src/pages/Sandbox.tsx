@@ -3,6 +3,7 @@ import {
   MinusCircleIcon,
   PlusCircleIcon,
 } from "@heroicons/react/24/solid";
+import { AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Button from "../components/Button";
@@ -16,7 +17,6 @@ import { Deck, MagicCard } from "../models/dtos";
 import { CardSize } from "../models/structure";
 import CardService from "../Services/CardService";
 import DeckService from "../Services/DeckService";
-import { AnimatePresence } from "framer-motion";
 
 const Sandbox: React.FC<{ deck: Deck; refresh: () => void }> = ({
   deck,
@@ -33,8 +33,6 @@ const Sandbox: React.FC<{ deck: Deck; refresh: () => void }> = ({
   const [cards, setCards] = useState<MagicCard[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pages, setPages] = useState(0);
-
-  // const [deck, setDeck] = useState<Deck | null>(null);
 
   useEffect(() => {
     setSearchTerm(q ?? "");

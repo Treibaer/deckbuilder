@@ -4,6 +4,7 @@ import Button from "../components/Button";
 import FullscreenLoadingSpinner from "../components/Common/FullscreenLoadingSpinner";
 import Client from "../Services/Client";
 import { FormatType, formatUnixTimestamp } from "../utils/dataUtils";
+import { Helmet } from "react-helmet-async";
 
 const Imports = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -45,6 +46,7 @@ const Imports = () => {
   }
   return (
     <div className="mx-auto">
+      <Helmet title="Imports" />
       {isLoading && <FullscreenLoadingSpinner />}
       <div className="text-3xl font-semibold m-2 text-center mb-4">Imports</div>
       <div className="grid grid-cols-2 gap-8 border border-lightBlue rounded-lg p-6 shadow-lg">
