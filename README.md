@@ -13,11 +13,22 @@ DeckBuilder is a web application for creating, managing, and sharing card decks.
 
 ## Technologies Used
 
-- **Frontend**: React, React Router (this repository)
-- **Backend**: PHP 8, Symfony 6 (not public yet)
-- **Database**: MariaDB
+- **Frontend**: 
+  - [React](https://reactjs.org/) - A JavaScript library for building user interfaces.
+  - [Redux](https://redux.js.org/) - A predictable state container for JavaScript apps, used to manage the application state.
+  - [Tailwind CSS](https://tailwindcss.com/) - A utility-first CSS framework for rapidly building custom user interfaces.
+  - [TypeScript](https://www.typescriptlang.org/) - A strongly typed programming language that builds on JavaScript.
+
+- **Backend**:
+  - **Current**: 
+    - [Node.js](https://nodejs.org/) - A JavaScript runtime built on Chrome's V8 JavaScript engine.
+    - [NestJS](https://nestjs.com/) - A progressive Node.js framework for building efficient, reliable, and scalable server-side applications.
+
+- **Database**: 
+  - [MariaDB](https://mariadb.org/) - An open-source relational database management system, a fork of MySQL.
+
 - **API**: Scryfall API (proxied through custom backend)
-- **Authentication**: Custom Bearer Token
+- **Authentication**: JWT, Bearer Token
 
 ## Installation
 
@@ -44,7 +55,7 @@ DeckBuilder is a web application for creating, managing, and sharing card decks.
     ```
 4. Adjust the `vite.config.js` - file and set a valid host
 
-5. Open your browser and navigate to `http://localhost:5173`.
+5. Open your browser and navigate to `http://localhost:3050`.
 
 ### Production build
 1. Build app
@@ -66,17 +77,6 @@ DeckBuilder is a web application for creating, managing, and sharing card decks.
 - Edit your deck and share it with others using the provided share link.
 - Search for moxfield decks, clone them and adjust to your needs
 
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request for any bugs, features, or improvements.
-
-1. Fork the repository.
-2. Create your feature branch: `git checkout -b feature/my-new-feature`
-3. Commit your changes: `git commit -m 'Add some feature'`
-4. Push to the branch: `git push origin feature/my-new-feature`
-5. Open a pull request.
-
-
 ## Acknowledgements
 
 - [Scryfall](https://scryfall.com) for providing an amazing API for card data.
@@ -85,21 +85,3 @@ Contributions are welcome! Please open an issue or submit a pull request for any
 ---
 
 Happy deck building!
-
-
-
-
-## Install react project
-### Terminal
-
-`npm create vite@latest tb-react`
-
-### install dependencies
-`npm install`
-
-### start webserver
-
-`npm run dev`
-
-### install router
-`npm install react-router-dom`

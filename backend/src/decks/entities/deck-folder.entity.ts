@@ -3,14 +3,11 @@ import {
   BelongsTo,
   Column,
   ForeignKey,
-  HasMany,
   Model,
   PrimaryKey,
-  Table,
+  Table
 } from "sequelize-typescript";
 import { User } from "./user.entity";
-import { DeckCard } from "./deck-card.entity";
-import { Deck } from "./deck.entity";
 
 @Table({ tableName: "deck_folder", timestamps: false })
 export class DeckFolder extends Model {

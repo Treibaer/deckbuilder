@@ -1,5 +1,5 @@
 // image.service.ts
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import axios from "axios";
 import { Response } from "express";
 import { promises as fsPromises } from "fs";

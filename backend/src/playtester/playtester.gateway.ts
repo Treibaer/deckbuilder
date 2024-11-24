@@ -5,7 +5,6 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
 } from "@nestjs/websockets";
 import { Server, Socket } from "socket.io";
 import { AccessToken } from "src/auth/entities/access-token";
@@ -17,7 +16,7 @@ import { SettingsDto } from "./models/settings.dto";
 import { Wrapper } from "./models/wrapper";
 import { PlaytesterService } from "./playtester.service";
 
-@WebSocketGateway(3000, {
+@WebSocketGateway(3100, {
   cors: {
     origin: "*",
     methods: ["GET", "POST"],
@@ -29,9 +28,6 @@ import { PlaytesterService } from "./playtester.service";
 export class EventsGateway
   implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
 {
-  @WebSocketServer()
-  private server: Server;
-
   private clients = new Map<string, Socket>();
   private connections = new Map<string, Connection>();
 
@@ -39,7 +35,7 @@ export class EventsGateway
 
   constructor(private readonly playtesterService: PlaytesterService) {}
 
-  afterInit(server: Server) {
+  afterInit(_server: Server) {
     const port = Number(process.env.WS_PORT ?? "3000");
     console.log("WebSocket server initialized on port " + port);
   }
@@ -113,7 +109,6 @@ export class EventsGateway
     }
 
     if (type === "authentication") {
-      const data: { type: string; id: number } = wrapper.data;
       this.log("Authentication received");
 
       connection.hasAuthenticated = true;

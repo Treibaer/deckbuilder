@@ -222,7 +222,7 @@ export class MoxfieldService {
       },
     );
 
-    const _sideBoard: DeckCardDto[] = Object.entries(deck.sideboard).map(
+    const sideboard: DeckCardDto[] = Object.entries(deck.sideboard).map(
       ([_, card]: [string, any]) => {
         cardId++;
         return {
@@ -251,7 +251,7 @@ export class MoxfieldService {
       colors: deck.main.colors ?? [],
       commanders,
       mainboard,
-      sideboard: [],
+      sideboard,
       isFavorite: favorite !== null,
       isLocked: true,
       updatedAt: 0,

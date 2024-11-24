@@ -8,7 +8,6 @@ import * as fs from "fs";
 import * as path from "path";
 import { fn } from "sequelize";
 import { Sequelize } from "sequelize-typescript";
-import { Col } from "sequelize/types/utils";
 import { CardSet } from "src/decks/entities/card-set.entity";
 import { Card } from "src/decks/entities/card.entity";
 
@@ -136,7 +135,6 @@ export class ImportService {
       }
 
       // check all parts
-      const oracleId = card.oracle_id;
       const allParts = card.all_parts as {
         object: string;
         id: string;

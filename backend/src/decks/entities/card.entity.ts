@@ -1,12 +1,10 @@
 import {
-  AutoIncrement,
   Column,
   DataType,
   Model,
   PrimaryKey,
-  Table,
+  Table
 } from "sequelize-typescript";
-import { DeckCard } from "./deck-card.entity";
 
 @Table({
   tableName: "card",

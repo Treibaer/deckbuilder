@@ -15,7 +15,7 @@ export class DraftService {
     return this.userService.user.id;
   }
 
-  async create(name: string) {
+  async create(_name: string) {
   }
 
   async get(draftId: number) {

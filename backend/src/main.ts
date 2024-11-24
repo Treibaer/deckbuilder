@@ -17,7 +17,7 @@ async function bootstrap() {
   console.log(`Listening on port ${port}`);
 
   const configService = app.get(ConfigService);
-  app.useWebSocketAdapter(new SocketIoAdapter(app, configService));
+  app.useWebSocketAdapter(new SocketIoAdapter(configService));
 
   await app.listen(port);
 }

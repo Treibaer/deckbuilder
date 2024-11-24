@@ -6,17 +6,14 @@ import {
   SetMetadata,
   UnauthorizedException,
 } from "@nestjs/common";
-import { ModuleRef, Reflector } from "@nestjs/core";
+import { Reflector } from "@nestjs/core";
 import { Request } from "express";
 import { User } from "src/decks/entities/user.entity";
 import { AccessToken } from "./entities/access-token";
 
 @Injectable({ scope: Scope.REQUEST })
 export class AuthGuard implements CanActivate {
-  constructor(
-    private reflector: Reflector,
-    private moduleRef: ModuleRef,
-  ) {}
+  constructor(private reflector: Reflector) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [

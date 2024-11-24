@@ -9,7 +9,6 @@ import {
   Table,
 } from "sequelize-typescript";
 import { User } from "./user.entity";
-import { Deck } from "./deck.entity";
 
 @Table({ tableName: "playtest", timestamps: false })
 export class Playtest extends Model {

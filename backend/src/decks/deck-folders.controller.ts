@@ -7,8 +7,6 @@ import {
   Patch,
   Post,
 } from "@nestjs/common";
-import { DeckTransformer } from "./deck.transformer";
-import { DeckService } from "./deck.service";
 import { DeckFolderService } from "./deck-folder.service";
 
 @Controller("api/v1/decks/folders")

@@ -5,12 +5,13 @@ import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
 import { AuthModule } from "./auth/auth.module";
 import { AccessToken } from "./auth/entities/access-token";
-import { CardController } from "./cards/cards.controller";
 import { CardService } from "./cards/card.service";
+import { CardController } from "./cards/cards.controller";
 import { DecksModule } from "./decks/decks.module";
 import { CardSet } from "./decks/entities/card-set.entity";
 import { Card } from "./decks/entities/card.entity";
 import { DeckCard } from "./decks/entities/deck-card.entity";
+import { DeckFolder } from "./decks/entities/deck-folder.entity";
 import { Deck } from "./decks/entities/deck.entity";
 import { FavoriteCard } from "./decks/entities/favorite-card";
 import { FavoriteDeck } from "./decks/entities/favorite-deck";
@@ -19,19 +20,18 @@ import { Playtest } from "./decks/entities/playtest.entity";
 import { Settings } from "./decks/entities/settings.entity";
 import { User } from "./decks/entities/user.entity";
 import { PlaytestService } from "./decks/playtest.service";
+import { FavoriteService } from "./favorites/favorite.service";
 import { FavoritesController } from "./favorites/favorites.controller";
 import { ImageModule } from "./image/image.module";
 import { ImportController } from "./import/import.controller";
 import { ImportService } from "./import/import.service";
-import { MatchesController } from "./matches/matches.controller";
 import { MatchService } from "./matches/match.service";
+import { MatchesController } from "./matches/matches.controller";
 import { MoxfieldController } from "./moxfield/moxfield.controller";
 import { MoxfieldService } from "./moxfield/moxfield.service";
 import { EventsModule } from "./playtester/playtester.module";
 import { UsersModule } from "./users/users.module";
 import { UrlService } from "./utils/urlservice";
-import { DeckFolder } from "./decks/entities/deck-folder.entity";
-import { FavoriteService } from "./favorites/favorite.service";
 
 @Module({
   imports: [
@@ -106,7 +106,7 @@ import { FavoriteService } from "./favorites/favorite.service";
   ],
 })
 export class AppModule implements NestModule {
-  configure(consumer: MiddlewareConsumer) {
+  configure(_consumer: MiddlewareConsumer) {
     // consumer.apply(logger).forRoutes(DecksController);
     return;
     Settings.sync({ alter: true });

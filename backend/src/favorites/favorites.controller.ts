@@ -7,15 +7,11 @@ import {
   Param,
   Post,
 } from "@nestjs/common";
-import { UserService } from "src/users/user.service";
 import { FavoriteService } from "./favorite.service";
 
 @Controller("api/v1/favorites")
 export class FavoritesController {
-  constructor(
-    private readonly userService: UserService,
-    private readonly favoritesService: FavoriteService,
-  ) {}
+  constructor(private readonly favoritesService: FavoriteService) {}
 
   @Get()
   async findAll() {

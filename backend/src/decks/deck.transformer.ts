@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
+import { DeckCardDto } from "./dto/deck-card.dto";
 import { DeckDto } from "./dto/deck.dto";
 import { Deck } from "./entities/deck.entity";
-import { DeckCard } from "./entities/deck-card.entity";
-import { DeckCardDto } from "./dto/deck-card.dto";
 
 @Injectable()
 export class DeckTransformer {
