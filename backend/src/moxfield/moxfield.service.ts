@@ -186,7 +186,12 @@ export class MoxfieldService {
     let content: string;
 
     if (!fs.existsSync(cacheName)) {
-      const response = await axios.get(deckUrl);
+      // get data from axios with custom user agent
+      const response = await axios.get(deckUrl, {
+        headers: {
+          "User-Agent": "Mozilla/5.0",
+        },
+      });
       content = response.data;
       content = JSON.stringify(content);
       fs.writeFileSync(cacheName, content);
@@ -287,7 +292,11 @@ export class MoxfieldService {
     let content: string;
 
     if (!fs.existsSync(cacheName) || ignoreCache) {
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        headers: {
+          "User-Agent": "Mozilla/5.0",
+        },
+      });
       content = response.data;
       content = JSON.stringify(content);
       fs.writeFileSync(cacheName, content);
